@@ -1,0 +1,30 @@
+# Files for Android Studio
+*.iml
+.gradle/
+.idea/
+local.properties
+/.idea
+/.gradle
+/build
+/captures/
+
+# User-specific files
+*.log
+*.swp
+*.bak
+
+# Android-specific
+*.apk
+*.ap_  
+*.dex
+*.class
+*.jar
+*.keystore
+
+# NDK
+/obj/
+/lib/
+
+# Gradle files
+gradle-app.setting
+gradle-wrapper.jar
