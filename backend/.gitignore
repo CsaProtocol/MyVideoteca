@@ -1,0 +1,45 @@
+# Ignore build artifacts
+/build/
+/CMakeFiles/
+/CMakeCache.txt
+/Makefile
+/*.o
+/*.obj
+/*.exe
+/*.out
+/*.log
+
+# Ignore CLion specific files
+/.idea/
+/cmake-build-debug/
+/cmake-build-release/
+/cmake-build-relwithdebinfo/
+/cmake-build-minsizerel/
+
+# Ignore OS specific files
+.DS_Store
+Thumbs.db
+
+# Ignore user-specific files
+*.user
+*.swp
+*.swo
+*.bak
+*.tmp
+
+# Ignore compiled dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Ignore compiled static libraries
+*.a
+*.lib
+
+# Ignore generated documentation
+/docs/
+/*.html
+/*.pdf
+
+# Ignore properties file
+properties.json
