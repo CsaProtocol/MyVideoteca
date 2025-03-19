@@ -8,13 +8,14 @@ extern const DBDriver postgres_driver;
 extern const DBDriver mariadb_driver;
 
 static const DBDriver* get_driver(const char* db_type) {
-    switch(db_type) {
-        case "postgres":
-            return &postgres_driver;
-        case "mariadb":
-            return &mariadb_driver;
-        default:
-            return NULL;
+    if(!db_type) {
+        return NULL;
+    } else if (strcmp(db_type, "postgres") == 0) {
+        return &postgres_driver;
+    } else if (strcmp(db_type, "mariadb") == 0) {
+        return &mariadb_driver;
+    } else {
+        return NULL;
     }
 }
 

@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <mariadb/mysql.h>
-#include "../database.h"
+#include "database.h"
 
 int mariadb_connectivity(DBHandle* handle, const DBParams* parameters) {
     MYSQL* connection = mysql_init(NULL);

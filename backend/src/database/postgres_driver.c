@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../database.h"
+#include "database.h"
 
 
 int postgres_connect(DBHandle* handle, const DBParams* parameters) {

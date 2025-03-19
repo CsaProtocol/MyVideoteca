@@ -1,13 +1,102 @@
-cmake_minimum_required(VERSION 3.30)
-project(backend_final C)
+cmake_minimum_required(VERSION 3.22)
 
-set(CMAKE_C_STANDARD 23)
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#                                      PROJECT FILE-STRUCTURE SETTINGS                                      #
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
-add_executable(backend_final main.c
-        database/database.h
-        database/database.c
-        database/postgreSQL/postgres_driver.c
-        database/mariaDB/mariaDB_driver.c
+project(
+  LANGUAGES C CXX
 )
 
-include_directories(/usr/include/postgresql)
+set(CMAKE_C_STANDARD 23)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(MAIN_BINARY demo)
+set(TEST_BINARY unit_tests)
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/out/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/out/lib)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/out/lib)
+
+include_directories(${CMAKE_SOURCE_DIR}/src)
+
+file(GLOB_RECURSE MAIN_FILE ${CMAKE_SOURCE_DIR}/src/main.c)
+file(GLOB_RECURSE SOURCE_FILES ${CMAKE_SOURCE_DIR}/src/*/*.c)
+file(GLOB_RECURSE TEST_FILES ${CMAKE_SOURCE_DIR}/tests/*/*.cpp)
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#                                             DEPENDENCIES                                                 #
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+set(CMAKE_PREFIX_PATH ${CMAKE_SOURCE_DIR}/dependencies/build/Release/generators ${CMAKE_PREFIX_PATH})
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/dependencies/build/Release/generators ${CMAKE_MODULE_PATH})
+
+find_package(GTest REQUIRED)
+find_package(PostgreSQL REQUIRED)
+find_package(jansson REQUIRED)
+find_package(mariadb-connector-c REQUIRED)
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#                                         MAIN COMPILATION OPTIONS                                         #
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+add_executable(
+  ${MAIN_BINARY}
+  ${MAIN_FILE}
+  ${SOURCE_FILES}
+)
+
+target_compile_options(
+  ${MAIN_BINARY}
+  PRIVATE
+  -O3
+  -Wall
+  -Wpedantic
+  -Wfloat-equal
+  -Wno-deprecated-declarations
+  -DDEBUG_BUILD
+)
+
+
+target_link_libraries(
+    ${MAIN_BINARY}
+    PRIVATE
+    jansson::jansson
+    PostgreSQL::PostgreSQL
+    mariadb-connector-c::mariadb-connector-c
+)
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#                                      "unit_tests" COMPILATION OPTIONS                                    #
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+add_executable(
+    ${TEST_BINARY}
+    ${SOURCE_FILES}
+    ${TEST_FILES}
+)
+
+target_compile_options(
+    ${TEST_BINARY}
+    PRIVATE
+    -O0
+    -Wunused
+    -Wall
+    -Wpedantic
+    -Wswitch
+    -Wfloat-equal
+    -DDEBUG_BUILD
+)
+
+target_link_libraries(
+    ${TEST_BINARY}
+    PRIVATE
+    GTest::GTest
+    GTest::Main
+    jansson::jansson
+    PostgreSQL::PostgreSQL
+    mariadb-connector-c::mariadb-connector-c
+)

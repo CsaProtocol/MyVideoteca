@@ -1,45 +1,30 @@
-# Ignore build artifacts
-/build/
-/CMakeFiles/
-/CMakeCache.txt
-/Makefile
-/*.o
-/*.obj
-/*.exe
-/*.out
-/*.log
+# Ignore IDE-related configurations
+.vscode
+.idea
 
-# Ignore CLion specific files
-/.idea/
-/cmake-build-debug/
-/cmake-build-release/
-/cmake-build-relwithdebinfo/
-/cmake-build-minsizerel/
+# Place files that you want to ignore here
+hidden
 
-# Ignore OS specific files
-.DS_Store
-Thumbs.db
-
-# Ignore user-specific files
-*.user
-*.swp
-*.swo
-*.bak
-*.tmp
-
-# Ignore compiled dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Ignore compiled static libraries
+# Ignore output files, executables and libraries
+*.elf
+*.exe
+*.out
+*.o
 *.a
+*.so
+*.dll
 *.lib
 
-# Ignore generated documentation
-/docs/
-/*.html
-/*.pdf
+# Ignore build-related files
+cmake-build-debug/*
+dependencies/*
+build/*
+out/*
+lib/*
+bin/*
 
-# Ignore properties file
-properties.json
+# Ignore unwanted distribution-related files
+*.snap
+*.msi
+*.nix
+result
