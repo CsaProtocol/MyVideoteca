@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base App Theme -->
+    <style name="AppTheme" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- General theme colors -->
+        <item name="colorPrimary">@color/mv_purple</item>
+        <item name="colorOnPrimary">@color/mv_red</item>
+        <item name="colorSecondary">@color/mv_yellow</item>
+        <item name="android:windowBackground">@color/mv_purple</item>
+
+        <!-- Default Button Style -->
+        <item name="materialButtonStyle">@style/PurpleButton</item>
+    </style>
+
+    <!-- Button Styles -->
+    <style name="PurpleButton" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/mv_purple</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+</resources>

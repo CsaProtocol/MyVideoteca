@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Base application theme -->
+    <style name="Base.Theme.MyVideoteca" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Define light/dark theme customizations here if needed -->
+    </style>
 
-    <style name="Theme.MyVideoteca" parent="android:Theme.Material.Light.NoActionBar" />
+    <!-- App-specific theme -->
+    <style name="Theme.MyVideoteca" parent="Base.Theme.MyVideoteca" />
 </resources>
