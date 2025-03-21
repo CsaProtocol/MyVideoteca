@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">MyVideoteca</string>
+
+
+    <!-- Registrazione -->
+    <string name="registrati">Registrati</string>
+    <string name="crea_account">Crea un nuovo account</string>
+    <string name="nome">Nome</string>
+    <string name="cognome">Cognome</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="vai_a_accedi">Hai già un account?</string>
+    <string name="accedi">Accedi</string>
 </resources>
