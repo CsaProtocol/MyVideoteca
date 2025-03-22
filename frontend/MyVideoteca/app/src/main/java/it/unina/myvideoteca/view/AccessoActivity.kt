@@ -51,11 +51,10 @@ class AccessoActivity: AppCompatActivity() {
                 if (response != null) {
                     val jsonResponse = JSONObject(response)
                     if (jsonResponse.getString("status") == "success") {
-                        //Salva i dati restituiti dal json (es: il numero max di noleggi)
-                        // Passa alla SuccessActivity
-                        /*val intent = Intent(this@MainActivity, SuccessActivity::class.java)
+                        //TODO: alva i dati restituiti dal json (es: il numero max di noleggi)
+                        val intent = Intent(this@AccessoActivity, HomeActivity::class.java)
                         startActivity(intent)
-                        finish()*/
+                        finish()
                         Toast.makeText(this, "Accesso avvenuto con successo.", Toast.LENGTH_SHORT).show()
                     } else {
                         Toast.makeText(this, jsonResponse.getString("message"), Toast.LENGTH_SHORT).show()
@@ -63,6 +62,11 @@ class AccessoActivity: AppCompatActivity() {
                 } else {
                     Toast.makeText(this, "Connessione persa! Tentativo di riconnessione...", Toast.LENGTH_SHORT).show()
                     SocketSingleton.client.attemptReconnect()
+                    if (SocketSingleton.client.isConnected()) { //se si è riusciti a riconnettersi al server si passa alla main activity (si torna da capo)
+                        val intent = Intent(this@AccessoActivity, MainActivity::class.java)
+                        startActivity(intent)
+                        finish()  // Chiudi l'attività corrente (l'utente non può tornare "indietro" alla pagina corrente)
+                    }
                 }
             }
         }.start()

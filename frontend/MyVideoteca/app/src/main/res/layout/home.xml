@@ -35,6 +35,16 @@
                 android:text="@string/cerca_film" />
 
             <Button
+                android:id="@+id/buttonCarrello"
+                style="@style/PurpleButton"
+                android:layout_marginTop="10dp"
+                android:layout_width="320dp"
+                android:layout_height="54dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="5dp"
+                android:text="@string/restituisci" />
+
+            <Button
                 android:id="@+id/buttonRestituisci"
                 style="@style/PurpleButton"
                 android:layout_marginTop="10dp"

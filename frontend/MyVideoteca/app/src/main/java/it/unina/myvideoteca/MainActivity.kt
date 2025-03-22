@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import it.unina.myvideoteca.server.ServerController
 import it.unina.myvideoteca.socket.SocketSingleton
 import it.unina.myvideoteca.view.AccessoActivity
+import it.unina.myvideoteca.view.HomeActivity
 import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {
@@ -57,11 +58,10 @@ class MainActivity : AppCompatActivity() {
                 if (response != null) {
                     val jsonResponse = JSONObject(response)
                     if (jsonResponse.getString("status") == "success") {
-                        //Salva i dati restituiti dal json (es: il numero max di noleggi)
-                        // Passa alla SuccessActivity
-                        /*val intent = Intent(this@MainActivity, SuccessActivity::class.java)
+                        //TODO: Salva i dati restituiti dal json (es: il numero max di noleggi)
+                        val intent = Intent(this@MainActivity, HomeActivity::class.java)
                         startActivity(intent)
-                        finish()*/
+                        finish()
                         Toast.makeText(this, "Registrazione avvenuta con successo.", Toast.LENGTH_SHORT).show()
                     } else {
                         Toast.makeText(this, jsonResponse.getString("message"), Toast.LENGTH_SHORT).show()

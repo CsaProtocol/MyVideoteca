@@ -18,6 +18,7 @@
 
     <!-- Home -->
     <string name="cerca_film">Cerca film</string>
+    <string name="vai_a_carrello">Vai al carrello</string>
     <string name="restituisci">Restituisci film</string>
 
 </resources>

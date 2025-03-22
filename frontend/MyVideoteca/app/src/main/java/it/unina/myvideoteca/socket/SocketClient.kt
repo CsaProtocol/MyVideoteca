@@ -31,6 +31,10 @@ class SocketClient(private val serverIp: String, private val serverPort: Int) {
         }
     }
 
+    fun isConnected(): Boolean {
+        return socket?.isConnected == true
+    }
+
     private fun startKeepAlive() {
         keepAliveThread = Thread {
             while (running) {
