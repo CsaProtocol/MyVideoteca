@@ -5,20 +5,32 @@ import org.json.JSONObject
 
 class ServerController(private val client: SocketClient) {
 
-    fun registerUser(name: String, surname: String, email: String, password: String): String? {
+    fun signUp(nome: String, cognome: String, email: String, password: String): String? {
         // Creazione del JSON da inviare al server
         val jsonRequest = JSONObject()
-        jsonRequest.put("endpoint", "registrazione")
-        jsonRequest.put("nome", name)
-        jsonRequest.put("cognome", surname)
+        jsonRequest.put("endpoint", "signUp")
+        jsonRequest.put("nome", nome)
+        jsonRequest.put("cognome", cognome)
         jsonRequest.put("email", email)
         jsonRequest.put("password", password)
 
-        // Connessione al server, invio del messaggio e lettura della risposta
-        client.connect()
+        // invio del messaggio e lettura della risposta
         client.sendMessage(jsonRequest.toString())
         val response = client.readResponse()
-        client.disconnect()
+
+        return response
+    }
+
+    fun logIn(email: String, password: String): String? {
+        // Creazione del JSON da inviare al server
+        val jsonRequest = JSONObject()
+        jsonRequest.put("endpoint", "logIn")
+        jsonRequest.put("email", email)
+        jsonRequest.put("password", password)
+
+        // invio del messaggio e lettura della risposta
+        client.sendMessage(jsonRequest.toString())
+        val response = client.readResponse()
 
         return response
     }

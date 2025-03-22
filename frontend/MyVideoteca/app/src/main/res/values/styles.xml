@@ -15,7 +15,14 @@
     <!-- Button Styles -->
     <style name="PurpleButton" parent="Widget.Material3.Button">
         <item name="backgroundTint">@color/mv_purple</item>
-        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="LightButton" parent="Widget.Material3.Button">
+        <item name="background">@drawable/light_button_background</item>
+        <item name="android:textColor">@color/mv_purple</item>
         <item name="android:textSize">20sp</item>
         <item name="android:textStyle">bold</item>
     </style>

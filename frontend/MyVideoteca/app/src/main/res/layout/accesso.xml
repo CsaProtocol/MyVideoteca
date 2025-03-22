@@ -40,39 +40,7 @@
                 android:gravity="center"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:text="@string/crea_account"/>
-
-            <TextView
-                android:id="@+id/textNome"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:text="@string/nome" />
-
-            <EditText
-                android:id="@+id/editTextNome"
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:layout_marginBottom="16dp"
-                android:importantForAutofill="no"
-                android:inputType="textPersonName"
-                android:hint="@string/nome"/>
-
-            <TextView
-                android:id="@+id/textCognome"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:text="@string/cognome" />
-
-            <EditText
-                android:id="@+id/editTextCognome"
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:layout_marginBottom="16dp"
-                android:importantForAutofill="no"
-                android:inputType="textPersonName"
-                android:hint="@string/cognome"/>
+                android:text="@string/benvenuto"/>
 
             <TextView
                 android:id="@+id/textEmail"
@@ -115,14 +83,14 @@
 
 
             <Button
-                android:id="@+id/buttonRegistrati"
+                android:id="@+id/buttonAccedi"
                 style="@style/PurpleButton"
                 android:layout_marginTop="16dp"
                 android:layout_width="320dp"
                 android:layout_height="54dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="5dp"
-                android:text="@string/registrati" />
+                android:text="@string/accedi" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -131,20 +99,20 @@
                 android:gravity="center_vertical">
 
                 <TextView
-                    android:id="@+id/textInfoLogin"
+                    android:id="@+id/textInfoSignup"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
                     android:layout_weight="1"
-                    android:text="@string/vai_a_accedi" />
+                    android:text="@string/vai_a_registrati" />
 
                 <TextView
-                    android:id="@+id/textAccedi"
+                    android:id="@+id/textRegistrati"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
                     android:layout_weight="1"
-                    android:text="@string/accedi"
+                    android:text="@string/registrati"
                     android:clickable="true"
                     android:focusable="true"
                     android:textStyle="bold"/>

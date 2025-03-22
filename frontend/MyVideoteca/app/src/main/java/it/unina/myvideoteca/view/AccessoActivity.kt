@@ -1,4 +1,4 @@
-package it.unina.myvideoteca
+package it.unina.myvideoteca.view
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,52 +7,46 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import it.unina.myvideoteca.MainActivity
+import it.unina.myvideoteca.R
 import it.unina.myvideoteca.server.ServerController
 import it.unina.myvideoteca.socket.SocketSingleton
-import it.unina.myvideoteca.view.AccessoActivity
 import org.json.JSONObject
 
-class MainActivity : AppCompatActivity() {
+class AccessoActivity: AppCompatActivity() {
     private lateinit var serverController: ServerController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.registrazione)
+        setContentView(R.layout.accesso)
 
-        val nomeEditText = findViewById<EditText>(R.id.editTextNome)
-        val cognomeEditText = findViewById<EditText>(R.id.editTextCognome)
         val emailEditText = findViewById<EditText>(R.id.editTextEmail)
         val passwordEditText = findViewById<EditText>(R.id.editTextPassword)
-        val registratiButton = findViewById<Button>(R.id.buttonRegistrati)
-        val accediText = findViewById<TextView>(R.id.textAccedi)
+        val accediButton = findViewById<Button>(R.id.buttonAccedi)
+        val registratiText = findViewById<TextView>(R.id.textRegistrati)
 
-        serverController = ServerController(SocketSingleton.client)  // Usa il singleton
+        serverController = ServerController(SocketSingleton.client)
 
-        registratiButton.setOnClickListener {
-            val nome = nomeEditText.text.toString().trim()
-            val cognome = cognomeEditText.text.toString().trim()
+        accediButton.setOnClickListener{
             val email = emailEditText.text.toString().trim()
             val password = passwordEditText.text.toString().trim()
 
-            if (nome.isEmpty() || cognome.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Compilare tutti i campi per procedere.", Toast.LENGTH_SHORT).show()
-            } else {
-                registrazione(nome, cognome, email, password)
+            }else{
+                accesso(email, password)
             }
         }
 
-        accediText.setOnClickListener{
-            val intent = Intent(this, AccessoActivity::class.java)
+        registratiText.setOnClickListener{
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
-
-
     }
 
-    private fun registrazione(nome: String, cognome: String, email: String, password: String){
-        // Thread separato per evitare di bloccare la UI durante le operazioni
+    private fun accesso(email: String, password: String){
         Thread {
-            val response = serverController.signUp(nome, cognome, email, password)
+            val response = serverController.logIn(email, password)
             runOnUiThread {
                 if (response != null) {
                     val jsonResponse = JSONObject(response)
@@ -62,7 +56,7 @@ class MainActivity : AppCompatActivity() {
                         /*val intent = Intent(this@MainActivity, SuccessActivity::class.java)
                         startActivity(intent)
                         finish()*/
-                        Toast.makeText(this, "Registrazione avvenuta con successo.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Accesso avvenuto con successo.", Toast.LENGTH_SHORT).show()
                     } else {
                         Toast.makeText(this, jsonResponse.getString("message"), Toast.LENGTH_SHORT).show()
                     }

@@ -10,5 +10,14 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="vai_a_accedi">Hai già un account?</string>
+
+    <!-- Accesso -->
     <string name="accedi">Accedi</string>
+    <string name="vai_a_registrati">Non hai un account?</string>
+    <string name="benvenuto">Benvenuto!</string>
+
+    <!-- Home -->
+    <string name="cerca_film">Cerca film</string>
+    <string name="restituisci">Restituisci film</string>
+
 </resources>
