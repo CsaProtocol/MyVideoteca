@@ -4,7 +4,7 @@ CREATE TABLE Utente(
     cognome VARCHAR(50) NOT NULL,
     email VARCHAR(50) NOT NULL,
     password VARCHAR(50) NOT NULL,
-    libri_non_restituiti BOOLEAN NOT NULL DEFAULT FALSE
+    film_non_restituiti BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TYPE film_genre AS ENUM (
@@ -35,6 +35,7 @@ CREATE TABLE Film(
     descrizione TEXT NOT NULL,
     numero_copie INTEGER NOT NULL,
     numero_copie_disponibili INTEGER
+    CONTRAINT numero_copie_disponibili <= numero_copie;
 );
 
 CREATE TABLE Noleggio(
