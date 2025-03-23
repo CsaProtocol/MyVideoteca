@@ -5,33 +5,31 @@ import org.json.JSONObject
 
 class ServerController(private val client: SocketClient) {
 
-    fun signUp(nome: String, cognome: String, email: String, password: String): String? {
-        // Creazione del JSON da inviare al server
-        val jsonRequest = JSONObject()
-        jsonRequest.put("endpoint", "signUp")
-        jsonRequest.put("nome", nome)
-        jsonRequest.put("cognome", cognome)
-        jsonRequest.put("email", email)
-        jsonRequest.put("password", password)
+    fun signUp(nome: String, cognome: String, email: String, password: String, callback: (String?) -> Unit) {
+        val jsonRequest = JSONObject().apply {
+            put("endpoint", "signUp")
+            put("nome", nome)
+            put("cognome", cognome)
+            put("email", email)
+            put("password", password)
+        }
 
-        // invio del messaggio e lettura della risposta
         client.sendMessage(jsonRequest.toString())
-        val response = client.readResponse()
-
-        return response
+        client.readResponse { response ->
+            callback(response)
+        }
     }
 
-    fun logIn(email: String, password: String): String? {
-        // Creazione del JSON da inviare al server
-        val jsonRequest = JSONObject()
-        jsonRequest.put("endpoint", "logIn")
-        jsonRequest.put("email", email)
-        jsonRequest.put("password", password)
+    fun logIn(email: String, password: String, callback: (String?) -> Unit) {
+        val jsonRequest = JSONObject().apply{
+            put("endpoint", "logIn")
+            put("email", email)
+            put("password", password)
+        }
 
-        // invio del messaggio e lettura della risposta
         client.sendMessage(jsonRequest.toString())
-        val response = client.readResponse()
-
-        return response
+        client.readResponse { response ->
+            callback(response)
+        }
     }
 }

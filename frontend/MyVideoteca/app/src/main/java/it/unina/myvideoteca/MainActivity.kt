@@ -2,6 +2,8 @@ package it.unina.myvideoteca
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -9,6 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import it.unina.myvideoteca.server.ServerController
 import it.unina.myvideoteca.socket.SocketSingleton
+import it.unina.myvideoteca.utils.RegexChecker
 import it.unina.myvideoteca.view.AccessoActivity
 import it.unina.myvideoteca.view.HomeActivity
 import org.json.JSONObject
@@ -23,11 +26,53 @@ class MainActivity : AppCompatActivity() {
         val nomeEditText = findViewById<EditText>(R.id.editTextNome)
         val cognomeEditText = findViewById<EditText>(R.id.editTextCognome)
         val emailEditText = findViewById<EditText>(R.id.editTextEmail)
+        val erroriEmail = findViewById<TextView>(R.id.textErroriEmail)
         val passwordEditText = findViewById<EditText>(R.id.editTextPassword)
+        val erroriPassword = findViewById<TextView>(R.id.textErroriPassword)
         val registratiButton = findViewById<Button>(R.id.buttonRegistrati)
         val accediText = findViewById<TextView>(R.id.textAccedi)
 
-        serverController = ServerController(SocketSingleton.client)  // Usa il singleton
+        serverController = ServerController(SocketSingleton.client)
+
+        emailEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { /*vuoto*/ }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { /*vuoto*/ }
+            override fun afterTextChanged(s: Editable?) {
+                val mail = s.toString()
+                val messaggiDiErrore = RegexChecker.verificaEmail(mail)
+
+                if (messaggiDiErrore.isEmpty()) {
+                    erroriEmail.visibility = TextView.GONE
+                    registratiButton.isEnabled = true
+                    registratiButton.backgroundTintList = getColorStateList(R.color.mv_purple)
+                } else {
+                    erroriEmail.visibility = TextView.VISIBLE
+                    erroriEmail.text = messaggiDiErrore.joinToString("\n")
+                    registratiButton.isEnabled = false
+                    registratiButton.backgroundTintList = getColorStateList(android.R.color.darker_gray)
+                }
+            }
+        })
+
+        passwordEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { /*vuoto*/ }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { /*vuoto*/ }
+            override fun afterTextChanged(s: Editable?) {
+                val psw = s.toString()
+                val messaggiDiErrore = RegexChecker.verificaPassword(psw)
+
+                if (messaggiDiErrore.isEmpty()) {
+                    erroriPassword.visibility = TextView.GONE
+                    registratiButton.isEnabled = true
+                    registratiButton.backgroundTintList = getColorStateList(R.color.mv_purple)
+                } else {
+                    erroriPassword.visibility = TextView.VISIBLE
+                    erroriPassword.text = messaggiDiErrore.joinToString("\n")
+                    registratiButton.isEnabled = false
+                    registratiButton.backgroundTintList = getColorStateList(android.R.color.darker_gray)
+                }
+            }
+        })
 
         registratiButton.setOnClickListener {
             val nome = nomeEditText.text.toString().trim()
@@ -47,18 +92,14 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-
     }
 
-    private fun registrazione(nome: String, cognome: String, email: String, password: String){
-        // Thread separato per evitare di bloccare la UI durante le operazioni
-        Thread {
-            val response = serverController.signUp(nome, cognome, email, password)
+    private fun registrazione(nome: String, cognome: String, email: String, password: String) {
+        serverController.signUp(nome, cognome, email, password) { response ->
             runOnUiThread {
                 if (response != null) {
                     val jsonResponse = JSONObject(response)
                     if (jsonResponse.getString("status") == "success") {
-                        //TODO: Salva i dati restituiti dal json (es: il numero max di noleggi)
                         val intent = Intent(this@MainActivity, HomeActivity::class.java)
                         startActivity(intent)
                         finish()
@@ -71,6 +112,7 @@ class MainActivity : AppCompatActivity() {
                     SocketSingleton.client.attemptReconnect()
                 }
             }
-        }.start()
+        }
     }
+
 }

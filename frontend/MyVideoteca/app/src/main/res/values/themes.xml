@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Base application theme -->
-    <style name="Base.Theme.MyVideoteca" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Define light/dark theme customizations here if needed -->
-    </style>
+    <!-- Base App Theme -->
+    <style name="Theme.MyVideoteca" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Colori principali -->
+        <item name="colorPrimary">@color/mv_purple</item>
+        <item name="colorOnPrimary">@color/mv_red</item>
+        <item name="colorSecondary">@color/mv_yellow</item>
+        <item name="android:windowBackground">@color/mv_purple</item>
 
-    <!-- App-specific theme -->
-    <style name="Theme.MyVideoteca" parent="Base.Theme.MyVideoteca" />
+        <!-- Imposta il colore della barra in alto -->
+        <item name="colorPrimaryVariant">@color/mv_purple</item>
+        <item name="android:statusBarColor">@color/mv_purple</item>
+
+        <!-- Stile del pulsante -->
+        <item name="materialButtonStyle">@style/PurpleButton</item>
+    </style>
 </resources>

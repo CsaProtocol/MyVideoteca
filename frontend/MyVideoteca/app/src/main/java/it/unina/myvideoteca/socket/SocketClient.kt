@@ -1,6 +1,7 @@
 package it.unina.myvideoteca.socket
 
 import android.util.Log
+import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
@@ -13,90 +14,110 @@ class SocketClient(private val serverIp: String, private val serverPort: Int) {
     private var writer: PrintWriter? = null
     private var reader: BufferedReader? = null
 
-    private var keepAliveThread: Thread? = null //Thread per la gestione del timeout del server
     private var running = false
+    private var reconnecting = false  // Evita tentativi multipli di riconnessione parallela
+
+    private var dispatcherIO: CoroutineDispatcher = Dispatchers.IO
+    private var dispatcherMain: CoroutineDispatcher = Dispatchers.Main
+
+    // Un unico CoroutineScope per l'intera classe
+    private val clientScope = CoroutineScope(dispatcherIO)
 
     fun connect() {
-        try {
-            socket = Socket(serverIp, serverPort)
-            writer = PrintWriter(OutputStreamWriter(socket?.getOutputStream()), true)
-            reader = BufferedReader(InputStreamReader(socket?.getInputStream()))
-            running = true
-            Log.d("Connessione","Connesso al server $serverIp:$serverPort")
-            startKeepAlive()  // Avvio del thread Keep-Alive dopo la connessione
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Log.d("Errore Connessione","Errore di connessione! Tentativo di riconnessione...")
-            attemptReconnect()  // Riconnessione automatica
+        clientScope.launch {
+            try {
+                socket = Socket(serverIp, serverPort)
+                writer = PrintWriter(OutputStreamWriter(socket?.getOutputStream()), true)
+                reader = BufferedReader(InputStreamReader(socket?.getInputStream()))
+                running = true
+
+                Log.d("Connessione", "Connesso al server $serverIp:$serverPort")
+                startKeepAlive()
+            } catch (e: Exception) {
+                Log.e("Errore Connessione", "Errore di connessione! Tentativo di riconnessione...", e)
+                attemptReconnect()
+            }finally {
+                reconnecting = false  // Resetta lo stato di riconnessione
+            }
         }
     }
 
     fun isConnected(): Boolean {
-        return socket?.isConnected == true
+        return socket?.isConnected == true && running
     }
 
     private fun startKeepAlive() {
-        keepAliveThread = Thread {
+        clientScope.launch {
             while (running) {
                 try {
-                    // Invia un messaggio di Keep-Alive ogni 250 secondi (prima del timeout di 300s)
                     writer?.println("{\"type\": \"heartbeat\"}")
-                    Log.d("KeepAlive","Keep-Alive inviato")
-                    Thread.sleep(250_000)  // Attendi 250 secondi tra un messaggio e l'altro
+                    Log.d("KeepAlive", "Keep-Alive inviato")
+                    delay(250_000L)  // Attendi 250 secondi tra un messaggio e l'altro
                 } catch (e: Exception) {
-                    e.printStackTrace()
-                    Log.d("Errore KeepAlive","Errore durante il Keep-Alive: chiusura la connessione.")
+                    Log.e("Errore KeepAlive", "Errore durante il Keep-Alive.", e)
                     disconnect()
-                    attemptReconnect()  // Tentativo di riconnessione se si verifica un errore
+                    attemptReconnect()
                     break
                 }
             }
         }
-        keepAliveThread?.start()
     }
 
     fun sendMessage(message: String) {
-        try {
-            writer?.println(message)
-            Log.d("sendMEssage","Messaggio inviato al server: $message")
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Log.d("Errore sendMessage","Errore durante l'invio del messaggio! Tentativo di riconnessione...")
-            attemptReconnect()  // Tentativo di riconnessione in caso di errore
+        clientScope.launch {
+            try {
+                writer?.println(message)
+                Log.d("sendMessage", "Messaggio inviato al server: $message")
+            } catch (e: Exception) {
+                Log.e("Errore sendMessage", "Errore durante l'invio del messaggio!", e)
+                attemptReconnect()
+            }
         }
     }
 
-    fun readResponse(): String? {
-        return try {
-            val response = reader?.readLine()
-            if (response == null) {
-                Log.d("readResponse","La connessione al server è stata interrotta.")
-                attemptReconnect()  // Se la risposta è null, la connessione è caduta
+    fun readResponse(callback: (String?) -> Unit) {
+        clientScope.launch {
+            try {
+                val response = reader?.readLine()  // Operazione di I/O in un thread separato
+                withContext(dispatcherMain) {
+                    callback(response)
+                }
+            } catch (e: Exception) {
+                Log.e("Errore readResponse", "Errore durante la lettura della risposta.", e)
+                withContext(dispatcherMain) {
+                    callback(null)
+                }
             }
-            response
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Log.d("Errore readResponse","Errore durante la lettura della risposta!")
-            attemptReconnect()
-            null
         }
     }
 
     fun attemptReconnect() {
-        disconnect()  // Chiude eventuali connessioni aperte
-        Log.d("attemptReconnect","Tentativo di riconnessione al server in 5 secondi...")
-        Thread.sleep(5000)  // Attende 5 secondi prima di riprovare
-        connect()  // Riprova a connettere
+        if (reconnecting) return  // Evita più tentativi paralleli
+        reconnecting = true
+
+        clientScope.launch {
+            disconnect()  // Chiudi le risorse esistenti
+            Log.d("attemptReconnect", "Tentativo di riconnessione al server in 5 secondi...")
+            delay(5000)
+            Log.d("attemptReconnect", "Tentativo di riconnessione...")
+            connect()  // Riprova la connessione
+        }
     }
 
     fun disconnect() {
+        running = false  // Termina il Keep-Alive
+
         try {
-            running = false  // Termina il thread Keep-Alive
+            writer?.close()
+            reader?.close()
             socket?.close()
-            Log.d("disconnect","Connessione chiusa.")
+            Log.d("disconnect", "Connessione chiusa.")
         } catch (e: Exception) {
-            e.printStackTrace()
-            Log.d("errore disconnect","Errore nella chiusura della connessione.")
+            Log.e("errore disconnect", "Errore nella chiusura della connessione.", e)
+        } finally {
+            writer = null
+            reader = null
+            socket = null
         }
     }
 }

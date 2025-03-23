@@ -83,12 +83,18 @@
 
             <EditText
                 android:id="@+id/editTextEmail"
-                android:layout_marginBottom="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
                 android:importantForAutofill="no"
                 android:inputType="textEmailAddress"
                 android:hint="@string/email"/>
+
+            <TextView
+                android:id="@+id/textErroriEmail"
+                style="@style/ErroreEmailPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp" />
 
             <TextView
                 android:id="@+id/textPassword"
@@ -113,11 +119,17 @@
                     android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <TextView
+                android:id="@+id/textErroriPassword"
+                style="@style/ErroreEmailPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp" />
 
             <Button
                 android:id="@+id/buttonRegistrati"
                 style="@style/PurpleButton"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
                 android:layout_width="320dp"
                 android:layout_height="54dp"
                 android:layout_gravity="center_horizontal"
