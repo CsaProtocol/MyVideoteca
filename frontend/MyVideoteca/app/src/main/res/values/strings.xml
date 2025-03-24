@@ -1,3 +1,71 @@
 <resources>
     <string name="app_name">MyVideoteca</string>
+    <string name="home">Home</string>
+
+
+    <!-- Registrazione -->
+    <string name="registrati">Registrati</string>
+    <string name="crea_account">Crea un nuovo account</string>
+    <string name="nome">Nome</string>
+    <string name="cognome">Cognome</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="vai_a_accedi">Hai già un account?</string>
+
+    <!-- Accesso -->
+    <string name="accedi">Accedi</string>
+    <string name="vai_a_registrati">Non hai un account?</string>
+    <string name="benvenuto">Benvenuto!</string>
+
+    <!-- Home -->
+    <string name="cerca_film">Cerca film</string>
+    <string name="vai_a_carrello">Vai al carrello</string>
+    <string name="restituisci">Restituisci film</string>
+
+    <!-- Cerca -->
+    <string name="cerca_sottotitolo">Cerca film per nome o per regista</string>
+    <string-array name="tipo_ricerca">
+        <item>Nome</item>
+        <item>Regista</item>
+    </string-array>
+    <string name="oppure">Oppure:</string>
+    <string name="cerca_generi">Cerca per genere</string>
+    <string-array name="genere_film">
+        <item>Azione</item>
+        <item>Avventura</item>
+        <item>Commedia</item>
+        <item>Drammatico</item>
+        <item>Fantasy</item>
+        <item>Fantascienza</item>
+        <item>Giallo</item>
+        <item>Horror</item>
+        <item>Musical</item>
+        <item>Romantico</item>
+        <item>Storico</item>
+        <item>Thriller</item>
+        <item>Western</item>
+        <item>Animazione</item>
+        <item>Documentario</item>
+    </string-array>
+    <string name="cerca">Cerca</string>
+
+    <!-- Cerca Risultati -->
+    <string name="num_risultati">La ricerca ha prodotto %d risultati.</string>
+    <string name="aggiungi_al_carrello">Aggiungi al carrello</string>
+    <string name="titolo_mockup">Titolo titolo2 titolo3 titolo</string>
+    <string name="regista_mockup">Regista</string>
+    <string name="anno_mockup">Anno e durata</string>
+    <string name="descrizione_mockup">Descrizione del film</string>
+    <string name="copie_disponibili">Copie disponibili: %d</string>
+
+    <!-- Noleggi -->
+    <string name="noleggi">Noleggi</string>
+
+    <!-- Carrello -->
+    <string name="carrello">Carrello</string>
+    <string name="check_out">Check-Out</string>
+
+
+
+
 </resources>

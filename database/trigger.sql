@@ -75,11 +75,11 @@ CREATE OR REPLACE FUNCTION aggiorna_flag_utente(id_utente INT)
 BEGIN
     IF(SELECT COUNT(*) FROM Noleggio WHERE utente_id = id_utente AND restituito = FALSE AND data_scadenza < CURRENT_TIMESTAMP) > 0 THEN
         UPDATE Utente
-        SET libri_non_restituiti = TRUE
+        SET film_non_restituiti = TRUE
         WHERE id = NEW.utente_id;
     ELSE
         UPDATE Utente
-        SET libri_non_restituiti = FALSE
+        SET film_non_restituiti = FALSE
         WHERE id = NEW.utente_id;
     END IF;
 END

@@ -1,23 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Base App Theme -->
-    <style name="AppTheme" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- General theme colors -->
-        <item name="colorPrimary">@color/mv_purple</item>
-        <item name="colorOnPrimary">@color/mv_red</item>
-        <item name="colorSecondary">@color/mv_yellow</item>
-        <item name="android:windowBackground">@color/mv_purple</item>
-
-        <!-- Default Button Style -->
-        <item name="materialButtonStyle">@style/PurpleButton</item>
-    </style>
-
     <!-- Button Styles -->
     <style name="PurpleButton" parent="Widget.Material3.Button">
         <item name="backgroundTint">@color/mv_purple</item>
-        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:textSize">20sp</item>
         <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Titolo">
+        <item name="android:textSize">30sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ErroreEmailPassword">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/mv_red</item>
+    </style>
+
+    <style name="PurpleSpinner" parent="Widget.AppCompat.Spinner">
+        <item name="android:background">@color/mv_purple</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:popupBackground">@color/mv_purple</item>
+        <item name="android:radius">10dp</item>
+    </style>
+
+    <style name="WhiteSpinner" parent="Widget.AppCompat.Spinner">
+        <item name="android:background">@drawable/purple_border_background</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:popupBackground">@color/mv_purple</item>
+        <item name="android:radius">10dp</item>
+        <item name="android:drawableRight">@drawable/arrow_drop_down</item>
     </style>
 
 </resources>

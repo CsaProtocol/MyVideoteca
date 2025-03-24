@@ -1,0 +1,123 @@
+package it.unina.myvideoteca.socket
+
+import android.util.Log
+import kotlinx.coroutines.*
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.io.OutputStreamWriter
+import java.io.PrintWriter
+import java.net.Socket
+
+class SocketClient(private val serverIp: String, private val serverPort: Int) {
+
+    private var socket: Socket? = null
+    private var writer: PrintWriter? = null
+    private var reader: BufferedReader? = null
+
+    private var running = false
+    private var reconnecting = false  // Evita tentativi multipli di riconnessione parallela
+
+    private var dispatcherIO: CoroutineDispatcher = Dispatchers.IO
+    private var dispatcherMain: CoroutineDispatcher = Dispatchers.Main
+
+    // Un unico CoroutineScope per l'intera classe
+    private val clientScope = CoroutineScope(dispatcherIO)
+
+    fun connect() {
+        clientScope.launch {
+            try {
+                socket = Socket(serverIp, serverPort)
+                writer = PrintWriter(OutputStreamWriter(socket?.getOutputStream()), true)
+                reader = BufferedReader(InputStreamReader(socket?.getInputStream()))
+                running = true
+
+                Log.d("Connessione", "Connesso al server $serverIp:$serverPort")
+                startKeepAlive()
+            } catch (e: Exception) {
+                Log.e("Errore Connessione", "Errore di connessione! Tentativo di riconnessione...", e)
+                attemptReconnect()
+            }finally {
+                reconnecting = false  // Resetta lo stato di riconnessione
+            }
+        }
+    }
+
+    fun isConnected(): Boolean {
+        return socket?.isConnected == true && running
+    }
+
+    private fun startKeepAlive() {
+        clientScope.launch {
+            while (running) {
+                try {
+                    writer?.println("{\"type\": \"heartbeat\"}")
+                    Log.d("KeepAlive", "Keep-Alive inviato")
+                    delay(250_000L)  // Attendi 250 secondi tra un messaggio e l'altro
+                } catch (e: Exception) {
+                    Log.e("Errore KeepAlive", "Errore durante il Keep-Alive.", e)
+                    disconnect()
+                    attemptReconnect()
+                    break
+                }
+            }
+        }
+    }
+
+    fun sendMessage(message: String) {
+        clientScope.launch {
+            try {
+                writer?.println(message)
+                Log.d("sendMessage", "Messaggio inviato al server: $message")
+            } catch (e: Exception) {
+                Log.e("Errore sendMessage", "Errore durante l'invio del messaggio!", e)
+                attemptReconnect()
+            }
+        }
+    }
+
+    fun readResponse(callback: (String?) -> Unit) {
+        clientScope.launch {
+            try {
+                val response = reader?.readLine()  // Operazione di I/O in un thread separato
+                withContext(dispatcherMain) {
+                    callback(response)
+                }
+            } catch (e: Exception) {
+                Log.e("Errore readResponse", "Errore durante la lettura della risposta.", e)
+                withContext(dispatcherMain) {
+                    callback(null)
+                }
+            }
+        }
+    }
+
+    fun attemptReconnect() {
+        if (reconnecting) return  // Evita più tentativi paralleli
+        reconnecting = true
+
+        clientScope.launch {
+            disconnect()  // Chiudi le risorse esistenti
+            Log.d("attemptReconnect", "Tentativo di riconnessione al server in 5 secondi...")
+            delay(5000)
+            Log.d("attemptReconnect", "Tentativo di riconnessione...")
+            connect()  // Riprova la connessione
+        }
+    }
+
+    fun disconnect() {
+        running = false  // Termina il Keep-Alive
+
+        try {
+            writer?.close()
+            reader?.close()
+            socket?.close()
+            Log.d("disconnect", "Connessione chiusa.")
+        } catch (e: Exception) {
+            Log.e("errore disconnect", "Errore nella chiusura della connessione.", e)
+        } finally {
+            writer = null
+            reader = null
+            socket = null
+        }
+    }
+}

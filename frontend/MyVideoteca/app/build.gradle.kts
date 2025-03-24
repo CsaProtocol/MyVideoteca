@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace = "it.unina.myvideoteca"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "it.unina.myvideoteca"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -34,7 +34,6 @@ android {
         jvmTarget = "11"
     }
     buildFeatures {
-        compose = true
     }
 }
 
@@ -44,8 +43,8 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    implementation("androidx.navigation:navigation-fragment-ktx:2.8.5")
-    implementation("androidx.navigation:navigation-ui-ktx:2.8.5")
-    implementation("com.google.code.gson:gson:2.10.1")
+    //implementation("androidx.navigation:navigation-fragment-ktx:2.8.5")
+    //implementation("androidx.navigation:navigation-ui-ktx:2.8.5")
+    //implementation("com.google.code.gson:gson:2.10.1")
     implementation("androidx.recyclerview:recyclerview:1.2.1")
 }
