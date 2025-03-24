@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="4dp"
+    android:layout_margin="5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:background="@drawable/purple_border_background"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/imgLogo"
+                android:layout_width="125dp"
+                android:layout_height="125dp"
+                android:layout_marginEnd="12dp"
+                android:contentDescription="@string/app_name"
+                app:srcCompat="@drawable/mv_logo_dark_round" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/textTitolo"
+                    style="@style/Titolo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/titolo_mockup" />
+
+                <TextView
+                    android:id="@+id/textRegista"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:text="@string/regista_mockup"/>
+                <TextView
+                    android:id="@+id/textAnno"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/anno_mockup"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textDescrizione"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/descrizione_mockup" />
+
+        <TextView
+            android:id="@+id/textCopie"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/copie_disponibili" />
+
+        <Button
+            android:id="@+id/buttonAggiungi"
+            style="@style/PurpleButton"
+            android:layout_marginTop="5dp"
+            android:layout_width="320dp"
+            android:layout_height="54dp"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/aggiungi_al_carrello" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

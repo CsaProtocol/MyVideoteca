@@ -51,6 +51,12 @@
 
     <!-- Cerca Risultati -->
     <string name="num_risultati">La ricerca ha prodotto %d risultati.</string>
+    <string name="aggiungi_al_carrello">Aggiungi al carrello</string>
+    <string name="titolo_mockup">Titolo titolo2 titolo3 titolo</string>
+    <string name="regista_mockup">Regista</string>
+    <string name="anno_mockup">Anno e durata</string>
+    <string name="descrizione_mockup">Descrizione del film</string>
+    <string name="copie_disponibili">Copie disponibili: %d</string>
 
     <!-- Noleggi -->
     <string name="noleggi">Noleggi</string>
@@ -58,6 +64,7 @@
     <!-- Carrello -->
     <string name="carrello">Carrello</string>
     <string name="check_out">Check-Out</string>
+
 
 
 
