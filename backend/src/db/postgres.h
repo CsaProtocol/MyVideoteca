@@ -1,0 +1,20 @@
+#ifndef POSTGRES_H
+#define POSTGRES_H
+
+#include <libpq-fe.h>
+#include <stdbool.h>
+
+typedef struct {
+    char* host;
+    int port;
+    char* dbname;
+    char* user;
+    char* password;
+} db_config_t;
+
+bool db_connect(db_config_t config);
+void db_disconnect(void);
+PGresult* db_execute_query(const char* query);
+void db_free_result(PGresult* result);
+
+#endif // POSTGRES_H

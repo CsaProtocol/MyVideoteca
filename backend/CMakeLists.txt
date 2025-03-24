@@ -22,9 +22,11 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/out/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/out/lib)
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
+include_directories(${CMAKE_SOURCE_DIR}/src/old)
 
 file(GLOB_RECURSE MAIN_FILE ${CMAKE_SOURCE_DIR}/src/main.c)
 file(GLOB_RECURSE SOURCE_FILES ${CMAKE_SOURCE_DIR}/src/*/*.c)
+file(GLOB_RECURSE SOURCE_FILES ${CMAKE_SOURCE_DIR}/src/*/*/*.c)
 file(GLOB_RECURSE TEST_FILES ${CMAKE_SOURCE_DIR}/tests/*/*.cpp)
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
@@ -37,27 +39,40 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/dependencies/build/Release/generators 
 find_package(GTest REQUIRED)
 find_package(PostgreSQL REQUIRED)
 find_package(jansson REQUIRED)
-find_package(mariadb-connector-c REQUIRED)
+find_package(hiredis REQUIRED)
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 #                                         MAIN COMPILATION OPTIONS                                         #
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 add_executable(
-  ${MAIN_BINARY}
-  ${MAIN_FILE}
-  ${SOURCE_FILES}
+    ${MAIN_BINARY}
+    ${MAIN_FILE}
+    ${SOURCE_FILES}
+        src/main.c
+        src/models/film.c
+        src/models/film.h
+        src/db/postgres.c
+        src/db/postgres.h
+        src/utils/logger.c
+        src/utils/logger.h
+        src/server/socket_server.c
+        src/server/socket_server.h
+        src/server/request_handler.c
+        src/server/request_handler.h
+        src/utils/json.c
+        src/utils/json.h
 )
 
 target_compile_options(
-  ${MAIN_BINARY}
-  PRIVATE
-  -O3
-  -Wall
-  -Wpedantic
-  -Wfloat-equal
-  -Wno-deprecated-declarations
-  -DDEBUG_BUILD
+    ${MAIN_BINARY}
+    PRIVATE
+    -O3
+    -Wall
+    -Wpedantic
+    -Wfloat-equal
+    -Wno-deprecated-declarations
+    -DDEBUG_BUILD
 )
 
 
@@ -66,7 +81,7 @@ target_link_libraries(
     PRIVATE
     jansson::jansson
     PostgreSQL::PostgreSQL
-    mariadb-connector-c::mariadb-connector-c
+    hiredis::hiredis
 )
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
@@ -98,5 +113,6 @@ target_link_libraries(
     GTest::Main
     jansson::jansson
     PostgreSQL::PostgreSQL
-    mariadb-connector-c::mariadb-connector-c
+    hiredis::hiredis
 )
+
