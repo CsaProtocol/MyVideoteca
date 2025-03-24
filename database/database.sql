@@ -2,7 +2,7 @@ CREATE TABLE Utente(
     id SERIAL PRIMARY KEY,
     nome VARCHAR(50) NOT NULL,
     cognome VARCHAR(50) NOT NULL,
-    email VARCHAR(50) NOT NULL,
+    email VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(50) NOT NULL,
     film_non_restituiti BOOLEAN NOT NULL DEFAULT FALSE
 );
@@ -34,8 +34,7 @@ CREATE TABLE Film(
     durata INTEGER NOT NULL, -- in minuti
     descrizione TEXT NOT NULL,
     numero_copie INTEGER NOT NULL,
-    numero_copie_disponibili INTEGER
-    CONTRAINT numero_copie_disponibili <= numero_copie;
+    numero_copie_disponibili INTEGER CHECK numero_copie_disponibili <= numero_copie;
 );
 
 CREATE TABLE Noleggio(
