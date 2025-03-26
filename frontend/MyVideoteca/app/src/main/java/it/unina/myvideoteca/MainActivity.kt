@@ -15,7 +15,6 @@ import it.unina.myvideoteca.server.ServerController
 import it.unina.myvideoteca.socket.SocketSingleton
 import it.unina.myvideoteca.utils.RegexChecker
 import it.unina.myvideoteca.view.AccessoActivity
-import it.unina.myvideoteca.view.HomeActivity
 import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {
@@ -107,10 +106,9 @@ class MainActivity : AppCompatActivity() {
                 if (response != null) {
                     val jsonResponse = JSONObject(response)
                     if (jsonResponse.getString("status") == "success") {
-                        val intent = Intent(this@MainActivity, HomeActivity::class.java)
-                        startActivity(intent)
-                        finish()
                         Toast.makeText(this, "Registrazione avvenuta con successo.", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this@MainActivity, AccessoActivity::class.java)
+                        startActivity(intent)
                     } else {
                         Toast.makeText(this, jsonResponse.getString("message"), Toast.LENGTH_SHORT).show()
                     }

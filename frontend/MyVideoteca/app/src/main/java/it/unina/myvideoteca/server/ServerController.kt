@@ -32,4 +32,18 @@ class ServerController(private val client: SocketClient) {
             callback(response)
         }
     }
+
+    fun ricerca(titolo: String, regista: String, genere: String, callback: (String?) -> Unit) {
+        val jsonRequest = JSONObject().apply{
+            put("endpoint", "ricerca")
+            put("titolo", titolo)
+            put("regista", regista)
+            put("genere", genere)
+        }
+
+        client.sendMessage(jsonRequest.toString())
+        client.readResponse { response ->
+            callback(response)
+        }
+    }
 }
