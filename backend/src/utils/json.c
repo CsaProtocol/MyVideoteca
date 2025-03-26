@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-// Crea una risposta JSON di successo
 char* json_response_success(const char* message) {
     json_t* response = json_object();
     json_object_set_new(response, "status", json_string("success"));
@@ -20,7 +19,6 @@ char* json_response_success(const char* message) {
     return response_str;
 }
 
-// Crea una risposta JSON di errore
 char* json_response_error(const char* message) {
     json_t* response = json_object();
     json_object_set_new(response, "status", json_string("error"));
@@ -35,8 +33,7 @@ char* json_response_error(const char* message) {
     return response_str;
 }
 
-// Serializza un JSON in una stringa, con gestione degli errori
-char* json_dumps_safe(json_t* json) {
+char* json_dumps_safe(json_t const* json) {
     if (!json) {
         log_error("Attempt to dump NULL JSON object");
         return NULL;

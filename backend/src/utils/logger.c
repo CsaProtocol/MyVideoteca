@@ -25,7 +25,6 @@ void init_logger(const char* log_file_path, const log_level_t min_level) {
     }
 
     current_min_level = min_level;
-
     pthread_mutex_unlock(&log_mutex);
 }
 
@@ -40,10 +39,8 @@ static void log_message(const log_level_t level, const char* level_str, const ch
     char timestamp[26];
     strftime(timestamp, sizeof(timestamp), "%Y-%m-%d %H:%M:%S", tm_info);
 
-    // Get thread ID
     const pthread_t thread_id = pthread_self();
 
-    // Print to log file
     fprintf(log_file, "[%s] [%lu] [%s] ", timestamp, (unsigned long)thread_id, level_str);
     vfprintf(log_file, format, args);
     fprintf(log_file, "\n");

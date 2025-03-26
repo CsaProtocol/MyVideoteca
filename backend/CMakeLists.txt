@@ -62,6 +62,14 @@ add_executable(
         src/server/request_handler.h
         src/utils/json.c
         src/utils/json.h
+        src/auth/auth.h
+        src/auth/auth.c
+        src/services/login_service.c
+        src/services/login_service.h
+        src/services/signup_service.c
+        src/services/signup_service.h
+        src/services/search_service.c
+        src/services/search_service.h
 )
 
 target_compile_options(
