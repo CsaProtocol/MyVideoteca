@@ -60,7 +60,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:id="@+id/textTitolo"
+                    android:id="@+id/textCerca"
                     style="@style/Titolo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -77,33 +77,57 @@
                     android:textSize="18sp"
                     android:text="@string/cerca_sottotitolo" />
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/textTitolo"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="@string/titolo" />
 
-                    <EditText
-                        android:id="@+id/editTextCerca"
-                        android:background="@drawable/purple_border_background"
-                        android:layout_width="220dp"
-                        android:layout_height="48dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginEnd="10dp"
-                        android:importantForAutofill="no"
-                        android:inputType="textPersonName"
-                        android:hint="@string/cerca_film"/>
+                <EditText
+                    android:id="@+id/editTextTitolo"
+                    android:background="@drawable/purple_border_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginBottom="10dp"
+                    android:importantForAutofill="no"
+                    android:inputType="textPersonName"
+                    android:hint="@string/titolo"/>
 
-                    <Spinner
-                        android:id="@+id/spinnerTipoRicerca"
-                        style="@style/PurpleSpinner"
-                        android:layout_width="120dp"
-                        android:layout_height="48dp"
-                        android:layout_gravity="center_vertical"
-                        android:entries="@array/tipo_ricerca" />
+                <TextView
+                    android:id="@+id/textRegista"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="@string/regista" />
 
-                </LinearLayout>
+                <EditText
+                    android:id="@+id/editTextRegista"
+                    android:background="@drawable/purple_border_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginBottom="10dp"
+                    android:importantForAutofill="no"
+                    android:inputType="textPersonName"
+                    android:hint="@string/regista_mockup"/>
 
+                <TextView
+                    android:id="@+id/textGenere"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="@string/genere" />
+
+                <Spinner
+                    android:id="@+id/spinnerGenere"
+                    android:background="@drawable/purple_border_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginBottom="10dp"
+                    android:entries="@array/genere_film" />
 
                 <Button
                     android:id="@+id/buttonCerca"
@@ -115,51 +139,6 @@
                     android:layout_marginBottom="5dp"
                     android:text="@string/cerca_film" />
 
-                <TextView
-                    android:id="@+id/textOpppure"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:text="@string/oppure" />
-
-                <TextView
-                    android:id="@+id/textInfoGeneri"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:textSize="20sp"
-                    android:text="@string/cerca_generi" />
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center_vertical">
-
-                    <Spinner
-                        android:id="@+id/spinnerGenere"
-                        android:background="@drawable/purple_border_background"
-                        android:layout_width="220dp"
-                        android:layout_height="48dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginEnd="10dp"
-                        android:entries="@array/tipo_ricerca" />
-
-                    <Button
-                        android:id="@+id/buttonCercaGenere"
-                        style="@style/PurpleButton"
-                        android:layout_marginTop="5dp"
-                        android:layout_width="120dp"
-                        android:layout_height="54dp"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginBottom="5dp"
-                        android:text="@string/cerca" />
-
-                </LinearLayout>
 
             </LinearLayout>
 

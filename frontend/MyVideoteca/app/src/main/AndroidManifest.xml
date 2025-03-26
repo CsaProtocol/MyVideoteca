@@ -26,7 +26,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.AccessoActivity"> </activity>
+        <activity android:name=".view.CarrelloActivity"> </activity>
+        <activity android:name=".view.CercaActivity"> </activity>
+        <activity android:name=".view.CercaRisultatiActivity"> </activity>
         <activity android:name=".view.HomeActivity"> </activity>
+        <activity android:name=".view.NoleggiActivity"> </activity>
     </application>
 
 </manifest>

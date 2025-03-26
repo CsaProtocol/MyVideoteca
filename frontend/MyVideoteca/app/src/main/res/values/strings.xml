@@ -23,14 +23,12 @@
     <string name="restituisci">Restituisci film</string>
 
     <!-- Cerca -->
-    <string name="cerca_sottotitolo">Cerca film per nome o per regista</string>
-    <string-array name="tipo_ricerca">
-        <item>Nome</item>
-        <item>Regista</item>
-    </string-array>
-    <string name="oppure">Oppure:</string>
-    <string name="cerca_generi">Cerca per genere</string>
+    <string name="cerca_sottotitolo">Cerca film per titolo, per regista o per genere</string>
+    <string name="titolo">Titolo</string>
+    <string name="regista">Regista</string>
+    <string name="genere">Genere</string>
     <string-array name="genere_film">
+        <item>Tutti i generi</item>
         <item>Azione</item>
         <item>Avventura</item>
         <item>Commedia</item>
@@ -54,7 +52,8 @@
     <string name="aggiungi_al_carrello">Aggiungi al carrello</string>
     <string name="titolo_mockup">Titolo titolo2 titolo3 titolo</string>
     <string name="regista_mockup">Regista</string>
-    <string name="anno_mockup">Anno e durata</string>
+    <string name="anno_e_durata_mockup">%d, %d min</string>
+    <string name="genere_mockup">Genere</string>
     <string name="descrizione_mockup">Descrizione del film</string>
     <string name="copie_disponibili">Copie disponibili: %d</string>
 

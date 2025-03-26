@@ -51,16 +51,23 @@
                     android:id="@+id/textAnno"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/anno_mockup"/>
+                    android:text="@string/anno_e_durata_mockup"/>
             </LinearLayout>
 
         </LinearLayout>
 
         <TextView
-            android:id="@+id/textDescrizione"
+            android:id="@+id/textGenere"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:text="@string/genere_mockup" />
+
+        <TextView
+            android:id="@+id/textDescrizione"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
             android:text="@string/descrizione_mockup" />
 
         <TextView
