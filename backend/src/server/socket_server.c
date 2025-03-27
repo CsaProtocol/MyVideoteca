@@ -26,7 +26,12 @@ void* handle_client(void* client_socket_ptr) {
 
         char* response = process_request(buffer);
 
-        write(client_socket, response, strlen(response));
+        const ssize_t written = write(client_socket, response, strlen(response));
+        if(written < 0) {
+            log_error("Failed to send response to client");
+            free(response);
+            break;
+        }
 
         free(response);
         memset(buffer, 0, sizeof(buffer));

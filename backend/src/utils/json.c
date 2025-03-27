@@ -33,7 +33,7 @@ char* json_response_error(const char* message) {
     return response_str;
 }
 
-char* json_dumps_safe(json_t const* json) {
+char* json_dumps_safe(json_t* json) {
     if (!json) {
         log_error("Attempt to dump NULL JSON object");
         return NULL;

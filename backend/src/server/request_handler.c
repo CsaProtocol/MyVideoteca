@@ -22,6 +22,9 @@ char* process_request(const char* request) {
         response = signup_service(request);
         return response;
     }
+
+    //TODO - CONTROLLA JWT TOKEN
+
     if(strcmp(endpoint, "ricerca") == 0) {
         response = search_service(request);
         return response;

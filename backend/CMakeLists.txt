@@ -70,6 +70,10 @@ add_executable(
         src/services/signup_service.h
         src/services/search_service.c
         src/services/search_service.h
+        src/services/rental_service.c
+        src/services/rental_service.h
+        src/services/return_service.c
+        src/services/return_service.h
 )
 
 target_compile_options(

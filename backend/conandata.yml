@@ -2,8 +2,7 @@
 # To keep your changes, remove these comment lines, but the plugin won't be able to modify your requirements
 
 requirements:
-  - "hiredis/1.2.0"
-  - "mariadb-connector-c/3.4.3"
+  - "openssl/3.4.1"
   - "libpq/15.12"
   - "jansson/2.14"
   - "gtest/1.16.0"
