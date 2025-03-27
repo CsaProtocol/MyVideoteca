@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.LinearLayoutManager
 import it.unina.myvideoteca.R
 import it.unina.myvideoteca.data.Film
-import org.json.JSONArray
+import org.json.JSONObject
 
 class CercaRisultatiActivity: AppCompatActivity() {
 
@@ -28,7 +28,8 @@ class CercaRisultatiActivity: AppCompatActivity() {
 
     private fun parseFilmList(jsonString: String): MutableList<Film> {
         val filmList = mutableListOf<Film>()
-        val filmArray = JSONArray(jsonString) //TODO: da correggere in base a come vengono passati realmente i film
+        val jsonRisultati = JSONObject(jsonString)
+        val filmArray = jsonRisultati.optJSONArray("films") ?: return filmList
         for (i in 0 until filmArray.length()) {
             val filmJson = filmArray.getJSONObject(i)
             val film = Film(

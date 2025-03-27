@@ -1,5 +1,6 @@
 package it.unina.myvideoteca.view
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -9,6 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import it.unina.myvideoteca.MainActivity
 import it.unina.myvideoteca.R
+import it.unina.myvideoteca.data.SharedPrefManager
 import it.unina.myvideoteca.server.ServerController
 import it.unina.myvideoteca.socket.SocketSingleton
 import org.json.JSONObject
@@ -50,7 +52,7 @@ class AccessoActivity: AppCompatActivity() {
                 if (response != null) {
                     val jsonResponse = JSONObject(response)
                     if (jsonResponse.getString("status") == "success") {
-                        // TODO: salva i dati restituiti dal json (es: il numero max di noleggi)
+                        saveData(this, jsonResponse)
                         val intent = Intent(this@AccessoActivity, HomeActivity::class.java)
                         startActivity(intent)
                         finish()
@@ -72,4 +74,11 @@ class AccessoActivity: AppCompatActivity() {
         }
     }
 
+    private fun saveData(context: Context, jsonResponse: JSONObject){
+        SharedPrefManager.saveToken(context, jsonResponse.getString("jwt_token"))
+        SharedPrefManager.saveUserId(context, jsonResponse.getString("id"))
+        SharedPrefManager.saveNumNonRestituiti(context, jsonResponse.getString("numero_film_non_restituiti"))
+        SharedPrefManager.saveMaxNoleggi(context, jsonResponse.getString("max_noleggi"))
+        SharedPrefManager.saveNonRestituitiBool(context, jsonResponse.getString("film_non_restituiti"))
+    }
 }

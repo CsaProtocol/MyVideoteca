@@ -2,6 +2,7 @@ package it.unina.myvideoteca.socket
 
 import android.util.Log
 import kotlinx.coroutines.*
+import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
@@ -50,7 +51,7 @@ class SocketClient(private val serverIp: String, private val serverPort: Int) {
         clientScope.launch {
             while (running) {
                 try {
-                    writer?.println("{\"type\": \"heartbeat\"}")
+                    writer?.println("{\"endpoint\": \"heartbeat\"}")
                     Log.d("KeepAlive", "Keep-Alive inviato")
                     delay(250_000L)  // Attendi 250 secondi tra un messaggio e l'altro
                 } catch (e: Exception) {
@@ -78,7 +79,20 @@ class SocketClient(private val serverIp: String, private val serverPort: Int) {
     fun readResponse(callback: (String?) -> Unit) {
         clientScope.launch {
             try {
-                val response = reader?.readLine()  // Operazione di I/O in un thread separato
+                var response: String?
+                do {
+                    response = reader?.readLine()
+                    if (response != null) {
+                        val jsonResponse = JSONObject(response)
+                        if (jsonResponse.optString("status") == "success" && jsonResponse.optString("message") == "Heartbeat successful") {
+                            Log.d("readResponse", "Risposta heartbeat ricevuta e ignorata.")
+                        } else {
+                            break // Se non è un heartbeat, esci dal ciclo
+                        }
+                    } else {
+                        break
+                    }
+                } while (true)
                 withContext(dispatcherMain) {
                     callback(response)
                 }
@@ -90,6 +104,7 @@ class SocketClient(private val serverIp: String, private val serverPort: Int) {
             }
         }
     }
+
 
     fun attemptReconnect() {
         if (reconnecting) return  // Evita più tentativi paralleli

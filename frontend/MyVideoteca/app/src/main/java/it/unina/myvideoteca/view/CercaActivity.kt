@@ -40,10 +40,10 @@ class CercaActivity: AppCompatActivity() {
             val regista = registaEditText.text.toString().trim()
             val genere = genereSpinner.selectedItem.toString()
 
-            //non faccio controlli sui campi vuoti, se tutti sono vuoti vuol dire che cerco tutti i film
-            ricerca(titolo, regista, genere)
+            ricerca(titolo, regista, genere) //non faccio controlli sui campi vuoti, se tutti sono vuoti vuol dire che cerco tutti i film
         }
     }
+
 
     private fun ricerca(titolo: String, regista: String, genere: String){
         serverController.ricerca(titolo, regista, genere){ response ->
@@ -72,4 +72,5 @@ class CercaActivity: AppCompatActivity() {
             }
         }
     }
+
 }
