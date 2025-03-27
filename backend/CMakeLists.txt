@@ -39,7 +39,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/dependencies/build/Release/generators 
 find_package(GTest REQUIRED)
 find_package(PostgreSQL REQUIRED)
 find_package(jansson REQUIRED)
-find_package(hiredis REQUIRED)
+find_package(OpenSSL REQUIRED)
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 #                                         MAIN COMPILATION OPTIONS                                         #
@@ -93,7 +93,7 @@ target_link_libraries(
     PRIVATE
     jansson::jansson
     PostgreSQL::PostgreSQL
-    hiredis::hiredis
+    openssl::openssl
 )
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
@@ -125,6 +125,6 @@ target_link_libraries(
     GTest::Main
     jansson::jansson
     PostgreSQL::PostgreSQL
-    hiredis::hiredis
+    openssl::openssl
 )
 

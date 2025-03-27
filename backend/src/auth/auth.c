@@ -1,15 +1,11 @@
 #include "auth.h"
-
-#include <stdbool.h>
 #include <string.h>
-#include <openssl/sha.h>
-
 #include "db/postgres.h"
 #include "utils/logger.h"
 
 bool login(const char* email, const char* password) {
     unsigned char hash[SHA512_DIGEST_LENGTH];
-    SHA512(password, strlen(password), hash);
+    SHA512((const unsigned char*) password, strlen(password), hash);
 
     char query[1024];
     snprintf("SELECT * FROM users WHERE email = %s AND password = %s", email, hash);
