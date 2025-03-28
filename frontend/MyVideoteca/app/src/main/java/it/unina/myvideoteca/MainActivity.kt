@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         val registratiButton = findViewById<Button>(R.id.buttonRegistrati)
         val accediText = findViewById<TextView>(R.id.textAccedi)
 
-        serverController = ServerController(SocketSingleton.client)
+        serverController = ServerController(SocketSingleton.client, this)
 
         emailEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { /*vuoto*/ }

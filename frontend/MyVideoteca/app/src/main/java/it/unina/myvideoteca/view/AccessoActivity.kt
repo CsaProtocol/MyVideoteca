@@ -27,7 +27,7 @@ class AccessoActivity: AppCompatActivity() {
         val accediButton = findViewById<Button>(R.id.buttonAccedi)
         val registratiText = findViewById<TextView>(R.id.textRegistrati)
 
-        serverController = ServerController(SocketSingleton.client)
+        serverController = ServerController(SocketSingleton.client, this)
 
         accediButton.setOnClickListener{
             val email = emailEditText.text.toString().trim()
