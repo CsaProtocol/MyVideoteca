@@ -45,7 +45,7 @@ class HomeActivity: AppCompatActivity() {
         }
 
         restituisciButton.setOnClickListener{
-            val intent = Intent(this, NoleggiActivity::class.java)
+            val intent = Intent(this, NoleggiCaricaActivity::class.java)
             startActivity(intent)
         }
 
