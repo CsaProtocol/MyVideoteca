@@ -26,7 +26,7 @@ int main(int argc, char* argv[]) {
         .port = 5432,
         .dbname = "videoteca",
         .user = "postgres",
-        .password = "password"
+        .password = "edugau01"
     };
 
     //TODO - da leggere da file di configurazione

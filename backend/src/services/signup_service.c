@@ -11,8 +11,8 @@ char* signup_service(const char* request) {
     json_t* deSerialized = json_loadb(request, strlen(request), 0, &error);
 
     if (!deSerialized) {
-        log_error("Invalid JSON: %s", error.text);
-        return "{\"status\":\"error\",\"message\":\"Invalid JSON\"}";
+        log_error("JSON non valido: %s", error.text);
+        return json_response_error("JSON non valido");
     }
 
     const char* email = json_string_value(json_object_get(deSerialized, "email"));
@@ -20,12 +20,18 @@ char* signup_service(const char* request) {
     const char* nome = json_string_value(json_object_get(deSerialized, "nome"));
     const char* cognome = json_string_value(json_object_get(deSerialized, "cognome"));
 
-    if (!signup(nome, cognome, email, password)) {
-        log_error("Signup failed");
+    if (!email || !password || !nome || !cognome) {
+        log_error("Campi obbligatori mancanti");
         json_decref(deSerialized);
-        return "{\"status\":\"error\",\"message\":\"Signup failed\"}";
+        return json_response_error("Campi obbligatori mancanti");
+    }
+
+    if (!signup(nome, cognome, email, password)) {
+        log_error("Registrazione fallita");
+        json_decref(deSerialized);
+        return json_response_error("Registrazione fallita");
     }
 
     json_decref(deSerialized);
-    return json_response_success("Signup successful");
+    return json_response_success("Registrazione completata con successo");
 }

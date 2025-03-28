@@ -18,13 +18,13 @@ bool db_connect(const db_config_t config) {
     conn = PQconnectdb(connection_info);
 
     if (PQstatus(conn) != CONNECTION_OK) {
-        log_error("Connection to database failed: %s", PQerrorMessage(conn));
+        log_error("Connessione al database fallita: %s", PQerrorMessage(conn));
         PQfinish(conn);
         conn = NULL;
         return false;
     }
 
-    log_info("Connected to PostgreSQL database");
+    log_info("Connesso al database PostgreSQL");
     return true;
 }
 
@@ -32,20 +32,20 @@ void db_disconnect(void) {
     if (conn) {
         PQfinish(conn);
         conn = NULL;
-        log_info("Disconnected from PostgreSQL database");
+        log_info("Disconnesso dal database PostgreSQL");
     }
 }
 
-PGresult* db_execute_query(const char* query) {
+PGresult* db_execute_query(const char* query, const int param_count, const char* params[]) {
     if (!conn) {
-        log_error("Database connection not established");
+        log_error("Connessione al database non stabilita");
         return NULL;
     }
 
-    PGresult* res = PQexec(conn, query);
+    PGresult* res = PQexecParams(conn, query, param_count, NULL, params, NULL, NULL, 0);
 
     if (PQresultStatus(res) != PGRES_TUPLES_OK && PQresultStatus(res) != PGRES_COMMAND_OK) {
-        log_error("Query execution failed: %s", PQerrorMessage(conn));
+        log_error("Esecuzione della query fallita: %s", PQerrorMessage(conn));
         PQclear(res);
         return NULL;
     }

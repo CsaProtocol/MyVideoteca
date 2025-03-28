@@ -2,6 +2,7 @@
 # To keep your changes, remove these comment lines, but the plugin won't be able to modify your requirements
 
 requirements:
+  - "argon2/20190702"
   - "openssl/3.4.1"
   - "libpq/15.12"
   - "jansson/2.14"

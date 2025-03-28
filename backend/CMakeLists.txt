@@ -40,6 +40,7 @@ find_package(GTest REQUIRED)
 find_package(PostgreSQL REQUIRED)
 find_package(jansson REQUIRED)
 find_package(OpenSSL REQUIRED)
+find_package(argon2 REQUIRED)
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 #                                         MAIN COMPILATION OPTIONS                                         #
@@ -94,6 +95,7 @@ target_link_libraries(
     jansson::jansson
     PostgreSQL::PostgreSQL
     openssl::openssl
+    argon2::argon2
 )
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
@@ -126,5 +128,6 @@ target_link_libraries(
     jansson::jansson
     PostgreSQL::PostgreSQL
     openssl::openssl
+    argon2::argon2
 )
 

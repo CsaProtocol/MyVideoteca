@@ -4,6 +4,7 @@
 
 #include "../auth/auth.h"
 #include "db/postgres.h"
+#include "utils/json.h"
 #include "utils/logger.h"
 
 char* login_service(const char* request) {
@@ -11,57 +12,58 @@ char* login_service(const char* request) {
     json_t* deSerialized = json_loadb(request, strlen(request), 0, &error);
 
     if (!deSerialized) {
-        log_error("Invalid JSON: %s", error.text);
-        return "{\"status\":\"error\",\"message\":\"Invalid JSON\"}";
+        log_error("JSON non valido: %s", error.text);
+        return json_response_error("JSON non valido");
     }
 
     const char* email = json_string_value(json_object_get(deSerialized, "email"));
     const char* password = json_string_value(json_object_get(deSerialized, "password"));
 
     if (!login(email, password)) {
-        log_error("Login failed");
+        log_error("Login fallito");
         json_decref(deSerialized);
-        return "{\"status\":\"error\",\"message\":\"Login failed\"}";
+        return json_response_error("Login fallito");
     }
 
-    char query[1024];
-    snprintf(query, sizeof(query), "SELECT id FROM utenti WHERE email = '%s';", email);
-
-    PGresult* result = db_execute_query(query);
+    const char* query1 = "SELECT id FROM utenti WHERE email = $1;";
+    const char* params1[1] = {email};
+    PGresult* result = db_execute_query(query1, 1, params1);
     if (!result) {
-        log_error("Error executing query");
+        log_error("Errore nell'esecuzione della query");
         json_decref(deSerialized);
-        return "{\"status\":\"error\",\"message\":\"Error executing query\"}";
+        return json_response_error("Errore nell'esecuzione della query");
     }
 
     int id = atoi(PQgetvalue(result, 0, 0));
     db_free_result(result);
 
-    snprintf(query, sizeof(query), "SELECT aggiorna_flag_utente(%d);", id);
-    result = db_execute_query(query);
+    const char* query2 = "SELECT aggiorna_flag_utente($1);";
+    const char* params2[1] = {(char*)&id};
+    result = db_execute_query(query2, 1, params2);
     if (!result) {
-        log_error("Error executing query");
+        log_error("Errore nell'esecuzione della query");
         json_decref(deSerialized);
-        return "{\"status\":\"error\",\"message\":\"Error executing query\"}";
+        return json_response_error("Errore nell'esecuzione della query");
     }
     db_free_result(result);
 
-    snprintf(query, sizeof(query),
+    const char* query3 =
         "SELECT id, numero_film_non_restituiti, get_massimo_noleggi() AS max_noleggi, film_non_restituiti "
         "FROM utenti "
         "FULL JOIN (SELECT COUNT(*) AS numero_film_non_restituiti, id_utente FROM noleggi WHERE data_restituzione IS NULL GROUP BY id_utente) "
-        "ON utenti.id = id_utente WHERE email = '%s';", email);
+        "ON utenti.id = id_utente WHERE email = $1;";
 
-    result = db_execute_query(query);
+    const char* params3[1] = {email};
+    result = db_execute_query(query3, 1, params3);
     if (!result) {
-        log_error("Error executing query");
+        log_error("Errore nell'esecuzione della query");
         json_decref(deSerialized);
-        return "{\"status\":\"error\",\"message\":\"Error executing query\"}";
+        return json_response_error("Errore nell'esecuzione della query");
     }
 
     json_t* response = json_object();
     json_object_set_new(response, "status", json_string("success"));
-    json_object_set_new(response, "message", json_string("Login successful"));
+    json_object_set_new(response, "message", json_string("Login effettuato con successo"));
     json_object_set_new(response, "id", json_integer(id));
     json_object_set_new(response, "numero_film_non_restituiti", json_integer(atoi(PQgetvalue(result, 0, 1))));
     json_object_set_new(response, "max_noleggi", json_integer(atoi(PQgetvalue(result, 0, 2))));

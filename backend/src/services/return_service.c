@@ -18,26 +18,30 @@ char* return_service(const char* request) {
     const int user_id = json_integer_value(json_object_get(deSerialized, "user_id"));
     const int film_id = json_integer_value(json_object_get(deSerialized, "film_id"));
 
-    char query[1024];
+    PGresult* result;
+    const char* query;
+    const char* params[2];
 
     if (rental_id > 0) {
-        snprintf(query, sizeof(query),
-            "UPDATE noleggi "
-            "SET data_restituzione = CURRENT_DATE "
-            "WHERE id = %d AND data_restituzione IS NULL "
-            "RETURNING id;", rental_id);
+        query = "UPDATE noleggi "
+                "SET data_restituzione = CURRENT_DATE "
+                "WHERE id = $1 AND data_restituzione IS NULL "
+                "RETURNING id;";
+        params[0] = (char*)&rental_id;
+        result = db_execute_query(query, 1, params);
     } else if (user_id > 0 && film_id > 0) {
-        snprintf(query, sizeof(query),
-            "UPDATE noleggi "
-            "SET data_restituzione = CURRENT_DATE "
-            "WHERE id_utente = %d AND id_film = %d AND data_restituzione IS NULL "
-            "RETURNING id;", user_id, film_id);
+        query = "UPDATE noleggi "
+                "SET data_restituzione = CURRENT_DATE "
+                "WHERE id_utente = $1 AND id_film = $2 AND data_restituzione IS NULL "
+                "RETURNING id;";
+        params[0] = (char*)&user_id;
+        params[1] = (char*)&film_id;
+        result = db_execute_query(query, 2, params);
     } else {
         json_decref(deSerialized);
         return json_response_error("Dati per la restituzione non validi");
     }
 
-    PGresult* result = db_execute_query(query);
     if (!result) {
         log_error("Errore nell'esecuzione della query di restituzione");
         json_decref(deSerialized);

@@ -14,7 +14,7 @@ typedef struct {
 
 bool db_connect(db_config_t config);
 void db_disconnect(void);
-PGresult* db_execute_query(const char* query);
+PGresult* db_execute_query(const char* query, int param_count, const char* params[]);
 void db_free_result(PGresult* result);
 
 #endif // POSTGRES_H
