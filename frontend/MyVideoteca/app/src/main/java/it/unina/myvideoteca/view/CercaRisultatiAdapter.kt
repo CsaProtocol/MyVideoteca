@@ -49,6 +49,11 @@ class CercaRisultatiAdapter(private val filmList: MutableList<Film>,
             descrizioneText.text = film.descrizione
             copieText.text = context.getString(R.string.copie_disponibili, film.copieDisponibili)
 
+            if (film.copieDisponibili < 1){
+                aggiungiButton.isEnabled = false
+                aggiungiButton.backgroundTintList = context.getColorStateList(android.R.color.darker_gray)
+            }
+
             aggiungiButton.setOnClickListener {
                     aggiungiAlCarrello(film)
             }

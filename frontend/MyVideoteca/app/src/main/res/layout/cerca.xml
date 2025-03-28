@@ -27,7 +27,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="100dp"
+                android:layout_marginBottom="10dp"
                 android:gravity="center_vertical">
 
                 <ImageView
@@ -51,7 +51,7 @@
 
             <LinearLayout
                 android:layout_width="357dp"
-                android:layout_height="500dp"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:layout_gravity="center"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -129,6 +129,42 @@
                     android:layout_marginBottom="10dp"
                     android:entries="@array/genere_film" />
 
+                <TextView
+                    android:id="@+id/textAnno"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="@string/anno" />
+
+                <EditText
+                    android:id="@+id/editTextAnno"
+                    android:background="@drawable/purple_border_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginBottom="10dp"
+                    android:importantForAutofill="no"
+                    android:inputType="number"
+                    android:hint="@string/anno"/>
+
+                <TextView
+                    android:id="@+id/textDurata"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="@string/durata" />
+
+                <EditText
+                    android:id="@+id/editTextDurata"
+                    android:background="@drawable/purple_border_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginBottom="10dp"
+                    android:importantForAutofill="no"
+                    android:inputType="number"
+                    android:hint="@string/durata"/>
+
                 <Button
                     android:id="@+id/buttonCerca"
                     style="@style/PurpleButton"
@@ -138,6 +174,41 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginBottom="5dp"
                     android:text="@string/cerca_film" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/textSeiIndeciso"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:textSize="16sp"
+                        android:text="@string/sei_indeciso" />
+
+                    <TextView
+                        android:id="@+id/textCercaPopolari"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="@color/mv_purple"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:text="@string/cerca_popolari" />
+
+                </LinearLayout>
+
+
+
 
 
             </LinearLayout>
