@@ -55,7 +55,7 @@ char* search_service(const char* request) {
     }
 
     if (durata_min > 0 && durata_max > 0) {
-        sprintf(where_clause + strlen(where_clause), " AND durata BETWEEN $%d $%d", param_count + 1, param_count + 1);
+        sprintf(where_clause + strlen(where_clause), " AND durata BETWEEN $%d AND $%d", param_count + 1, param_count + 1);
         char* durata_str = malloc(16);
         sprintf(durata_str, "%d", durata_min);
         params[param_count++] = durata_str;
