@@ -58,3 +58,54 @@ void db_free_result(PGresult* result) {
         PQclear(result);
     }
 }
+
+bool db_begin_transaction() {
+    if (!conn) {
+        log_error("Connessione al database non stabilita");
+        return false;
+    }
+
+    PGresult* res = PQexec(conn, "BEGIN");
+    if (PQresultStatus(res) != PGRES_COMMAND_OK) {
+        log_error("Impossibile iniziare la transazione: %s", PQerrorMessage(conn));
+        PQclear(res);
+        return false;
+    }
+
+    PQclear(res);
+    return true;
+}
+
+bool db_rollback_transaction(void) {
+    if (!conn) {
+        log_error("Connessione al database non stabilita");
+        return false;
+    }
+
+    PGresult* res = PQexec(conn, "ROLLBACK");
+    if (PQresultStatus(res) != PGRES_COMMAND_OK) {
+        log_error("Impossibile eseguire rollback della transazione: %s", PQerrorMessage(conn));
+        PQclear(res);
+        return false;
+    }
+
+    PQclear(res);
+    return true;
+}
+
+bool db_commit_transaction(void) {
+    if (!conn) {
+        log_error("Connessione al database non stabilita");
+        return false;
+    }
+
+    PGresult* res = PQexec(conn, "COMMIT");
+    if (PQresultStatus(res) != PGRES_COMMAND_OK) {
+        log_error("Impossibile eseguire commit della transazione: %s", PQerrorMessage(conn));
+        PQclear(res);
+        return false;
+    }
+
+    PQclear(res);
+    return true;
+}

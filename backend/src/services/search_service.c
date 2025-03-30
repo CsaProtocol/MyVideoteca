@@ -18,12 +18,12 @@ char* search_service(const char* request) {
     const char* titolo = json_string_value(json_object_get(deSerialized, "titolo"));
     const char* genere = json_string_value(json_object_get(deSerialized, "genere"));
     const char* regista = json_string_value(json_object_get(deSerialized, "regista"));
-    int anno = json_integer_value(json_object_get(deSerialized, "anno"));
-    int durata_min = json_integer_value(json_object_get(deSerialized, "durata_min"));
-    int durata_max = json_integer_value(json_object_get(deSerialized, "durata_max"));
+    const int anno = json_integer_value(json_object_get(deSerialized, "anno"));
+    const int durata_min = json_integer_value(json_object_get(deSerialized, "durata_min"));
+    const int durata_max = json_integer_value(json_object_get(deSerialized, "durata_max"));
 
     char where_clause[1024] = "";
-    char* params[5] = {NULL};
+    char* params[6] = {NULL};
     int param_count = 0;
 
     if (titolo) {
@@ -67,7 +67,7 @@ char* search_service(const char* request) {
     char query[2048];
     snprintf(query, sizeof(query),
         "SELECT film_id, titolo, genere, regista, anno, durata, descrizione, numero_copie, numero_copie_disponibili "
-        "FROM films "
+        "FROM film "
         "WHERE 1=1 %s", where_clause);
 
     PGresult* result = db_execute_query(query, param_count, (const char**)params);

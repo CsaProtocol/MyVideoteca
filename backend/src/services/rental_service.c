@@ -15,63 +15,96 @@ char* rental_service(const char* request) {
     }
 
     const int user_id = json_integer_value(json_object_get(deSerialized, "user_id"));
-    const int film_id = json_integer_value(json_object_get(deSerialized, "film_id"));
+    const json_t* films_array = json_object_get(deSerialized, "films");
 
-    if (user_id <= 0 || film_id <= 0) {
-        log_error("User ID o film ID non validi");
+    if (user_id <= 0 || !json_is_array(films_array) || json_array_size(films_array) == 0) {
+        log_error("User ID non valido o array film non presente/vuoto");
         json_decref(deSerialized);
-        return json_response_error("User ID o film ID non validi");
+        return json_response_error("User ID non valido o array film non presente/vuoto");
     }
 
-    const char* query1 =
-        "SELECT EXISTS(SELECT 1 FROM films WHERE id = $1) AS film_exists, "
-        "NOT EXISTS(SELECT 1 FROM noleggi WHERE id_film = $1 AND data_restituzione IS NULL) AS available;";
+    json_t* successful_rentals = json_array();
+    json_t* failed_rentals = json_array();
 
-    const char* params1[1] = {(char*)&film_id};
-    PGresult* result = db_execute_query(query1, 1, params1);
-    if (!result) {
-        log_error("Errore nel controllo della disponibilità del film");
-        json_decref(deSerialized);
-        return json_response_error("Errore nel controllo della disponibilità del film");
+    size_t index;
+    json_t* film_json;
+    json_array_foreach(films_array, index, film_json) {
+        const int film_id = json_integer_value(film_json);
+        json_t* rental_result = json_object();
+        json_object_set_new(rental_result, "film_id", json_integer(film_id));
+
+        if (film_id <= 0) {
+            json_object_set_new(rental_result, "error", json_string("Film ID non valido"));
+            json_array_append_new(failed_rentals, rental_result);
+            continue;
+        }
+
+        const char* query_check =
+            "SELECT EXISTS(SELECT 1 FROM films WHERE id = $1) AS film_exists, "
+            "NOT EXISTS(SELECT 1 FROM noleggi WHERE id_film = $1 AND data_restituzione IS NULL) AS available;";
+
+        char* params_check[1];
+        params_check[0] = malloc(16);
+        sprintf(params_check[0], "%d", film_id);
+
+        PGresult* result = db_execute_query(query_check, 1, params_check);
+        free((void*)params_check[0]);
+
+        if (!result) {
+            json_object_set_new(rental_result, "error", json_string("Errore database"));
+            json_array_append_new(failed_rentals, rental_result);
+            continue;
+        }
+
+        const int film_exists = strcmp(PQgetvalue(result, 0, 0), "t") == 0;
+        const int available = strcmp(PQgetvalue(result, 0, 1), "t") == 0;
+        db_free_result(result);
+
+        if (!film_exists) {
+            json_object_set_new(rental_result, "error", json_string("Film non trovato"));
+            json_array_append_new(failed_rentals, rental_result);
+            continue;
+        }
+
+        if (!available) {
+            json_object_set_new(rental_result, "error", json_string("Film non disponibile"));
+            json_array_append_new(failed_rentals, rental_result);
+            continue;
+        }
+
+        const char* query_insert =
+            "INSERT INTO noleggi (id_utente, id_film, data_noleggio) "
+            "VALUES ($1, $2, CURRENT_DATE) RETURNING id;";
+
+        char* params_insert[2];
+        params_insert[0] = malloc(16);
+        sprintf(params_insert[0], "%d", user_id);
+        params_insert[1] = malloc(16);
+        sprintf(params_insert[1], "%d", film_id);
+
+        result = db_execute_query(query_insert, 2, params_insert);
+        free((void*)params_insert[0]);
+        free((void*)params_insert[1]);
+
+        if(!result) {
+            db_rollback_transaction();
+            json_object_set_new(rental_result, "error", json_string("Errore creazione noleggio"));
+            json_array_append_new(failed_rentals, rental_result);
+            continue;
+        }
+
+        const int rental_id = atoi(PQgetvalue(result, 0, 0));
+        db_free_result(result);
+
+        json_object_set_new(rental_result, "noleggio_id", json_integer(rental_id));
+        json_array_append_new(successful_rentals, rental_result);
     }
-
-    const int film_exists = strcmp(PQgetvalue(result, 0, 0), "t") == 0;
-    const int available = strcmp(PQgetvalue(result, 0, 1), "t") == 0;
-    db_free_result(result);
-
-    if (!film_exists) {
-        log_error("Film non trovato");
-        json_decref(deSerialized);
-        return json_response_error("Film non trovato");
-    }
-
-    if (!available) {
-        log_error("Film non disponibile");
-        json_decref(deSerialized);
-        return json_response_error("Film non disponibile");
-    }
-
-    const char* query2 =
-        "INSERT INTO noleggi (id_utente, id_film, data_noleggio) "
-        "VALUES ($1, $2, CURRENT_DATE) RETURNING id;";
-
-    const char* params2[2] = {(char*)&user_id, (char*)&film_id};
-    result = db_execute_query(query2, 2, params2);
-    if (!result) {
-        log_error("Errore nella creazione di un noleggio");
-        json_decref(deSerialized);
-        return json_response_error("Errore nella creazione di un noleggio");
-    }
-
-    const int rental_id = atoi(PQgetvalue(result, 0, 0));
-    db_free_result(result);
-
     json_decref(deSerialized);
 
     json_t* response = json_object();
     json_object_set_new(response, "status", json_string("success"));
-    json_object_set_new(response, "message", json_string("Noleggiato con successo"));
-    json_object_set_new(response, "noleggio_id", json_integer(rental_id));
+    json_object_set_new(response, "successful_rentals", successful_rentals);
+    json_object_set_new(response, "failed_rentals", failed_rentals);
 
     char* response_str = json_dumps(response, 0);
     json_decref(response);
