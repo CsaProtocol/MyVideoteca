@@ -29,21 +29,21 @@ char* search_service(const char* request) {
     if (titolo) {
         char titolo_pattern[256];
         snprintf(titolo_pattern, sizeof(titolo_pattern), "%%%s%%", titolo);
-        strcat(where_clause, " AND titolo ILIKE $1");
+        strcat(where_clause, " AND titolo LIKE $1");
         params[param_count++] = strdup(titolo_pattern);
     }
 
     if (genere) {
         char genere_pattern[256];
         snprintf(genere_pattern, sizeof(genere_pattern), "%%%s%%", genere);
-        sprintf(where_clause + strlen(where_clause), " AND genere ILIKE $%d", param_count + 1);
+        sprintf(where_clause + strlen(where_clause), " AND genere LIKE $%d", param_count + 1);
         params[param_count++] = strdup(genere_pattern);
     }
 
     if (regista) {
         char regista_pattern[256];
         snprintf(regista_pattern, sizeof(regista_pattern), "%%%s%%", regista);
-        sprintf(where_clause + strlen(where_clause), " AND regista ILIKE $%d", param_count + 1);
+        sprintf(where_clause + strlen(where_clause), " AND regista LIKE $%d", param_count + 1);
         params[param_count++] = strdup(regista_pattern);
     }
 

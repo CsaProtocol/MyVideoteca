@@ -77,6 +77,10 @@ add_executable(
         src/services/return_service.h
         src/auth/jwt.c
         src/auth/jwt.h
+        src/services/all_rentals_service.c
+        src/services/all_rentals_service.h
+        src/utils/config.c
+        src/utils/config.h
 )
 
 target_compile_options(

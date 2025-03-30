@@ -5,8 +5,10 @@
 #include <signal.h>
 #include <stdlib.h>
 
+#include "utils/config.h"
+
 static void handle_signal(const int sig) {
-    log_info("Received signal %d, shutting down...", sig);
+    log_info("Ricevuto segnale %d, arresto in corso...", sig);
     stop_server();
     db_disconnect();
     close_logger();
@@ -15,35 +17,26 @@ static void handle_signal(const int sig) {
 
 int main(int argc, char* argv[]) {
     init_logger("videoteca.log", LOG_INFO);
-    log_info("Starting Videoteca Server...");
+    log_info("Avvio del Server MyVideoteca...");
 
     signal(SIGINT, handle_signal);
     signal(SIGTERM, handle_signal);
 
-    //TODO - da leggere da file di configurazione
-    const db_config_t db_config = {
-        .host = "localhost",
-        .port = 5432,
-        .dbname = "videoteca",
-        .user = "postgres",
-        .password = "edugau01"
-    };
+    db_config_t db_config;
+    server_config_t server_config;
 
-    //TODO - da leggere da file di configurazione
-    const server_config_t server_config = {
-        .port = 8080,
-        .backlog = 10,
-        .max_connections = 100
-    };
+    if(!load_config("properties.json", &db_config, &server_config)) {
+        log_error("Impossibile caricare la configurazione");
+        return 1;
+    }
 
-    // Connect to databases
     if (!db_connect(db_config)) {
-        log_error("Failed to connect to PostgreSQL");
+        log_error("Connessione a PostgreSQL fallita");
         return 1;
     }
 
     if (!initialize_server(server_config)) {
-        log_error("Failed to initialize server");
+        log_error("Inizializzazione del server fallita");
         db_disconnect();
         return 1;
     }
