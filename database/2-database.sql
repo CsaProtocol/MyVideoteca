@@ -33,8 +33,8 @@ CREATE TABLE Film(
     anno INTEGER NOT NULL,
     durata INTEGER NOT NULL, -- in minuti
     descrizione TEXT NOT NULL,
-    numero_copie INTEGER NOT NULL,
-    numero_copie_disponibili INTEGER CHECK numero_copie_disponibili <= numero_copie;
+    numero_copie INTEGER NOT NULL CHECK (numero_copie > 0),
+    numero_copie_disponibili INTEGER NOT NULL CHECK (numero_copie_disponibili >= 0 AND numero_copie_disponibili <= numero_copie)
 );
 
 CREATE TABLE Noleggio(

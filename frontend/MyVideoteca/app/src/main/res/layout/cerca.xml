@@ -152,18 +152,45 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:text="@string/durata" />
+                    android:text="@string/durata_min_max" />
 
-                <EditText
-                    android:id="@+id/editTextDurata"
-                    android:background="@drawable/purple_border_background"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_gravity="center_vertical"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
                     android:layout_marginBottom="10dp"
-                    android:importantForAutofill="no"
-                    android:inputType="number"
-                    android:hint="@string/durata"/>
+                    android:gravity="center_vertical">
+
+                    <EditText
+                        android:id="@+id/editTextDurataMin"
+                        android:background="@drawable/purple_border_background"
+                        android:layout_width="150dp"
+                        android:layout_height="48dp"
+                        android:importantForAutofill="no"
+                        android:inputType="number"
+                        android:hint="@string/durata_min"/>
+
+                    <EditText
+                        android:id="@+id/editTextDurataMax"
+                        android:background="@drawable/purple_border_background"
+                        android:layout_width="150dp"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="30dp"
+                        android:importantForAutofill="no"
+                        android:inputType="number"
+                        android:hint="@string/durata_max"/>
+
+                </LinearLayout>
+
+
+                <CheckBox
+                    android:id="@+id/boxPopolari"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:textColor="@color/mv_purple"
+                    android:text="@string/cerca_popolari"/>
 
                 <Button
                     android:id="@+id/buttonCerca"
@@ -174,41 +201,6 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginBottom="5dp"
                     android:text="@string/cerca_film" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:gravity="center_vertical">
-
-                    <TextView
-                        android:id="@+id/textSeiIndeciso"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:textSize="16sp"
-                        android:text="@string/sei_indeciso" />
-
-                    <TextView
-                        android:id="@+id/textCercaPopolari"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:textStyle="bold"
-                        android:textSize="16sp"
-                        android:textColor="@color/mv_purple"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:text="@string/cerca_popolari" />
-
-                </LinearLayout>
-
-
-
 
 
             </LinearLayout>

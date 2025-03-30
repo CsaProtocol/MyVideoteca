@@ -14,8 +14,7 @@ import it.unina.myvideoteca.data.SharedPrefManager
 
 class CarrelloAdapter(private val filmList: MutableList<Film>,
                             private val context: Context
-):
-    RecyclerView.Adapter<CarrelloAdapter.CarrelloViewHolder>()
+): RecyclerView.Adapter<CarrelloAdapter.CarrelloViewHolder>()
 {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarrelloViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.carrello_card, parent, false)

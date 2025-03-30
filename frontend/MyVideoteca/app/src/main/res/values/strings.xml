@@ -46,10 +46,12 @@
         <item>Documentario</item>
     </string-array>
     <string name="anno">Anno</string>
-    <string name="durata">Durata minima</string>
+    <string name="durata_min_max">Durata minima e durata massima</string>
+    <string name="durata_min">Durata minima</string>
+    <string name="durata_max">Durata massima</string>
     <string name="cerca">Cerca</string>
     <string name="sei_indeciso">Sei indeciso?</string>
-    <string name="cerca_popolari"><u>Cerca i film più popolari</u></string>
+    <string name="cerca_popolari"><u>Cerca per film più popolari</u></string>
 
     <!-- Cerca Risultati -->
     <string name="num_risultati">La ricerca ha prodotto %1$d risultati.</string>
@@ -61,16 +63,18 @@
     <string name="descrizione_mockup">Descrizione del film</string>
     <string name="copie_disponibili">Copie disponibili: %1$d</string>
 
-    <!-- Noleggi -->
-    <string name="noleggi">Noleggi</string>
 
     <!-- Carrello -->
     <string name="carrello">Carrello</string>
-    <string name="check_out">Check-Out</string>
+    <string name="noleggia">Noleggia i film</string>
     <string name="rimuovi_dal_carrello">Rimuovi</string>
     <string name="carrello_vuoto">Il tuo carrello è vuoto. Cerca dei film e aggiungili al carrello! </string>
 
 
-
+    <!-- Noleggi Carica -->
+    <string name="stiamo_caricando">Stiamo caricando i tuoi noleggi. Attendere prego.</string>
+    <!-- Noleggi -->
+    <string name="noleggi">Noleggi</string>
+    <string name="noleggi_vuoto">Non hai nessun noleggio in corso. Cerca dei film e aggiungili al carrello! </string>
 
 </resources>

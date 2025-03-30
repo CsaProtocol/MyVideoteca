@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.LinearLayoutManager
 import it.unina.myvideoteca.R
-import it.unina.myvideoteca.utils.FilmParser
+import it.unina.myvideoteca.utils.DataParser
 
 class CercaRisultatiActivity: AppCompatActivity() {
 
@@ -18,7 +18,7 @@ class CercaRisultatiActivity: AppCompatActivity() {
         setContentView(R.layout.cerca_risultati)
 
         val risultati = intent.getStringExtra("risultati") ?: ""
-        val filmList = FilmParser.parseFilmList(risultati)
+        val filmList = DataParser.parseFilmList(risultati)
 
         recyclerView = findViewById(R.id.risultatiRecyclerView)
         adapter = CercaRisultatiAdapter(filmList, this)

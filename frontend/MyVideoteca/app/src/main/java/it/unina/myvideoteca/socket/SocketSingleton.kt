@@ -5,7 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 object SocketSingleton {
-    val client: SocketClient = SocketClient("192.168.1.100", 8080)
+    val client: SocketClient = SocketClient("192.168.1.108", 8080)
 
     init {
         // Connetti il socket su un thread separato usando coroutines

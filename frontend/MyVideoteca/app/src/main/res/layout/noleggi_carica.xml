@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/carrello"
+    android:id="@+id/noleggi_carica"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
@@ -48,52 +48,38 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="357dp"
-                android:layout_height="729dp"
-                android:orientation="vertical"
-                android:layout_gravity="center"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+            <TextView
+                android:id="@+id/textTitolo"
+                style="@style/Titolo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/noleggi" />
 
-                <TextView
-                    android:id="@+id/textTitolo"
-                    style="@style/Titolo"
+            <TextView
+                android:id="@+id/textCaricando"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/stiamo_caricando" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp">
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyleLarge"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_gravity="center_horizontal"
-                    android:text="@string/carrello" />
+                    android:layout_centerInParent="true"
+                    android:visibility="gone" />
 
-                <TextView
-                    android:id="@+id/textVuoto"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="20dp"
-                    android:layout_gravity="center_horizontal"
-                    android:text="@string/carrello_vuoto" />
+            </RelativeLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/carrelloRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="30dp"
-                    android:nestedScrollingEnabled="false"/>
-
-                <Button
-                    android:id="@+id/buttonNoleggia"
-                    style="@style/PurpleButton"
-                    android:layout_marginTop="5dp"
-                    android:layout_width="320dp"
-                    android:layout_height="54dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="5dp"
-                    android:text="@string/noleggia" />
-
-            </LinearLayout>
 
         </LinearLayout>
 

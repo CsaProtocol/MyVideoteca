@@ -3,10 +3,10 @@ package it.unina.myvideoteca.view
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Spinner
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import it.unina.myvideoteca.MainActivity
@@ -27,10 +27,11 @@ class CercaActivity: AppCompatActivity() {
         val genereSpinner = findViewById<Spinner>(R.id.spinnerGenere)
         genereSpinner.setSelection(0)
         val annoEditText = findViewById<EditText>(R.id.editTextAnno)
-        val durataEditText = findViewById<EditText>(R.id.editTextDurata)
+        val durataMinEditText = findViewById<EditText>(R.id.editTextDurataMin)
+        val durataMaxEditText = findViewById<EditText>(R.id.editTextDurataMax)
         val cercaButton = findViewById<Button>(R.id.buttonCerca)
 
-        val cercaPopolari = findViewById<TextView>(R.id.textCercaPopolari)
+        val popolariBox = findViewById<CheckBox>(R.id.boxPopolari)
 
         serverController = ServerController(SocketSingleton.client, this)
 
@@ -45,19 +46,37 @@ class CercaActivity: AppCompatActivity() {
             val regista = registaEditText.text.toString().trim()
             val genere = genereSpinner.selectedItem.toString()
             val anno = annoEditText.text.toString().trim()
-            val durata = durataEditText.text.toString().trim()
+            val durataMin = durataMinEditText.text.toString().trim()
+            val durataMax = durataMaxEditText.text.toString().trim()
+            val popolari = popolariBox.isChecked.toString()
 
-            ricerca(titolo, regista, genere, anno, durata, "false") //non faccio controlli sui campi vuoti, se tutti sono vuoti vuol dire che cerco tutti i film
+            if( !checkDurata(durataMin, durataMax) ){
+                Toast.makeText(this, "Inserire durata minima e massima corrette (o non inserirle affatto!)", Toast.LENGTH_SHORT).show()
+            }else{
+                ricerca(titolo, regista, genere, anno, durataMin, durataMax, popolari) //non faccio controlli sui campi vuoti, se tutti sono vuoti vuol dire che cerco tutti i film
+            }
         }
 
-        cercaPopolari.setOnClickListener{
-            ricerca("", "", "", "", "", "true")
+    }
+
+    fun checkDurata(minDurataStr: String, maxDurataStr: String) : Boolean{
+        val minDurata = minDurataStr.toIntOrNull() ?: 0
+        val maxDurata = maxDurataStr.toIntOrNull() ?: 0
+        if ((minDurataStr.isNotEmpty() xor maxDurataStr.isNotEmpty())) {
+            return false    //Uno solo compilato
         }
+        if (minDurata == 0 && maxDurata == 0 && minDurataStr.isNotEmpty() && maxDurataStr.isNotEmpty()) {
+            return false    //Entrambi i campi a zero
+        }
+        if (minDurata > maxDurata) {
+            return false    //Durata minima maggiore della durata massima
+        }
+        return true
     }
 
 
-    private fun ricerca(titolo: String, regista: String, genere: String, anno: String, durata: String, popolarita: String){
-        serverController.ricerca(titolo, regista, genere, anno, durata, popolarita){ response ->
+    private fun ricerca(titolo: String, regista: String, genere: String, anno: String, durataMin: String, durataMax: String, popolarita: String){
+        serverController.ricerca(titolo, regista, genere, anno, durataMin, durataMax, popolarita){ response ->
             runOnUiThread {
                 if (response != null) {
                     val jsonResponse = JSONObject(response)
@@ -67,8 +86,7 @@ class CercaActivity: AppCompatActivity() {
                         intent.putExtra("risultati", risultati)
                         startActivity(intent)
                     } else {
-                        Toast.makeText(this, jsonResponse.getString("message"), Toast.LENGTH_SHORT)
-                            .show()
+                        Toast.makeText(this, jsonResponse.getString("message"), Toast.LENGTH_SHORT).show()
                     }
                 } else {
                     Toast.makeText(this, "Connessione persa! Tentativo di riconnessione...", Toast.LENGTH_SHORT).show()
