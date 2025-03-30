@@ -1,0 +1,401 @@
+openapi: 3.0.0
+info:
+  title: Film Rental API
+  description: API per la gestione di un sistema di noleggio film
+  version: 1.0.0
+
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        status:
+          type: string
+          example: error
+        message:
+          type: string
+          example: Errore descrittivo
+    
+    LoginRequest:
+      type: object
+      required:
+        - endpoint
+        - email
+        - password
+      properties:
+        endpoint:
+          type: string
+          example: login
+        email:
+          type: string
+          example: user@example.com
+        password:
+          type: string
+          example: secure_password
+    
+    LoginResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+          example: Login effettuato con successo
+        id:
+          type: integer
+          example: 42
+        numero_film_non_restituiti:
+          type: integer
+          example: 3
+        max_noleggi:
+          type: integer
+          example: 5
+        film_non_restituiti:
+          type: string
+          example: "[{\"id\": 1, \"titolo\": \"Matrix\"}, {\"id\": 2, \"titolo\": \"Inception\"}]"
+    
+    SignupRequest:
+      type: object
+      required:
+        - endpoint
+        - email
+        - password
+        - nome
+        - cognome
+      properties:
+        endpoint:
+          type: string
+          example: signup
+        email:
+          type: string
+          example: nuovo@example.com
+        password:
+          type: string
+          example: password_sicura
+        nome:
+          type: string
+          example: Mario
+        cognome:
+          type: string
+          example: Rossi
+    
+    SearchRequest:
+      type: object
+      required:
+        - endpoint
+      properties:
+        endpoint:
+          type: string
+          example: ricerca
+        titolo:
+          type: string
+          example: Matrix
+        genere:
+          type: string
+          example: Sci-Fi
+        regista:
+          type: string
+          example: Wachowski
+        anno:
+          type: integer
+          example: 1999
+        durata_min:
+          type: integer
+          example: 90
+        durata_max:
+          type: integer
+          example: 180
+    
+    SearchResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        films:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              titolo:
+                type: string
+              genere:
+                type: string
+              regista:
+                type: string
+              anno:
+                type: integer
+              durata:
+                type: integer
+              descrizione:
+                type: string
+              numero_copie:
+                type: integer
+              numero_copie_disponibili:
+                type: integer
+    
+    RentalRequest:
+      type: object
+      required:
+        - endpoint
+        - user_id
+        - films
+      properties:
+        endpoint:
+          type: string
+          example: noleggio
+        user_id:
+          type: integer
+          example: 42
+        films:
+          type: array
+          items:
+            type: integer
+          example: [1, 2, 3]
+    
+    RentalResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        successful_rentals:
+          type: array
+          items:
+            type: object
+            properties:
+              film_id:
+                type: integer
+              noleggio_id:
+                type: integer
+        failed_rentals:
+          type: array
+          items:
+            type: object
+            properties:
+              film_id:
+                type: integer
+              error:
+                type: string
+    
+    ReturnRequest:
+      type: object
+      required:
+        - endpoint
+      properties:
+        endpoint:
+          type: string
+          example: restituzione
+        rental_id:
+          type: integer
+          example: 123
+        user_id:
+          type: integer
+          example: 42
+        film_id:
+          type: integer
+          example: 1
+    
+    ReturnResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+          example: Film restituito con successo
+        noleggio_id:
+          type: integer
+          example: 123
+    
+    HeartbeatRequest:
+      type: object
+      required:
+        - endpoint
+      properties:
+        endpoint:
+          type: string
+          example: heartbeat
+    
+    HeartbeatResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+          example: Heartbeat riuscito
+
+paths:
+  /api:
+    post:
+      summary: Endpoint principale che gestisce tutte le richieste
+      description: Questo endpoint riceve tutte le richieste JSON e le instrada ai servizi appropriati in base al campo "endpoint"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/LoginRequest'
+                - $ref: '#/components/schemas/SignupRequest'
+                - $ref: '#/components/schemas/SearchRequest'
+                - $ref: '#/components/schemas/RentalRequest'
+                - $ref: '#/components/schemas/ReturnRequest'
+                - $ref: '#/components/schemas/HeartbeatRequest'
+      responses:
+        '200':
+          description: Risposta dell'operazione richiesta
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/LoginResponse'
+                  - $ref: '#/components/schemas/SearchResponse'
+                  - $ref: '#/components/schemas/RentalResponse'
+                  - $ref: '#/components/schemas/ReturnResponse'
+                  - $ref: '#/components/schemas/HeartbeatResponse'
+                  - $ref: '#/components/schemas/Error'
+
+  /login:
+    post:
+      tags:
+        - Autenticazione
+      summary: Login utente
+      description: Autenticazione utente con email e password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login riuscito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Login fallito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /signup:
+    post:
+      tags:
+        - Autenticazione
+      summary: Registrazione utente
+      description: Registra un nuovo utente nel sistema
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignupRequest'
+      responses:
+        '200':
+          description: Registrazione completata
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Registrazione completata con successo
+        '400':
+          description: Registrazione fallita
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /ricerca:
+    post:
+      tags:
+        - Film
+      summary: Ricerca film
+      description: Cerca film nel catalogo in base a diversi criteri
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRequest'
+      responses:
+        '200':
+          description: Risultati ricerca
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+
+  /noleggio:
+    post:
+      tags:
+        - Noleggi
+      summary: Noleggio film
+      description: Noleggia uno o più film
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RentalRequest'
+      responses:
+        '200':
+          description: Risultati noleggio
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RentalResponse'
+
+  /restituzione:
+    post:
+      tags:
+        - Noleggi
+      summary: Restituzione film
+      description: Restituisce un film noleggiato
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReturnRequest'
+      responses:
+        '200':
+          description: Risultato restituzione
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReturnResponse'
+        '400':
+          description: Errore restituzione
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /heartbeat:
+    post:
+      tags:
+        - Sistema
+      summary: Verifica stato server
+      description: Semplice endpoint per verificare che il server sia attivo
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HeartbeatRequest'
+      responses:
+        '200':
+          description: Server attivo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HeartbeatResponse'
