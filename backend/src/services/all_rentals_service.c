@@ -17,7 +17,7 @@ char* all_rentals_service(const char* request) {
 
     const char* userid = json_string_value(json_object_get(deSerialized, "userid"));
 
-    const char query =
+    const char* query =
         "SELECT noleggio_id, film_id, data_noleggio, data_scadenza, restituito  "
         "FROM noleggi "
         "WHERE id_utente = $1 AND restituito = FALSE;";

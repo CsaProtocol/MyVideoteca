@@ -21,6 +21,13 @@ void* handle_client(void* client_socket_ptr) {
     char buffer[4096] = {0};
     ssize_t bytes_read;
 
+    const char* greeting = "Welcome to the server! Please send your request.\n";
+    if (write(client_socket, greeting, strlen(greeting)) < 0) {
+        log_error("Failed to send greeting to client");
+        close(client_socket);
+        return NULL;
+    }
+
     while ((bytes_read = read(client_socket, buffer, sizeof(buffer) - 1)) > 0) {
         buffer[bytes_read] = '\0';
 

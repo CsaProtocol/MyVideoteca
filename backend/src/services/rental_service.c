@@ -43,7 +43,7 @@ char* rental_service(const char* request) {
             "SELECT EXISTS(SELECT 1 FROM films WHERE id = $1) AS film_exists, "
             "NOT EXISTS(SELECT 1 FROM noleggi WHERE id_film = $1 AND data_restituzione IS NULL) AS available;";
 
-        char* params_check[1];
+        char* params_check[1] = {NULL};
         params_check[0] = malloc(16);
         sprintf(params_check[0], "%d", film_id);
 

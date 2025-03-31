@@ -86,7 +86,10 @@ bool load_config(const char* file_path, db_config_t* db_config, server_config_t*
     if (json_is_object(db)) {
         const json_t* host = json_object_get(db, "host");
         if (json_is_string(host)) {
-            strncpy((char*)db_config->host, json_string_value(host), sizeof(db_config->host) - 1);
+            char* new_host = strdup(json_string_value(host));
+            if (db_config->host != default_db_config.host)
+                free(db_config->host);
+            db_config->host = new_host;
         }
 
         const json_t* port = json_object_get(db, "port");
@@ -96,17 +99,26 @@ bool load_config(const char* file_path, db_config_t* db_config, server_config_t*
 
         const json_t* dbname = json_object_get(db, "dbname");
         if (json_is_string(dbname)) {
-            strncpy((char*)db_config->dbname, json_string_value(dbname), sizeof(db_config->dbname) - 1);
+            char* dbname_str = strdup(json_string_value(dbname));
+            if (db_config->dbname != default_db_config.dbname)
+                free(db_config->dbname);
+            db_config->dbname = dbname_str;
         }
 
         const json_t* user = json_object_get(db, "user");
         if (json_is_string(user)) {
-            strncpy((char*)db_config->user, json_string_value(user), sizeof(db_config->user) - 1);
+            char* user_str = strdup(json_string_value(user));
+            if (db_config->user != default_db_config.user)
+                free(db_config->user);
+            db_config->user = user_str;
         }
 
         const json_t* password = json_object_get(db, "password");
         if (json_is_string(password)) {
-            strncpy((char*)db_config->password, json_string_value(password), sizeof(db_config->password) - 1);
+            char* password_str = strdup(json_string_value(password));
+            if (db_config->password != default_db_config.password)
+                free(db_config->password);
+            db_config->password = password_str;
         }
     }
 
@@ -131,4 +143,17 @@ bool load_config(const char* file_path, db_config_t* db_config, server_config_t*
     json_decref(root);
     log_info("Configuration loaded from %s", file_path);
     return true;
+}
+
+void free_config(db_config_t* db_config) {
+    if (!db_config) return;
+
+    if (db_config->host != default_db_config.host)
+        free(db_config->host);
+    if (db_config->dbname != default_db_config.dbname)
+        free(db_config->dbname);
+    if (db_config->user != default_db_config.user)
+        free(db_config->user);
+    if (db_config->password != default_db_config.password)
+        free(db_config->password);
 }
