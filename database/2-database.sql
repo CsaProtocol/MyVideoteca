@@ -3,7 +3,7 @@ CREATE TABLE Utente(
     nome VARCHAR(50) NOT NULL,
     cognome VARCHAR(50) NOT NULL,
     email VARCHAR(50) NOT NULL UNIQUE,
-    password VARCHAR(50) NOT NULL,
+    password VARCHAR(128) NOT NULL,
     film_non_restituiti BOOLEAN NOT NULL DEFAULT FALSE
 );
 
