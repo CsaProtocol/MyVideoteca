@@ -7,7 +7,7 @@
 
 bool login(const char* email, const char* password) {
     char query[256];
-    snprintf(query, sizeof(query), "SELECT password FROM users WHERE email = $1");
+    snprintf(query, sizeof(query), "SELECT password FROM Utente WHERE email = $1");
 
     const char* params[1] = {email};
     PGresult* result = db_execute_query(query, 1, params);

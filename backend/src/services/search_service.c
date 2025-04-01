@@ -67,7 +67,7 @@ char* search_service(const char* request) {
     char query[2048];
     snprintf(query, sizeof(query),
         "SELECT film_id, titolo, genere, regista, anno, durata, descrizione, numero_copie, numero_copie_disponibili "
-        "FROM film "
+        "FROM Film "
         "WHERE 1=1 %s", where_clause);
 
     PGresult* result = db_execute_query(query, param_count, (const char**)params);

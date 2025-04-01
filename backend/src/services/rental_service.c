@@ -40,8 +40,8 @@ char* rental_service(const char* request) {
         }
 
         const char* query_check =
-            "SELECT EXISTS(SELECT 1 FROM films WHERE id = $1) AS film_exists, "
-            "NOT EXISTS(SELECT 1 FROM noleggi WHERE id_film = $1 AND data_restituzione IS NULL) AS available;";
+            "SELECT EXISTS(SELECT 1 FROM Film WHERE id = $1) AS film_exists, "
+            "NOT EXISTS(SELECT 1 FROM Noleggi WHERE id_film = $1 AND data_restituzione IS NULL) AS available;";
 
         char* params_check[1] = {NULL};
         params_check[0] = malloc(16);
@@ -73,7 +73,7 @@ char* rental_service(const char* request) {
         }
 
         const char* query_insert =
-            "INSERT INTO noleggi (id_utente, id_film, data_noleggio) "
+            "INSERT INTO Noleggio (id_utente, id_film, data_noleggio) "
             "VALUES ($1, $2, CURRENT_DATE) RETURNING id;";
 
         char* params_insert[2];

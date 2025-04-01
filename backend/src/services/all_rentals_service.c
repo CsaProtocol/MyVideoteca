@@ -19,7 +19,7 @@ char* all_rentals_service(const char* request) {
 
     const char* query =
         "SELECT noleggio_id, film_id, data_noleggio, data_scadenza, restituito  "
-        "FROM noleggi "
+        "FROM Noleggio "
         "WHERE id_utente = $1 AND restituito = FALSE;";
 
     const char* params[1] = {userid};

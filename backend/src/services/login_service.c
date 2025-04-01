@@ -25,7 +25,7 @@ char* login_service(const char* request) {
         return json_response_error("Login fallito");
     }
 
-    const char* query1 = "SELECT id FROM utenti WHERE email = $1;";
+    const char* query1 = "SELECT id FROM Utenti WHERE email = $1;";
     const char* params1[1] = {email};
     PGresult* result = db_execute_query(query1, 1, params1);
     if (!result) {
@@ -49,7 +49,7 @@ char* login_service(const char* request) {
 
     const char* query3 =
         "SELECT id, numero_film_non_restituiti, get_massimo_noleggi() AS max_noleggi, film_non_restituiti "
-        "FROM utenti "
+        "FROM Utenti "
         "FULL JOIN (SELECT COUNT(*) AS numero_film_non_restituiti, id_utente FROM noleggi WHERE data_restituzione IS NULL GROUP BY id_utente) "
         "ON utenti.id = id_utente WHERE email = $1;";
 
