@@ -75,7 +75,7 @@ class AccessoActivity: AppCompatActivity() {
     }
 
     private fun saveData(context: Context, jsonResponse: JSONObject){
-        SharedPrefManager.saveToken(context, jsonResponse.getString("jwt_token"))
+        //SharedPrefManager.saveToken(context, jsonResponse.getString("jwt_token"))
         SharedPrefManager.saveUserId(context, jsonResponse.getString("id"))
         SharedPrefManager.saveNumNonRestituiti(context, jsonResponse.getString("numero_film_non_restituiti"))
         SharedPrefManager.saveMaxNoleggi(context, jsonResponse.getString("max_noleggi"))

@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import it.unina.myvideoteca.MainActivity
 import it.unina.myvideoteca.R
+import it.unina.myvideoteca.data.RicercaFilm
 import it.unina.myvideoteca.server.ServerController
 import it.unina.myvideoteca.socket.SocketSingleton
 import org.json.JSONObject
@@ -53,7 +54,8 @@ class CercaActivity: AppCompatActivity() {
             if( !checkDurata(durataMin, durataMax) ){
                 Toast.makeText(this, "Inserire durata minima e massima corrette (o non inserirle affatto!)", Toast.LENGTH_SHORT).show()
             }else{
-                ricerca(titolo, regista, genere, anno, durataMin, durataMax, popolari) //non faccio controlli sui campi vuoti, se tutti sono vuoti vuol dire che cerco tutti i film
+                val filtri = RicercaFilm(titolo, regista, genere, anno, durataMin, durataMax, popolari)
+                ricerca(filtri) //non faccio controlli sui campi vuoti, se tutti sono vuoti vuol dire che cerco tutti i film
             }
         }
 
@@ -75,8 +77,8 @@ class CercaActivity: AppCompatActivity() {
     }
 
 
-    private fun ricerca(titolo: String, regista: String, genere: String, anno: String, durataMin: String, durataMax: String, popolarita: String){
-        serverController.ricerca(titolo, regista, genere, anno, durataMin, durataMax, popolarita){ response ->
+    private fun ricerca(filtri: RicercaFilm){
+        serverController.ricerca(filtri){ response ->
             runOnUiThread {
                 if (response != null) {
                     val jsonResponse = JSONObject(response)

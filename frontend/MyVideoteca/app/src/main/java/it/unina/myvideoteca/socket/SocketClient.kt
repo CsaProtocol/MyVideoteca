@@ -84,35 +84,41 @@ class SocketClient(private val serverIp: String, private val serverPort: Int) {
                 var response: String?
                 do {
                     response = reader?.readLine()
-                    if (response != null) {
+                    Log.d("readResponse", "Messaggio ricevuto: $response")
 
-                        // Controllo se la risposta è un JSON
+                    if (response != null) {
                         if (!response.trim().startsWith("{")) {
-                            Log.d("readResponse", "Messaggio ignorato: $response")
+                            Log.d("readResponse", "Messaggio ignorato perché non è JSON: $response")
                             continue
                         }
 
                         val jsonResponse = JSONObject(response)
+                        Log.d("readResponse", "JSON decodificato: $jsonResponse")
+
                         if (jsonResponse.optString("status") == "success" && jsonResponse.optString("message") == "Heartbeat successful") {
                             Log.d("readResponse", "Risposta heartbeat ricevuta e ignorata.")
                         } else {
-                            break // Se non è un heartbeat, esci dal ciclo
+                            withContext(dispatcherMain) {
+                                Log.d("readResponse", "Invocazione callback con risposta: $response")
+                                callback(response)
+                            }
+                            break // Esce dal ciclo una volta elaborata la prima risposta utile
                         }
                     } else {
+                        Log.d("readResponse", "Risposta nulla ricevuta.")
                         break
                     }
                 } while (true)
-                withContext(dispatcherMain) {
-                    callback(response)
-                }
             } catch (e: Exception) {
                 Log.e("Errore readResponse", "Errore durante la lettura della risposta.", e)
                 withContext(dispatcherMain) {
+                    Log.d("readResponse", "Invocazione callback con valore null per errore.")
                     callback(null)
                 }
             }
         }
     }
+
 
 
     fun attemptReconnect() {

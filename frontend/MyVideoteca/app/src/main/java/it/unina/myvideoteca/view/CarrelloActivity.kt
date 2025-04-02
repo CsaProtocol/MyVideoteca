@@ -18,6 +18,7 @@ import it.unina.myvideoteca.data.SharedPrefManager
 import it.unina.myvideoteca.server.ServerController
 import it.unina.myvideoteca.socket.SocketSingleton
 import it.unina.myvideoteca.utils.DataParser
+import org.json.JSONArray
 import org.json.JSONObject
 
 class CarrelloActivity: AppCompatActivity() {
@@ -79,23 +80,57 @@ class CarrelloActivity: AppCompatActivity() {
         dialog.show()
     }
 
-    private fun noleggia(carrelloList: MutableList<Film>){
-        serverController.noleggio(carrelloList){ response ->
+    private fun noleggia(carrelloList: MutableList<Film>) {
+        serverController.noleggio(carrelloList) { response ->
             runOnUiThread {
                 if (response != null) {
                     val jsonResponse = JSONObject(response)
-                    /*TODO: gestisci rimuovendo elementi noleggiati con successo dal carrello*/
+                    val successfulRentals = jsonResponse.optJSONArray("successful_rentals")
+                    val failedRentals = jsonResponse.optJSONArray("failed_rentals")
+
+                    // Gestione film non noleggiati
+                    gestisciNoleggioFallito(failedRentals)
+
+                    // Gestione film noleggiati con successo
+                    gestisciNoleggioSuccesso(successfulRentals)
                 } else {
-                    Toast.makeText(this, "Connessione persa! Tentativo di riconnessione...", Toast.LENGTH_SHORT).show()
-                    SocketSingleton.client.attemptReconnect()
-                    if (SocketSingleton.client.isConnected()) {
-                        // Se si è riusciti a riconnettersi al server, torna alla MainActivity
-                        val intent = Intent(this@CarrelloActivity, MainActivity::class.java)
-                        startActivity(intent)
-                        finish()  // Chiudi l'attività corrente per evitare che l'utente possa tornare indietro
-                    }
+                    gestisciConnessionePersa()
                 }
             }
+        }
+    }
+
+    private fun gestisciNoleggioFallito(failedRentals: JSONArray?) {
+        if (failedRentals != null && failedRentals.length() > 0) {
+            val errorMessage = "Alcuni film non sono stati noleggiati. Puoi riprovare quando saranno disponibili o avrai restituito altri film."
+            Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun gestisciNoleggioSuccesso(successfulRentals: JSONArray?) {
+        if (successfulRentals != null) {
+            val userId = SharedPrefManager.getUserId(this)
+            val userCart = SharedPrefManager.getUserCart(userId, this)
+
+            for (i in 0 until successfulRentals.length()) {
+                val rental = successfulRentals.getJSONObject(i)
+                val filmId = rental.optInt("film_id")
+                userCart.remove(filmId.toString()) // Rimuove i film noleggiati dal carrello
+            }
+
+            SharedPrefManager.saveUserCart(userId, userCart.toString(), this)
+            recreate() // Aggiorna l'activity
+        }
+    }
+
+    private fun gestisciConnessionePersa() {
+        Toast.makeText(this, "Connessione persa! Tentativo di riconnessione...", Toast.LENGTH_SHORT).show()
+        SocketSingleton.client.attemptReconnect()
+
+        if (SocketSingleton.client.isConnected()) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish() // Chiude l'activity corrente
         }
     }
 

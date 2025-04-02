@@ -69,13 +69,15 @@ object SharedPrefManager {
         return getPreferences(context).getString(JWT_TOKEN, null)
     }
 
-    fun saveUserCart(userId: String, cartJson: String, context: Context) {
+    fun saveUserCart(userId: String?, cartJson: String, context: Context) {
         val carts = JSONObject(getPreferences(context).getString(CARTS, "{}") ?: "{}")
-        carts.put(userId, JSONObject(cartJson))
-        getPreferences(context).edit().putString(CARTS, carts.toString()).apply()
+        if (userId != null) {
+            carts.put(userId, JSONObject(cartJson))
+            getPreferences(context).edit().putString(CARTS, carts.toString()).apply()
+        }
     }
 
-    fun getUserCart(userId: String, context: Context): JSONObject {
+    fun getUserCart(userId: String?, context: Context): JSONObject {
         val carts = JSONObject(getPreferences(context).getString(CARTS, "{}") ?: "{}")
         return carts.optJSONObject(userId) ?: JSONObject()
     }

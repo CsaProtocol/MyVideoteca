@@ -2,6 +2,7 @@ package it.unina.myvideoteca.server
 
 import android.content.Context
 import it.unina.myvideoteca.data.Film
+import it.unina.myvideoteca.data.RicercaFilm
 import it.unina.myvideoteca.data.SharedPrefManager
 import it.unina.myvideoteca.socket.SocketClient
 import org.json.JSONObject
@@ -36,18 +37,17 @@ class ServerController(private val client: SocketClient, private val context: Co
         }
     }
 
-    fun ricerca(titolo: String, regista: String, genere: String, anno: String,
-                durataMin: String, durataMax: String, popolari: String, callback: (String?) -> Unit) {
+    fun ricerca(filtri: RicercaFilm, callback: (String?) -> Unit) {
         val jsonRequest = JSONObject().apply{
             put("endpoint", "ricerca")
-            put("titolo", titolo)
-            put("regista", regista)
-            put("genere", genere)
-            put("anno", anno)
-            put("durata_min", durataMin)
-            put("durata_max", durataMax)
-            put("popolari", popolari)
-            put("jwt_token", SharedPrefManager.getToken(context))
+            put("titolo", filtri.titolo)
+            put("regista", filtri.regista)
+            put("genere", filtri.genere)
+            put("anno", filtri.anno)
+            put("durata_min", filtri.durataMin)
+            put("durata_max", filtri.durataMax)
+            put("popolari", filtri.popolari)
+            //put("jwt_token", SharedPrefManager.getToken(context))
         }
 
         client.sendMessage(jsonRequest.toString())
@@ -61,7 +61,7 @@ class ServerController(private val client: SocketClient, private val context: Co
             put("endpoint", "noleggio")
             put("films", carrelloList)
             put("user_id", SharedPrefManager.getUserId(context))
-            put("jwt_token", SharedPrefManager.getToken(context))
+            //put("jwt_token", SharedPrefManager.getToken(context))
         }
 
         client.sendMessage(jsonRequest.toString())
@@ -74,7 +74,7 @@ class ServerController(private val client: SocketClient, private val context: Co
         val jsonRequest = JSONObject().apply{
             put("endpoint", "get_noleggi")
             put("user_id", SharedPrefManager.getUserId(context))
-            put("jwt_token", SharedPrefManager.getToken(context))
+            //put("jwt_token", SharedPrefManager.getToken(context))
         }
 
         client.sendMessage(jsonRequest.toString())
