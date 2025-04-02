@@ -27,7 +27,9 @@ class SocketClient(private val serverIp: String, private val serverPort: Int) {
     fun connect() {
         clientScope.launch {
             try {
+                Log.d("SocketClient", "Tentativo di connessione a $serverIp:$serverPort...")
                 socket = Socket(serverIp, serverPort)
+                Log.d("SocketClient", "Socket creato con successo!")
                 writer = PrintWriter(OutputStreamWriter(socket?.getOutputStream()), true)
                 reader = BufferedReader(InputStreamReader(socket?.getInputStream()))
                 running = true
@@ -83,6 +85,13 @@ class SocketClient(private val serverIp: String, private val serverPort: Int) {
                 do {
                     response = reader?.readLine()
                     if (response != null) {
+
+                        // Controllo se la risposta è un JSON
+                        if (!response.trim().startsWith("{")) {
+                            Log.d("readResponse", "Messaggio ignorato: $response")
+                            continue
+                        }
+
                         val jsonResponse = JSONObject(response)
                         if (jsonResponse.optString("status") == "success" && jsonResponse.optString("message") == "Heartbeat successful") {
                             Log.d("readResponse", "Risposta heartbeat ricevuta e ignorata.")

@@ -98,3 +98,23 @@ BEGIN
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION aggiorna_flag_utente(in_utente_id INT)
+RETURNS VOID AS $$
+DECLARE
+    film_in_ritardo INT;
+BEGIN
+    -- Conta i film non restituiti in ritardo
+    SELECT COUNT(*) INTO film_in_ritardo
+    FROM Noleggio 
+    WHERE utente_id = in_utente_id 
+      AND restituito = FALSE 
+      AND data_scadenza < CURRENT_TIMESTAMP;
+
+    -- Aggiorna il flag nella tabella Utente
+    UPDATE Utente
+    SET film_non_restituiti = (film_in_ritardo > 0)
+    WHERE id = in_utente_id;
+END;
+$$ LANGUAGE plpgsql;

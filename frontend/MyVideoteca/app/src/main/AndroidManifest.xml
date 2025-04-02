@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -13,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyVideoteca"
-        tools:targetApi="31">
+        tools:targetApi="31"
+        android:networkSecurityConfig="@xml/network_security_config">
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -31,6 +33,7 @@
         <activity android:name=".view.CercaRisultatiActivity"> </activity>
         <activity android:name=".view.HomeActivity"> </activity>
         <activity android:name=".view.NoleggiActivity"> </activity>
+        <activity android:name=".view.NoleggiCaricaActivity"> </activity>
     </application>
 
 </manifest>
