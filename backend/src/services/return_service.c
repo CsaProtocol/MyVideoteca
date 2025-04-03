@@ -24,16 +24,16 @@ char* return_service(const char* request) {
 
     if (rental_id > 0) {
         query = "UPDATE Noleggio "
-                "SET data_restituzione = CURRENT_DATE "
-                "WHERE id = $1 AND data_restituzione IS NULL "
-                "RETURNING id;";
+                "SET restituito = true "
+                "WHERE noleggio_id = $1 AND restituito = false "
+                "RETURNING noleggio_id;";
         params[0] = (char*)&rental_id;
         result = db_execute_query(query, 1, params);
     } else if (user_id > 0 && film_id > 0) {
         query = "UPDATE Noleggio "
-                "SET data_restituzione = CURRENT_DATE "
-                "WHERE id_utente = $1 AND id_film = $2 AND data_restituzione IS NULL "
-                "RETURNING id;";
+                "SET restituito = true "
+                "WHERE utente_id = $1 AND film_id = $2 AND restituito = false "
+                "RETURNING noleggio_id;";
         params[0] = (char*)&user_id;
         params[1] = (char*)&film_id;
         result = db_execute_query(query, 2, params);

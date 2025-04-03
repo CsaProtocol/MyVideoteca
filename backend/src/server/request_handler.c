@@ -2,6 +2,7 @@
 
 #include <string.h>
 
+#include "services/all_rentals_service.h"
 #include "services/login_service.h"
 #include "services/rental_service.h"
 #include "services/return_service.h"
@@ -54,6 +55,11 @@ char* process_request(const char* request) {
     }
     if(strcmp(endpoint, "restituzione") == 0) {
         response = return_service(request);
+        json_decref(deSerialized);
+        return response;
+    }
+    if(strcmp(endpoint, "get_noleggi") == 0) {
+        response = all_rentals_service(request);
         json_decref(deSerialized);
         return response;
     }

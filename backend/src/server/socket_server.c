@@ -32,8 +32,17 @@ void* handle_client(void* client_socket_ptr) {
         buffer[bytes_read] = '\0';
 
         char* response = process_request(buffer);
+        // Aggiungi '\n' alla risposta
+        size_t response_len = strlen(response);
+        char* response_with_newline = malloc(response_len + 2); // +1 per '\n', +1 per '\0'
+        if (!response_with_newline) {
+            log_error("Allocazione memoria fallita");
+            free(response);
+            return NULL;
+        }
+        sprintf(response_with_newline, "%s\n", response);
 
-        const ssize_t written = write(client_socket, response, strlen(response));
+        const ssize_t written = write(client_socket, response_with_newline, strlen(response_with_newline));
         if(written < 0) {
             log_error("Impossibile inviare risposta al client");
             free(response);
@@ -41,6 +50,7 @@ void* handle_client(void* client_socket_ptr) {
         }
 
         free(response);
+        free(response_with_newline);
         memset(buffer, 0, sizeof(buffer));
     }
 
