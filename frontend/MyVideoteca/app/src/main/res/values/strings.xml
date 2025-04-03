@@ -76,5 +76,7 @@
     <!-- Noleggi -->
     <string name="noleggi">Noleggi</string>
     <string name="noleggi_vuoto">Non hai nessun noleggio in corso. Cerca dei film e aggiungili al carrello! </string>
+    <string name="inizio_noleggio">Noleggiato il: %1$s </string>
+    <string name="scadenza_noleggio">Scade il: %1$s </string>
 
 </resources>

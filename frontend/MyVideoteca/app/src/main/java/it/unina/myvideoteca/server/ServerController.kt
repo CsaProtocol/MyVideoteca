@@ -3,6 +3,7 @@ package it.unina.myvideoteca.server
 import android.content.Context
 import it.unina.myvideoteca.data.Film
 import it.unina.myvideoteca.data.RicercaFilm
+import it.unina.myvideoteca.data.Noleggio
 import it.unina.myvideoteca.data.SharedPrefManager
 import it.unina.myvideoteca.socket.SocketClient
 import org.json.JSONObject
@@ -74,6 +75,21 @@ class ServerController(private val client: SocketClient, private val context: Co
         val jsonRequest = JSONObject().apply{
             put("endpoint", "get_noleggi")
             put("user_id", SharedPrefManager.getUserId(context))
+            //put("jwt_token", SharedPrefManager.getToken(context))
+        }
+
+        client.sendMessage(jsonRequest.toString())
+        client.readResponse { response ->
+            callback(response)
+        }
+    }
+
+    fun restituisciNoleggio(noleggio: Noleggio, callback: (String?) -> Unit){
+        val jsonRequest = JSONObject().apply{
+            put("endpoint", "restituzione")
+            put("user_id", SharedPrefManager.getUserId(context))
+            put("film_id", noleggio.filmId)
+            put("rental_id", noleggio.noleggioId)
             //put("jwt_token", SharedPrefManager.getToken(context))
         }
 

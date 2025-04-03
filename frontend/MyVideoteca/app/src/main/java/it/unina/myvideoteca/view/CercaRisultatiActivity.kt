@@ -3,6 +3,7 @@ package it.unina.myvideoteca.view
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.LinearLayoutManager
 import it.unina.myvideoteca.R
@@ -27,6 +28,7 @@ class CercaRisultatiActivity: AppCompatActivity() {
 
         val risultatiText = findViewById<TextView>(R.id.textRisultati)
         risultatiText.text = getString(R.string.num_risultati, filmList.size)
+        if (filmList.size < 1) recyclerView.isVisible = false
     }
 
 }

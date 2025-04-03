@@ -5,8 +5,6 @@ import it.unina.myvideoteca.data.Noleggio
 import org.json.JSONObject
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 object DataParser {
@@ -43,14 +41,17 @@ object DataParser {
                 noleggioId = noleggioJson.optInt("noleggioid", -1),
                 utenteId = noleggioJson.optInt("utenteid", -1),
                 filmId = noleggioJson.optInt("filmid", -1),
-                dataNoleggio = dateFormatter(noleggioJson.getString("dataNoleggio")),
-                dataScadenza = dateFormatter(noleggioJson.getString("dataScadenza")),
+                titoloFilm = noleggioJson.getString("titolo_film"),
+                registaFilm = noleggioJson.getString("regista_film"),
+                dataNoleggio = noleggioJson.getString("dataNoleggio"),
+                dataScadenza = noleggioJson.getString("dataScadenza"),
                 restituito = noleggioJson.optBoolean("restituito", false)
             )
             noleggiList.add(noleggio)
         }
         return noleggiList
     }
+
 
     fun dateFormatter(dateStr: String): Timestamp{
         val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH)  // Formato della stringa
