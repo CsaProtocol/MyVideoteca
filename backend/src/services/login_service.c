@@ -27,6 +27,7 @@ char* login_service(const char* request) {
 
     const char* query1 = "SELECT id FROM Utente WHERE email = $1;";
     const char* params1[1] = {email};
+    log_info("Esecuzione della query per ottenere l'ID dell'utente con email: %s", email);
     PGresult* result = db_execute_query(query1, 1, params1);
     if (!result) {
         log_error("Errore nell'esecuzione della query");
@@ -37,8 +38,9 @@ char* login_service(const char* request) {
     int id = atoi(PQgetvalue(result, 0, 0));
     db_free_result(result);
 
-    const char* query2 = "SELECT aggiorna_flag_utente($1);";
-    const char* params2[1] = {(char*)&id};
+    /*const char* query2 = "SELECT aggiorna_flag_utente($1);";
+    const int* params2[1] = {&id};
+    log_info("Esecuzione della query per aggiornare il flag dell'utente con ID: %d", id);
     result = db_execute_query(query2, 1, params2);
     if (!result) {
         log_error("Errore nell'esecuzione della query");
@@ -46,14 +48,16 @@ char* login_service(const char* request) {
         return json_response_error("Errore nell'esecuzione della query");
     }
     db_free_result(result);
+    */
 
     const char* query3 =
         "SELECT id, numero_film_non_restituiti, get_massimo_noleggi() AS max_noleggi, film_non_restituiti "
-        "FROM Utente "
-        "FULL JOIN (SELECT COUNT(*) AS numero_film_non_restituiti, id_utente FROM noleggi WHERE data_restituzione IS NULL GROUP BY id_utente) "
-        "ON Utente.id = id_utente WHERE email = $1;";
+        "FROM utente "
+        "FULL JOIN (SELECT COUNT(*) AS numero_film_non_restituiti, utente_id FROM Noleggio "
+        "WHERE restituito = 'FALSE' GROUP BY utente_id) ON Utente.id = utente_id WHERE email = $1;";
 
     const char* params3[1] = {email};
+    log_info("Esecuzione della query per ottenere i dettagli dell'utente con email: %s", email);
     result = db_execute_query(query3, 1, params3);
     if (!result) {
         log_error("Errore nell'esecuzione della query");

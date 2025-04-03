@@ -7,6 +7,7 @@
 
 bool login(const char* email, const char* password) {
     char query[256];
+    log_info("Esecuzione della query di login per l'email: %s", email);
     snprintf(query, sizeof(query), "SELECT password FROM Utente WHERE email = $1");
 
     const char* params[1] = {email};
@@ -59,6 +60,7 @@ bool signup(const char* nome, const char* cognome, const char* email, const char
     }
 
     char query[256];
+    log_info("Esecuzione della query di registrazione per l'email: %s", email);
     snprintf(query, sizeof(query),
              "INSERT INTO Utente(nome, cognome, email, password) VALUES($1, $2, $3, $4) RETURNING *");
 
