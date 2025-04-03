@@ -81,4 +81,14 @@ object SharedPrefManager {
         val carts = JSONObject(getPreferences(context).getString(CARTS, "{}") ?: "{}")
         return carts.optJSONObject(userId) ?: JSONObject()
     }
+
+    fun logout(context: Context) {
+        val editor = getPreferences(context).edit()
+        editor.putString(USER_ID, "")
+        editor.putString(NUM_NON_RESTITUITI, "")
+        editor.putString(MAX_NOLEGGI, "")
+        editor.putString(NON_RESTITUITI_BOOL, "")
+        editor.putString(JWT_TOKEN, "")
+        editor.apply()
+    }
 }

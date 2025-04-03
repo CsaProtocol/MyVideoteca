@@ -3,6 +3,7 @@ package it.unina.myvideoteca.view
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -37,10 +38,13 @@ class CarrelloActivity: AppCompatActivity() {
         adapter = CarrelloAdapter(carrelloList, this)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
+        recyclerView.isVisible = true
 
         serverController = ServerController(SocketSingleton.client, this)
 
         val noleggiaButton = findViewById<Button>(R.id.buttonNoleggia)
+        noleggiaButton.isEnabled = true
+        noleggiaButton.backgroundTintList = getColorStateList(R.color.mv_purple)
 
         val vuotoText = findViewById<TextView>(R.id.textVuoto)
         vuotoText.isVisible = false
@@ -50,6 +54,11 @@ class CarrelloActivity: AppCompatActivity() {
             noleggiaButton.isEnabled = false
             noleggiaButton.backgroundTintList = getColorStateList(android.R.color.darker_gray)
         }
+
+        val homeButton = findViewById<ImageView>(R.id.imgHome)
+        val homeText = findViewById<TextView>(R.id.textHome)
+        homeButton.setOnClickListener{ home() }
+        homeText.setOnClickListener{ home() }
 
         noleggiaButton.setOnClickListener{
             val numNonRestituiti = SharedPrefManager.getNumNonRestituiti(this) ?: 0
@@ -65,6 +74,11 @@ class CarrelloActivity: AppCompatActivity() {
             }
         }
 
+    }
+
+    private fun home(){
+        val intent = Intent(this, HomeActivity::class.java)
+        startActivity(intent)
     }
 
     private fun showPopup(message: String){

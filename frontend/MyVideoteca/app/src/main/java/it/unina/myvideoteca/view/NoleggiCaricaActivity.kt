@@ -2,7 +2,9 @@ package it.unina.myvideoteca.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -25,6 +27,16 @@ class NoleggiCaricaActivity: AppCompatActivity() {
         serverController = ServerController(SocketSingleton.client, this)
 
         recuperaNoleggi()
+
+        val homeButton = findViewById<ImageView>(R.id.imgHome)
+        val homeText = findViewById<TextView>(R.id.textHome)
+        homeButton.setOnClickListener{ home() }
+        homeText.setOnClickListener{ home() }
+    }
+
+    private fun home(){
+        val intent = Intent(this, HomeActivity::class.java)
+        startActivity(intent)
     }
 
 

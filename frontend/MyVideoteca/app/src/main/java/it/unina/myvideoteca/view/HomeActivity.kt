@@ -8,6 +8,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import it.unina.myvideoteca.MainActivity
 import it.unina.myvideoteca.R
 import it.unina.myvideoteca.data.SharedPrefManager
 
@@ -20,6 +21,7 @@ class HomeActivity: AppCompatActivity() {
         val cercaButton = findViewById<Button>(R.id.buttonCerca)
         val carrelloButton = findViewById<Button>(R.id.buttonCarrello)
         val restituisciButton = findViewById<Button>(R.id.buttonRestituisci)
+        val logoutButton = findViewById<Button>(R.id.buttonLogout)
 
         if(SharedPrefManager.getNonRestituitiBool(this) == true){
             val builder = AlertDialog.Builder(this)
@@ -46,6 +48,12 @@ class HomeActivity: AppCompatActivity() {
 
         restituisciButton.setOnClickListener{
             val intent = Intent(this, NoleggiCaricaActivity::class.java)
+            startActivity(intent)
+        }
+
+        logoutButton.setOnClickListener{
+            SharedPrefManager.logout(this)
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
 

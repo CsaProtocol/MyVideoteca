@@ -7,6 +7,7 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import it.unina.myvideoteca.MainActivity
@@ -37,10 +38,9 @@ class CercaActivity: AppCompatActivity() {
         serverController = ServerController(SocketSingleton.client, this)
 
         val homeButton = findViewById<ImageView>(R.id.imgHome)
-        homeButton.setOnClickListener{
-            val intent = Intent(this, HomeActivity::class.java)
-            startActivity(intent)
-        }
+        val homeText = findViewById<TextView>(R.id.textHome)
+        homeButton.setOnClickListener{ home() }
+        homeText.setOnClickListener{ home() }
 
         cercaButton.setOnClickListener{
             val titolo = titoloEditText.text.toString().trim()
@@ -59,6 +59,11 @@ class CercaActivity: AppCompatActivity() {
             }
         }
 
+    }
+
+    private fun home(){
+        val intent = Intent(this, HomeActivity::class.java)
+        startActivity(intent)
     }
 
     fun checkDurata(minDurataStr: String, maxDurataStr: String) : Boolean{

@@ -21,6 +21,7 @@
     <string name="cerca_film">Cerca film</string>
     <string name="vai_a_carrello">Vai al carrello</string>
     <string name="restituisci">Restituisci film</string>
+    <string name="logout">Logout</string>
 
     <!-- Cerca -->
     <string name="cerca_sottotitolo">Cerca film per titolo, per regista o per genere</string>

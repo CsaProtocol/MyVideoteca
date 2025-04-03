@@ -1,6 +1,8 @@
 package it.unina.myvideoteca.view
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -35,6 +37,16 @@ class NoleggiActivity: AppCompatActivity() {
             recyclerView.isVisible = false
         }
 
+        val homeButton = findViewById<ImageView>(R.id.imgHome)
+        val homeText = findViewById<TextView>(R.id.textHome)
+        homeButton.setOnClickListener{ home() }
+        homeText.setOnClickListener{ home() }
+
+    }
+
+    private fun home(){
+        val intent = Intent(this, HomeActivity::class.java)
+        startActivity(intent)
     }
 
 }

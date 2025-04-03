@@ -95,7 +95,7 @@ class SocketClient(private val serverIp: String, private val serverPort: Int) {
                         val jsonResponse = JSONObject(response)
                         Log.d("readResponse", "JSON decodificato: $jsonResponse")
 
-                        if (jsonResponse.optString("status") == "success" && jsonResponse.optString("message") == "Heartbeat successful") {
+                        if (jsonResponse.optString("status") == "success" && jsonResponse.optString("message") == "Heartbeat riuscito") {
                             Log.d("readResponse", "Risposta heartbeat ricevuta e ignorata.")
                         } else {
                             withContext(dispatcherMain) {
