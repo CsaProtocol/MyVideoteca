@@ -52,11 +52,4 @@ object DataParser {
         return noleggiList
     }
 
-
-    fun dateFormatter(dateStr: String): Timestamp{
-        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH)  // Formato della stringa
-        val date = sdf.parse(dateStr) // Parsing della stringa in un oggetto Date
-        return Timestamp(date.time)// Conversione da Date a Timestamp
-    }
-
 }

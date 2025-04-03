@@ -5,12 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import it.unina.myvideoteca.R
 import it.unina.myvideoteca.data.Film
 import it.unina.myvideoteca.data.SharedPrefManager
+import it.unina.myvideoteca.utils.UrlFormatter
 import org.json.JSONObject
 
 class CercaRisultatiAdapter(private val filmList: MutableList<Film>,
@@ -33,6 +36,7 @@ class CercaRisultatiAdapter(private val filmList: MutableList<Film>,
         view: View,
         private val context: Context
     ) : RecyclerView.ViewHolder(view) {
+        val filmImg = view.findViewById<ImageView>(R.id.imgFilm)
         val titoloText = view.findViewById<TextView>(R.id.textTitolo)
         val registaText = view.findViewById<TextView>(R.id.textRegista)
         val annoEDurataText = view.findViewById<TextView>(R.id.textAnno)
@@ -42,6 +46,11 @@ class CercaRisultatiAdapter(private val filmList: MutableList<Film>,
         val aggiungiButton = view.findViewById<Button>(R.id.buttonAggiungi)
 
         fun bind(film : Film){
+            val imageUrl = UrlFormatter.getMoviePosterUrl(film.titolo)
+            Glide.with(context)
+                .load(imageUrl)
+                .error(R.drawable.mv_logo_light) // Immagine di fallback in caso di errore
+                .into(filmImg)
             titoloText.text = film.titolo
             registaText.text = film.regista
             annoEDurataText.text = context.getString(R.string.anno_e_durata_mockup, film.anno, film.durata)

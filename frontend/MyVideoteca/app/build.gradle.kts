@@ -43,8 +43,6 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    //implementation("androidx.navigation:navigation-fragment-ktx:2.8.5")
-    //implementation("androidx.navigation:navigation-ui-ktx:2.8.5")
-    //implementation("com.google.code.gson:gson:2.10.1")
     implementation("androidx.recyclerview:recyclerview:1.2.1")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 }
