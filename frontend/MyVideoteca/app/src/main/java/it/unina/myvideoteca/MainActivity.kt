@@ -9,8 +9,6 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import it.unina.myvideoteca.server.ServerController
 import it.unina.myvideoteca.socket.SocketSingleton
 import it.unina.myvideoteca.utils.RegexChecker
@@ -23,11 +21,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.registrazione)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.registrazione)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets      /*Si adatta allo schermo del dispositivo in uso*/
-        }
 
         val nomeEditText = findViewById<EditText>(R.id.editTextNome)
         val cognomeEditText = findViewById<EditText>(R.id.editTextCognome)

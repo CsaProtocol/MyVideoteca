@@ -87,7 +87,7 @@ class SocketClient(private val serverIp: String, private val serverPort: Int) {
                     Log.d("readResponse", "Messaggio ricevuto: $response")
 
                     if (response != null) {
-                        if (!response.trim().startsWith("{")) {
+                        if (!response.trim().startsWith("{") && !response.trim().startsWith("[")) {
                             Log.d("readResponse", "Messaggio ignorato perché non è JSON: $response")
                             continue
                         }

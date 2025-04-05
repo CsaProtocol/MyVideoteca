@@ -30,6 +30,8 @@ char* all_rentals_service(const char* request) {
         return json_response_error("Errore nell'esecuzione della query");
     }
 
+    json_t* response = json_object();
+    json_object_set_new(response, "status", json_string("success"));
     json_t* rentals = json_array();
     for(int i = 0; i < PQntuples(result); i++) {
         json_t* rental = json_object();
@@ -41,10 +43,11 @@ char* all_rentals_service(const char* request) {
         json_object_set_new(rental, "regista_film", json_string(PQgetvalue(result, i, 5)));
         json_array_append_new(rentals, rental);
     }
+    json_object_set_new(response, "noleggi", rentals);
     db_free_result(result);
     json_decref(deSerialized);
 
-    char* response_str = json_dumps(rentals, 0);
+    char* response_str = json_dumps(response, 0);
     json_decref(rentals);
     return response_str;
 }

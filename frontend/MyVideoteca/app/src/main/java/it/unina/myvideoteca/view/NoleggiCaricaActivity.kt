@@ -46,14 +46,15 @@ class NoleggiCaricaActivity: AppCompatActivity() {
                 if (response != null) {
                     val jsonResponse = JSONObject(response)
                     if (jsonResponse.getString("status") == "success") {
-                        val risultati = jsonResponse.getString("risultati")
                         val intent = Intent(this@NoleggiCaricaActivity, NoleggiActivity::class.java)
-                        intent.putExtra("risultati", risultati)
+                        intent.putExtra("risultati", response)
                         startActivity(intent)   //Va ai noleggi se sono stati caricati correttamente
+                        finish()
                     } else {
                         Toast.makeText(this, jsonResponse.getString("message"), Toast.LENGTH_SHORT).show()
                         val intent = Intent(this@NoleggiCaricaActivity, HomeActivity::class.java)
                         startActivity(intent)   //Torna alla home se ci sono errori nel caricamento dei noleggi
+                        finish()
                     }
                 } else {
                     Toast.makeText(this, "Connessione persa! Tentativo di riconnessione...", Toast.LENGTH_SHORT).show()

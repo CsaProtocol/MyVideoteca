@@ -1,6 +1,7 @@
 package it.unina.myvideoteca.view
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -72,6 +73,7 @@ class CercaRisultatiAdapter(private val filmList: MutableList<Film>,
             val userId = SharedPrefManager.getUserId(context)
             if (userId != null) {
                 val userCart = SharedPrefManager.getUserCart(userId, context)
+                Log.d("aggiungiAlCarrello", "Carrello prima dell'aggiunta: $userCart")
 
                 if (userCart.has((film.filmId).toString())) { // Controlla se il film è già nel carrello
                     Toast.makeText(context, "Film già presente nel carrello", Toast.LENGTH_SHORT).show()
@@ -83,6 +85,7 @@ class CercaRisultatiAdapter(private val filmList: MutableList<Film>,
                     }
                     userCart.put((film.filmId).toString(), movieJson)
                     SharedPrefManager.saveUserCart(userId, userCart.toString(), context)
+                    Log.d("aggiungiAlCarrello", "Carrello dopo l'aggiunta: $userCart")
 
                     Toast.makeText(context, "Film aggiunto al carrello", Toast.LENGTH_SHORT).show()
                 }

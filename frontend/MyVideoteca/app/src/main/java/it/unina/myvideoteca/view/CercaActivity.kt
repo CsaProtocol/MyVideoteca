@@ -45,7 +45,8 @@ class CercaActivity: AppCompatActivity() {
         cercaButton.setOnClickListener{
             val titolo = titoloEditText.text.toString().trim()
             val regista = registaEditText.text.toString().trim()
-            val genere = genereSpinner.selectedItem.toString()
+            var genere = genereSpinner.selectedItem.toString()
+            if( genere == "Tutti i generi") genere = ""
             val anno = annoEditText.text.toString().trim()
             val durataMin = durataMinEditText.text.toString().trim()
             val durataMax = durataMaxEditText.text.toString().trim()
@@ -88,9 +89,8 @@ class CercaActivity: AppCompatActivity() {
                 if (response != null) {
                     val jsonResponse = JSONObject(response)
                     if (jsonResponse.getString("status") == "success") {
-                        val risultati = jsonResponse.getString("risultati")
                         val intent = Intent(this@CercaActivity, CercaRisultatiActivity::class.java)
-                        intent.putExtra("risultati", risultati)
+                        intent.putExtra("risultati", response)
                         startActivity(intent)
                     } else {
                         Toast.makeText(this, jsonResponse.getString("message"), Toast.LENGTH_SHORT).show()

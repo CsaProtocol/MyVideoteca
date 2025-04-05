@@ -3,9 +3,6 @@ package it.unina.myvideoteca.utils
 import it.unina.myvideoteca.data.Film
 import it.unina.myvideoteca.data.Noleggio
 import org.json.JSONObject
-import java.sql.Timestamp
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 object DataParser {
 
@@ -16,15 +13,15 @@ object DataParser {
         for (i in 0 until filmArray.length()) {
             val filmJson = filmArray.getJSONObject(i)
             val film = Film(
-                filmId = filmJson.optInt("filmid", -1),
+                filmId = filmJson.optInt("id", -1),
                 titolo = filmJson.optString("titolo", "N/D"),
                 regista = filmJson.optString("regista", "N/D"),
                 genere = filmJson.optString("genere", "N/D"),
                 anno = filmJson.optInt("anno", 0),
                 durata = filmJson.optInt("durata", 0),
                 descrizione = filmJson.optString("descrizione", ""),
-                copie = filmJson.optInt("copie", 0),
-                copieDisponibili = filmJson.optInt("copieDisponibili", 0)
+                copie = filmJson.optInt("numero_copie", 0),
+                copieDisponibili = filmJson.optInt("numero_copie_disponibili", 0)
             )
             filmList.add(film)
         }
@@ -38,14 +35,12 @@ object DataParser {
         for (i in 0 until noleggiArray.length()) {
             val noleggioJson = noleggiArray.getJSONObject(i)
             val noleggio = Noleggio(
-                noleggioId = noleggioJson.optInt("noleggioid", -1),
-                utenteId = noleggioJson.optInt("utenteid", -1),
+                noleggioId = noleggioJson.optInt("noleggio_id", -1),
                 filmId = noleggioJson.optInt("filmid", -1),
                 titoloFilm = noleggioJson.getString("titolo_film"),
                 registaFilm = noleggioJson.getString("regista_film"),
-                dataNoleggio = noleggioJson.getString("dataNoleggio"),
-                dataScadenza = noleggioJson.getString("dataScadenza"),
-                restituito = noleggioJson.optBoolean("restituito", false)
+                dataNoleggio = noleggioJson.getString("data_noleggio"),
+                dataScadenza = noleggioJson.getString("data_scadenza")
             )
             noleggiList.add(noleggio)
         }
