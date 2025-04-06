@@ -1,5 +1,6 @@
 package it.unina.myvideoteca.utils
 
+import it.unina.myvideoteca.data.CarrelloFilm
 import it.unina.myvideoteca.data.Film
 import it.unina.myvideoteca.data.Noleggio
 import org.json.JSONObject
@@ -22,6 +23,22 @@ object DataParser {
                 descrizione = filmJson.optString("descrizione", ""),
                 copie = filmJson.optInt("numero_copie", 0),
                 copieDisponibili = filmJson.optInt("numero_copie_disponibili", 0)
+            )
+            filmList.add(film)
+        }
+        return filmList
+    }
+
+    fun parseCarrelloList(jsonString: String): MutableList<CarrelloFilm> {
+        val filmList = mutableListOf<CarrelloFilm>()
+        val jsonRisultati = JSONObject(jsonString)
+        val filmArray = jsonRisultati.optJSONArray("films") ?: return filmList
+        for (i in 0 until filmArray.length()) {
+            val filmJson = filmArray.getJSONObject(i)
+            val film = CarrelloFilm(
+                filmId = filmJson.optInt("id", -1),
+                titolo = filmJson.optString("titolo", "N/D"),
+                regista = filmJson.optString("regista", "N/D")
             )
             filmList.add(film)
         }

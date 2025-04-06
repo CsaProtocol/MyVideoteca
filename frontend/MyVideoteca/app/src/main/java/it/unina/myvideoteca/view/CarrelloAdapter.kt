@@ -11,11 +11,12 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import it.unina.myvideoteca.R
-import it.unina.myvideoteca.data.Film
+import it.unina.myvideoteca.data.CarrelloFilm
 import it.unina.myvideoteca.data.SharedPrefManager
 import it.unina.myvideoteca.utils.UrlFormatter
+import org.json.JSONArray
 
-class CarrelloAdapter(private val filmList: MutableList<Film>,
+class CarrelloAdapter(private val filmList: MutableList<CarrelloFilm>,
                             private val context: Context
 ): RecyclerView.Adapter<CarrelloAdapter.CarrelloViewHolder>()
 {
@@ -39,12 +40,12 @@ class CarrelloAdapter(private val filmList: MutableList<Film>,
         private val context: Context,
         private val notifyChange: (Int) -> Unit
     ) : RecyclerView.ViewHolder(view) {
-        val filmImg = view.findViewById<ImageView>(R.id.imgFilm)
-        val titoloText = view.findViewById<TextView>(R.id.textTitolo)
-        val registaText = view.findViewById<TextView>(R.id.textRegista)
-        val rimuoviButton = view.findViewById<Button>(R.id.buttonRimuovi)
+        private val filmImg = view.findViewById<ImageView>(R.id.imgFilm)
+        private val titoloText = view.findViewById<TextView>(R.id.textTitolo)
+        private val registaText = view.findViewById<TextView>(R.id.textRegista)
+        private val rimuoviButton = view.findViewById<Button>(R.id.buttonRimuovi)
 
-        fun bind(film : Film){
+        fun bind(film : CarrelloFilm){
             val imageUrl = UrlFormatter.getMoviePosterUrl(film.titolo)
             Glide.with(context)
                 .load(imageUrl)
@@ -58,12 +59,21 @@ class CarrelloAdapter(private val filmList: MutableList<Film>,
             }
         }
 
-        private fun rimuoviDalCarrello(film: Film){
+        private fun rimuoviDalCarrello(film: CarrelloFilm) {
             val userId = SharedPrefManager.getUserId(context)
 
             if (userId != null) {
                 val userCart = SharedPrefManager.getUserCart(userId, context)
-                userCart.remove(film.filmId.toString())
+                val filmsArray = userCart.optJSONArray("films") ?: JSONArray()
+                val newArray = JSONArray()
+
+                for (i in 0 until filmsArray.length()) { // Ricrea l'array senza il film da rimuovere
+                    val currentFilm = filmsArray.getJSONObject(i)
+                    if (currentFilm.optInt("id") != film.filmId) {
+                        newArray.put(currentFilm)
+                    }
+                }
+                userCart.put("films", newArray)
                 SharedPrefManager.saveUserCart(userId, userCart.toString(), context)
 
                 val position = bindingAdapterPosition
@@ -73,6 +83,7 @@ class CarrelloAdapter(private val filmList: MutableList<Film>,
                 }
             }
         }
+
 
     }
 

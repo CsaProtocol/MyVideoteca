@@ -16,6 +16,7 @@ import it.unina.myvideoteca.data.Film
 import it.unina.myvideoteca.data.SharedPrefManager
 import it.unina.myvideoteca.utils.UrlFormatter
 import org.json.JSONObject
+import org.json.JSONArray
 
 class CercaRisultatiAdapter(private val filmList: MutableList<Film>,
                             private val context: Context):
@@ -37,14 +38,14 @@ class CercaRisultatiAdapter(private val filmList: MutableList<Film>,
         view: View,
         private val context: Context
     ) : RecyclerView.ViewHolder(view) {
-        val filmImg = view.findViewById<ImageView>(R.id.imgFilm)
-        val titoloText = view.findViewById<TextView>(R.id.textTitolo)
-        val registaText = view.findViewById<TextView>(R.id.textRegista)
-        val annoEDurataText = view.findViewById<TextView>(R.id.textAnno)
-        val genereText = view.findViewById<TextView>(R.id.textGenere)
-        val descrizioneText = view.findViewById<TextView>(R.id.textDescrizione)
-        val copieText = view.findViewById<TextView>(R.id.textCopie)
-        val aggiungiButton = view.findViewById<Button>(R.id.buttonAggiungi)
+        private val filmImg = view.findViewById<ImageView>(R.id.imgFilm)
+        private val titoloText = view.findViewById<TextView>(R.id.textTitolo)
+        private val registaText = view.findViewById<TextView>(R.id.textRegista)
+        private val annoEDurataText = view.findViewById<TextView>(R.id.textAnno)
+        private val genereText = view.findViewById<TextView>(R.id.textGenere)
+        private val descrizioneText = view.findViewById<TextView>(R.id.textDescrizione)
+        private val copieText = view.findViewById<TextView>(R.id.textCopie)
+        private val aggiungiButton = view.findViewById<Button>(R.id.buttonAggiungi)
 
         fun bind(film : Film){
             val imageUrl = UrlFormatter.getMoviePosterUrl(film.titolo)
@@ -69,27 +70,37 @@ class CercaRisultatiAdapter(private val filmList: MutableList<Film>,
             }
         }
 
-        private fun aggiungiAlCarrello(film: Film){
+        private fun aggiungiAlCarrello(film: Film) {
             val userId = SharedPrefManager.getUserId(context)
             if (userId != null) {
                 val userCart = SharedPrefManager.getUserCart(userId, context)
-                Log.d("aggiungiAlCarrello", "Carrello prima dell'aggiunta: $userCart")
+                val filmsArray = userCart.optJSONArray("films") ?: JSONArray()
 
-                if (userCart.has((film.filmId).toString())) { // Controlla se il film è già nel carrello
-                    Toast.makeText(context, "Film già presente nel carrello", Toast.LENGTH_SHORT).show()
-                } else {
-                    // Aggiungi il film al carrello
-                    val movieJson = JSONObject().apply {
-                        put("id", (film.filmId).toString())
-                        put("titolo", film.titolo)
+                var alreadyInCart = false   // Controlla se il film è già presente nel carrello
+                for (i in 0 until filmsArray.length()) {
+                    val existingFilm = filmsArray.getJSONObject(i)
+                    if (existingFilm.optInt("film_id") == film.filmId) {
+                        alreadyInCart = true
+                        break
                     }
-                    userCart.put((film.filmId).toString(), movieJson)
-                    SharedPrefManager.saveUserCart(userId, userCart.toString(), context)
-                    Log.d("aggiungiAlCarrello", "Carrello dopo l'aggiunta: $userCart")
+                }
 
+                if (alreadyInCart) {
+                    Toast.makeText(context, "Film già presente nel carrello", Toast.LENGTH_SHORT).show()
+                } else {    //Aggiungi film al carrello
+                    val movieJson = JSONObject().apply {
+                        put("film_id", film.filmId)
+                        put("titolo", film.titolo)
+                        put("regista", film.regista)
+                    }
+                    filmsArray.put(movieJson)
+                    userCart.put("films", filmsArray)
+                    SharedPrefManager.saveUserCart(userId, userCart.toString(), context) // Salva il carrello aggiornato
+                    Log.d("aggiungiAlCarrello", "Carrello dopo l'aggiunta: $userCart")
                     Toast.makeText(context, "Film aggiunto al carrello", Toast.LENGTH_SHORT).show()
                 }
             }
         }
+
     }
 }

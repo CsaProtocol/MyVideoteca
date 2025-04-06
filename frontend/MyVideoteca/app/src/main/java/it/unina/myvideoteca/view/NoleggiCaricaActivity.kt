@@ -41,7 +41,7 @@ class NoleggiCaricaActivity: AppCompatActivity() {
 
 
     private fun recuperaNoleggi(){
-        serverController.recuperaNoleggi(){ response ->
+        serverController.recuperaNoleggi{ response ->
             runOnUiThread {
                 if (response != null) {
                     val jsonResponse = JSONObject(response)

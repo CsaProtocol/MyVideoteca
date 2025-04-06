@@ -2,6 +2,7 @@ package it.unina.myvideoteca.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -14,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import it.unina.myvideoteca.MainActivity
 import it.unina.myvideoteca.R
-import it.unina.myvideoteca.data.Film
 import it.unina.myvideoteca.data.SharedPrefManager
 import it.unina.myvideoteca.server.ServerController
 import it.unina.myvideoteca.socket.SocketSingleton
@@ -32,7 +32,8 @@ class CarrelloActivity: AppCompatActivity() {
         setContentView(R.layout.carrello)
 
         val carrello = SharedPrefManager.getUserCart(SharedPrefManager.getUserId(this)?:"", this).toString()
-        val carrelloList = DataParser.parseFilmList(carrello)
+        Log.d("Carrello", "user cart: $carrello")
+        val carrelloList = DataParser.parseCarrelloList(carrello)
 
         recyclerView = findViewById(R.id.carrelloRecyclerView)
         adapter = CarrelloAdapter(carrelloList, this)
@@ -70,7 +71,7 @@ class CarrelloActivity: AppCompatActivity() {
             }else if(carrelloList.isEmpty()){
                 showPopup("Aggiungi dei film al carrello per proseguire con il noleggio.")
             }else{
-                noleggia(carrelloList)
+                noleggia()
             }
         }
 
@@ -94,11 +95,14 @@ class CarrelloActivity: AppCompatActivity() {
         dialog.show()
     }
 
-    private fun noleggia(carrelloList: MutableList<Film>) {
-        serverController.noleggio(carrelloList) { response ->
+    private fun noleggia() {
+        serverController.noleggio { response ->
             runOnUiThread {
                 if (response != null) {
                     val jsonResponse = JSONObject(response)
+                    if (jsonResponse.getString("status") != "success") {
+                        Toast.makeText(this, jsonResponse.getString("message"), Toast.LENGTH_SHORT).show()
+                    }
                     val successfulRentals = jsonResponse.optJSONArray("successful_rentals")
                     val failedRentals = jsonResponse.optJSONArray("failed_rentals")
 

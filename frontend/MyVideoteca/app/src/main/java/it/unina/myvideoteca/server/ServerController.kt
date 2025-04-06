@@ -1,11 +1,13 @@
 package it.unina.myvideoteca.server
 
 import android.content.Context
+import it.unina.myvideoteca.data.CarrelloFilm
 import it.unina.myvideoteca.data.Film
 import it.unina.myvideoteca.data.RicercaFilm
 import it.unina.myvideoteca.data.Noleggio
 import it.unina.myvideoteca.data.SharedPrefManager
 import it.unina.myvideoteca.socket.SocketClient
+import org.json.JSONArray
 import org.json.JSONObject
 
 class ServerController(private val client: SocketClient, private val context: Context) {
@@ -57,11 +59,21 @@ class ServerController(private val client: SocketClient, private val context: Co
         }
     }
 
-    fun noleggio(carrelloList: MutableList<Film>, callback: (String?) -> Unit) {
-        val jsonRequest = JSONObject().apply{
+    fun noleggio(callback: (String?) -> Unit) {
+        val userId = SharedPrefManager.getUserId(context)
+        val userCart = SharedPrefManager.getUserCart(userId, context)
+        val filmsArray = userCart.optJSONArray("films") ?: JSONArray()
+
+        val filmIdsArray = JSONArray()
+        for (i in 0 until filmsArray.length()) {
+            val film = filmsArray.getJSONObject(i)
+            filmIdsArray.put(film.getInt("film_id"))
+        }
+
+        val jsonRequest = JSONObject().apply {
             put("endpoint", "noleggio")
-            put("films", carrelloList)
-            put("user_id", SharedPrefManager.getUserId(context))
+            put("films", filmIdsArray)
+            put("user_id", userId?.toIntOrNull() ?: -1)
             //put("jwt_token", SharedPrefManager.getToken(context))
         }
 
@@ -70,6 +82,7 @@ class ServerController(private val client: SocketClient, private val context: Co
             callback(response)
         }
     }
+
 
     fun recuperaNoleggi(callback: (String?) -> Unit){
         val jsonRequest = JSONObject().apply{

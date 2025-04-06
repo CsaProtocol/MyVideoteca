@@ -44,12 +44,12 @@ class NoleggiAdapter(private val noleggiList: MutableList<Noleggio>,
         private val context: Context,
         private val notifyChange: (Int) -> Unit
     ) : RecyclerView.ViewHolder(view) {
-        val filmImg = view.findViewById<ImageView>(R.id.imgFilm)
-        val titoloText = view.findViewById<TextView>(R.id.textTitolo)
-        val registaText = view.findViewById<TextView>(R.id.textRegista)
-        val inizioNoleggio = view.findViewById<TextView>(R.id.inizioNoleggioText)
-        val scadenzaNoleggio = view.findViewById<TextView>(R.id.scadenzaNoleggioText)
-        val restituisciButton = view.findViewById<Button>(R.id.buttonRestituisci)
+        private val filmImg = view.findViewById<ImageView>(R.id.imgFilm)
+        private val titoloText = view.findViewById<TextView>(R.id.textTitolo)
+        private val registaText = view.findViewById<TextView>(R.id.textRegista)
+        private val inizioNoleggio = view.findViewById<TextView>(R.id.inizioNoleggioText)
+        private val scadenzaNoleggio = view.findViewById<TextView>(R.id.scadenzaNoleggioText)
+        private val restituisciButton = view.findViewById<Button>(R.id.buttonRestituisci)
 
         fun bind(noleggio : Noleggio){
             val imageUrl = UrlFormatter.getMoviePosterUrl(noleggio.titoloFilm)
