@@ -1,6 +1,7 @@
 package it.unina.myvideoteca.view
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -75,6 +76,7 @@ class CarrelloAdapter(private val filmList: MutableList<CarrelloFilm>,
                 }
                 userCart.put("films", newArray)
                 SharedPrefManager.saveUserCart(userId, userCart.toString(), context)
+                Log.d("Carrello", "carrello dopo la rimozione: ${SharedPrefManager.getUserCart(userId, context)}")
 
                 val position = bindingAdapterPosition
                 if (position != RecyclerView.NO_POSITION) {
