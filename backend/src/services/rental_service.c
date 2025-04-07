@@ -27,7 +27,7 @@ char* rental_service(const char* request) {
     json_t* failed_rentals = json_array();
 
     size_t index;
-    json_t* film_json;
+    const json_t* film_json;
     json_array_foreach(films_array, index, film_json) {
         const int film_id = json_integer_value(film_json);
         json_t* rental_result = json_object();
@@ -45,7 +45,7 @@ char* rental_service(const char* request) {
         params_check[0] = malloc(16);
         sprintf(params_check[0], "%d", film_id);
 
-        PGresult* result = db_execute_query(query_check, 1, params_check);
+        PGresult* result = db_execute_query(query_check, 1, (const char**) params_check);
         free((void*)params_check[0]);
 
         if (!result || PQntuples(result) == 0) {
@@ -73,12 +73,11 @@ char* rental_service(const char* request) {
         params_insert[1] = malloc(16);
         sprintf(params_insert[1], "%d", film_id);
 
-        result = db_execute_query(query_insert, 2, params_insert);
+        result = db_execute_query(query_insert, 2, (const char**) params_insert);
         free((void*)params_insert[0]);
         free((void*)params_insert[1]);
 
         if(!result) {
-            //db_rollback_transaction(); Perchè? Basta metterlo nei failed_rentals, no?
             json_object_set_new(rental_result, "error", json_string("Errore creazione noleggio"));
             json_array_append_new(failed_rentals, rental_result);
             continue;

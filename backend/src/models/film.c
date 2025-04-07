@@ -14,7 +14,7 @@ film_t* film_create(const char* title, const char* director, const char* genre,
              "INSERT INTO Film(titolo, regista, genere, year, numero_copie, numero_copie_disponibili) "
              "VALUES ($1, $2, $3, $4, $5, $6) RETURNING *");
 
-    const char* params[6] = {title, director, genre, (char*)&year, (char*)&total_copies, (char*)&total_copies};
+    const char* params[6] = {title, director, genre, (const char*)&year, (const char*)&total_copies, (const char*)&total_copies};
     PGresult* result = db_execute_query(query, 6, params);
     if (!result) {
         log_error("Creazione del film fallita");

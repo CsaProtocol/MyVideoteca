@@ -75,8 +75,6 @@ add_executable(
         src/services/rental_service.h
         src/services/return_service.c
         src/services/return_service.h
-        src/auth/jwt.c
-        src/auth/jwt.h
         src/services/all_rentals_service.c
         src/services/all_rentals_service.h
         src/utils/config.c

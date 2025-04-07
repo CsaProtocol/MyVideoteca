@@ -3,7 +3,6 @@
 
 #include <libpq-fe.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 static PGconn* conn = NULL;
