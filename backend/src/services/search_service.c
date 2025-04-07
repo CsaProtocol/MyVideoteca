@@ -21,7 +21,7 @@ char* search_service(const char* request) {
     const int anno = json_integer_value(json_object_get(deSerialized, "anno"));
     const int durata_min = json_integer_value(json_object_get(deSerialized, "durata_min"));
     const int durata_max = json_integer_value(json_object_get(deSerialized, "durata_max"));
-    const int popularity = json_integer_value(json_object_get(deSerialized, "popolari"));
+    const bool popularity = json_boolean_value(json_object_get(deSerialized, "popolari"));
 
     char where_clause[1024] = "";
     char* params[6] = {NULL};
