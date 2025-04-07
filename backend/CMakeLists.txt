@@ -110,6 +110,36 @@ add_executable(
     ${TEST_BINARY}
     ${SOURCE_FILES}
     ${TEST_FILES}
+        src/main.c
+        src/models/film.c
+        src/models/film.h
+        src/db/postgres.c
+        src/db/postgres.h
+        src/utils/logger.c
+        src/utils/logger.h
+        src/server/socket_server.c
+        src/server/socket_server.h
+        src/server/request_handler.c
+        src/server/request_handler.h
+        src/utils/json.c
+        src/utils/json.h
+        src/auth/auth.h
+        src/auth/auth.c
+        src/services/login_service.c
+        src/services/login_service.h
+        src/services/signup_service.c
+        src/services/signup_service.h
+        src/services/search_service.c
+        src/services/search_service.h
+        src/services/rental_service.c
+        src/services/rental_service.h
+        src/services/return_service.c
+        src/services/return_service.h
+        src/services/all_rentals_service.c
+        src/services/all_rentals_service.h
+        src/utils/config.c
+        src/utils/config.h
+        tests/login_test.cpp
 )
 
 target_compile_options(
@@ -127,8 +157,7 @@ target_compile_options(
 target_link_libraries(
     ${TEST_BINARY}
     PRIVATE
-    GTest::GTest
-    GTest::Main
+    gtest::gtest
     jansson::jansson
     PostgreSQL::PostgreSQL
     openssl::openssl

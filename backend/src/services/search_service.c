@@ -21,6 +21,7 @@ char* search_service(const char* request) {
     const int anno = json_integer_value(json_object_get(deSerialized, "anno"));
     const int durata_min = json_integer_value(json_object_get(deSerialized, "durata_min"));
     const int durata_max = json_integer_value(json_object_get(deSerialized, "durata_max"));
+    const int popularity = json_integer_value(json_object_get(deSerialized, "popolari"));
 
     char where_clause[1024] = "";
     char* params[6] = {NULL};
@@ -64,10 +65,13 @@ char* search_service(const char* request) {
         params[param_count++] = durata_max_str;
     }
 
+    if(popularity)
+        strcat(where_clause, " ORDER BY popularity DESC");
+
     char query[2048];
     snprintf(query, sizeof(query),
-        "SELECT film_id, titolo, genere, regista, anno, durata, descrizione, numero_copie, numero_copie_disponibili "
-        "FROM Film "
+        "SELECT film_id, titolo, genere, regista, anno, durata, descrizione, numero_copie, numero_copie_disponibili, popularity "
+        "FROM Film FULL JOIN (SELECT film_id, COUNT(*) AS popularity FROM Noleggio GROUP BY film_id) AS count_popularity ON Film.film_id = count_popularity.film_id "
         "WHERE 1=1 %s", where_clause);
 
     PGresult* result = db_execute_query(query, param_count, (const char**)params);
