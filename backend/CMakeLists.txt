@@ -140,6 +140,7 @@ add_executable(
         src/utils/config.c
         src/utils/config.h
         tests/login_test.cpp
+        tests/signup_test.cpp
 )
 
 target_compile_options(
