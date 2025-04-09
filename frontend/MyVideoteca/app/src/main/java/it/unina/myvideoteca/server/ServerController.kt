@@ -102,7 +102,7 @@ class ServerController(private val client: SocketClient, private val context: Co
             put("endpoint", "restituzione")
             put("user_id", SharedPrefManager.getUserId(context))
             put("film_id", noleggio.filmId)
-            put("rental_id", noleggio.noleggioId)
+            put("rental_id", (noleggio.noleggioId).toString())
             //put("jwt_token", SharedPrefManager.getToken(context))
         }
 

@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import it.unina.myvideoteca.MainActivity
 import it.unina.myvideoteca.R
 import it.unina.myvideoteca.data.SharedPrefManager
+import it.unina.myvideoteca.utils.AppState
 
 class HomeActivity: AppCompatActivity() {
 
@@ -23,7 +24,7 @@ class HomeActivity: AppCompatActivity() {
         val restituisciButton = findViewById<Button>(R.id.buttonRestituisci)
         val logoutButton = findViewById<Button>(R.id.buttonLogout)
 
-        if(SharedPrefManager.getNonRestituitiBool(this) == true){
+        if(SharedPrefManager.getNonRestituitiBool(this) == true && !AppState.popupMostrato){
             val builder = AlertDialog.Builder(this)
             builder.setTitle("ATTENZIONE!")
             builder.setMessage("Hai dei film da restituire oltre la scadenza. Per favore restituisci i tuoi noleggi.")
@@ -34,6 +35,7 @@ class HomeActivity: AppCompatActivity() {
                 titleTextView?.setTextColor(ContextCompat.getColor(this, R.color.mv_red)) // Cambia il colore del titolo in rosso
             }
             dialog.show()
+            AppState.popupMostrato = true //PopUp mostrato per questa sessione
         }
 
         cercaButton.setOnClickListener{
@@ -52,6 +54,7 @@ class HomeActivity: AppCompatActivity() {
         }
 
         logoutButton.setOnClickListener{
+            AppState.popupMostrato = false // Resetta lo stato
             SharedPrefManager.logout(this)
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)

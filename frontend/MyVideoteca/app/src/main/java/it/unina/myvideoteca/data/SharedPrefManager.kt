@@ -56,7 +56,11 @@ object SharedPrefManager {
     }
 
     fun getNonRestituitiBool(context: Context): Boolean {
-        return getPreferences(context).getString(NON_RESTITUITI_BOOL, null).toBoolean()
+        val nonRestituiti = getPreferences(context).getString(NON_RESTITUITI_BOOL, null)
+        if(nonRestituiti == "t"){
+            return true
+        }
+        return false
     }
 
     fun saveToken(context: Context, token: String) {

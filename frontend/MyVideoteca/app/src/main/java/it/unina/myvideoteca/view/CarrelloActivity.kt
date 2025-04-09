@@ -127,16 +127,11 @@ class CarrelloActivity: AppCompatActivity() {
 
     private fun gestisciNoleggioSuccesso(successfulRentals: JSONArray?) {
         if (successfulRentals != null) {
-            val userId = SharedPrefManager.getUserId(this)
-            val userCart = SharedPrefManager.getUserCart(userId, this)
-
             for (i in 0 until successfulRentals.length()) {
                 val rental = successfulRentals.getJSONObject(i)
                 val filmId = rental.optInt("film_id")
-                userCart.remove(filmId.toString()) // Rimuove i film noleggiati dal carrello
+                rimuoviDalCarrello(filmId)// Rimuove i film noleggiati dal carrello
             }
-
-            SharedPrefManager.saveUserCart(userId, userCart.toString(), this)
             recreate() // Aggiorna l'activity
         }
     }
@@ -149,6 +144,28 @@ class CarrelloActivity: AppCompatActivity() {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish() // Chiude l'activity corrente
+        }
+    }
+
+    private fun rimuoviDalCarrello(filmid: Int) {
+        val userId = SharedPrefManager.getUserId(this)
+
+        if (userId != null) {
+            val userCart = SharedPrefManager.getUserCart(userId, this)
+            val filmsArray = userCart.optJSONArray("films") ?: JSONArray()
+            val newArray = JSONArray()
+
+            for (i in 0 until filmsArray.length()) { // Ricrea l'array senza il film da rimuovere
+                val currentFilm = filmsArray.getJSONObject(i)
+                val currentId = currentFilm.optInt("film_id")
+                if (currentId != filmid) {
+                    newArray.put(currentFilm)
+                } else {
+                    Log.d("Carrello", "Film con id ${filmid} rimosso dal carrello")
+                }
+            }
+            userCart.put("films", newArray)
+            SharedPrefManager.saveUserCart(userId, userCart.toString(), this)
         }
     }
 

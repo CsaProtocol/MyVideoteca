@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide
 import it.unina.myvideoteca.MainActivity
 import it.unina.myvideoteca.R
 import it.unina.myvideoteca.data.Noleggio
+import it.unina.myvideoteca.data.SharedPrefManager
 import it.unina.myvideoteca.server.ServerController
 import it.unina.myvideoteca.socket.SocketSingleton
 import it.unina.myvideoteca.utils.UrlFormatter
@@ -59,8 +60,8 @@ class NoleggiAdapter(private val noleggiList: MutableList<Noleggio>,
                 .into(filmImg)
             titoloText.text = noleggio.titoloFilm
             registaText.text = noleggio.registaFilm
-            inizioNoleggio.text = context.getString(R.string.inizio_noleggio, noleggio.dataNoleggio)
-            scadenzaNoleggio.text = context.getString(R.string.scadenza_noleggio, noleggio.dataScadenza)
+            inizioNoleggio.text = context.getString(R.string.inizio_noleggio, noleggio.dataNoleggio.take(19))
+            scadenzaNoleggio.text = context.getString(R.string.scadenza_noleggio, noleggio.dataScadenza.take(19))
 
             restituisciButton.setOnClickListener {
                 restituisciNoleggio(noleggio)
@@ -90,6 +91,8 @@ class NoleggiAdapter(private val noleggiList: MutableList<Noleggio>,
         }
 
         private fun rimuoviNoleggio() {
+            val numNonRestituiti = SharedPrefManager.getNumNonRestituiti(context) ?: 0
+            SharedPrefManager.saveNumNonRestituiti(context, (numNonRestituiti-1).toString())
             val position = bindingAdapterPosition
             if (position != RecyclerView.NO_POSITION) {
                 notifyChange(position)
