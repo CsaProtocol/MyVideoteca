@@ -87,7 +87,7 @@ class ServerController(private val client: SocketClient, private val context: Co
     fun recuperaNoleggi(callback: (String?) -> Unit){
         val jsonRequest = JSONObject().apply{
             put("endpoint", "get_noleggi")
-            put("user_id", SharedPrefManager.getUserId(context))
+            put("userid", SharedPrefManager.getUserId(context))
             //put("jwt_token", SharedPrefManager.getToken(context))
         }
 

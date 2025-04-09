@@ -2,6 +2,7 @@ package it.unina.myvideoteca.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -21,7 +22,9 @@ class NoleggiActivity: AppCompatActivity() {
         setContentView(R.layout.noleggi)
 
         val risultati = intent.getStringExtra("risultati") ?: ""
+        Log.d("Noleggi", "noleggi: $risultati")
         val noleggiList = DataParser.parseNoleggiList(risultati)
+        Log.d("Noleggi", "noleggiList: $noleggiList")
 
         recyclerView = findViewById(R.id.noleggiRecyclerView)
         adapter = NoleggiAdapter(noleggiList, this)
@@ -29,10 +32,10 @@ class NoleggiActivity: AppCompatActivity() {
         recyclerView.adapter = adapter
 
         val nessunNoleggio = findViewById<TextView>(R.id.textVuoto)
-        if(noleggiList.size > 0){
-            nessunNoleggio.isVisible = false
-            recyclerView.isVisible = true
-        }else{
+        nessunNoleggio.isVisible = false
+        recyclerView.isVisible = true
+
+        if(noleggiList.isEmpty()){
             nessunNoleggio.isVisible = true
             recyclerView.isVisible = false
         }

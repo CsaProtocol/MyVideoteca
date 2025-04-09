@@ -70,8 +70,12 @@ class CarrelloAdapter(private val filmList: MutableList<CarrelloFilm>,
 
                 for (i in 0 until filmsArray.length()) { // Ricrea l'array senza il film da rimuovere
                     val currentFilm = filmsArray.getJSONObject(i)
-                    if (currentFilm.optInt("id") != film.filmId) {
+                    val currentId = currentFilm.optInt("film_id")
+                    Log.d("Carrello", "Confronto: ${film.filmId} == $currentId ?")
+                    if (currentId != film.filmId) {
                         newArray.put(currentFilm)
+                    } else {
+                        Log.d("Carrello", "Film con id ${film.filmId} rimosso dal carrello")
                     }
                 }
                 userCart.put("films", newArray)

@@ -36,7 +36,7 @@ object DataParser {
         for (i in 0 until filmArray.length()) {
             val filmJson = filmArray.getJSONObject(i)
             val film = CarrelloFilm(
-                filmId = filmJson.optInt("id", -1),
+                filmId = filmJson.optInt("film_id", -1),
                 titolo = filmJson.optString("titolo", "N/D"),
                 regista = filmJson.optString("regista", "N/D")
             )
@@ -53,7 +53,7 @@ object DataParser {
             val noleggioJson = noleggiArray.getJSONObject(i)
             val noleggio = Noleggio(
                 noleggioId = noleggioJson.optInt("noleggio_id", -1),
-                filmId = noleggioJson.optInt("filmid", -1),
+                filmId = noleggioJson.optInt("film_id", -1),
                 titoloFilm = noleggioJson.getString("titolo_film"),
                 registaFilm = noleggioJson.getString("regista_film"),
                 dataNoleggio = noleggioJson.getString("data_noleggio"),

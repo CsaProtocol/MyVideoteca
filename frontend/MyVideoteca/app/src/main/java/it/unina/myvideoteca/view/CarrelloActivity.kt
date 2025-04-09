@@ -67,7 +67,7 @@ class CarrelloActivity: AppCompatActivity() {
             val max = maxNoleggi - numNonRestituiti
 
             if(carrelloList.size > max){
-                showPopup("Hai troppi noleggi in corso! Rimuovi qualche film dal carrello.")
+                showPopup("Hai troppi noleggi in corso! Rimuovi qualche film dal carrello o restituisci dei noleggi.")
             }else if(carrelloList.isEmpty()){
                 showPopup("Aggiungi dei film al carrello per proseguire con il noleggio.")
             }else{
