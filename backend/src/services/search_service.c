@@ -70,8 +70,8 @@ char* search_service(const char* request) {
 
     char query[2048];
     snprintf(query, sizeof(query),
-        "SELECT film_id, titolo, genere, regista, anno, durata, descrizione, numero_copie, numero_copie_disponibili, popularity "
-        "FROM Film FULL JOIN (SELECT film_id, COUNT(*) AS popularity FROM Noleggio GROUP BY film_id) AS count_popularity ON Film.film_id = count_popularity.film_id "
+        "SELECT Film.film_id, titolo, genere, regista, anno, durata, descrizione, numero_copie, numero_copie_disponibili, COALESCE(popularity, 0) AS popularity "
+        "FROM Film FULL JOIN (SELECT film_id AS alias_id, COUNT(noleggio_id) AS popularity FROM Noleggio GROUP BY film_id) AS count_popularity ON Film.film_id = count_popularity.alias_id "
         "WHERE 1=1 %s", where_clause);
 
     PGresult* result = db_execute_query(query, param_count, (const char**)params);

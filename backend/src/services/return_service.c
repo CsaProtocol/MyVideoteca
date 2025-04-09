@@ -1,5 +1,6 @@
 #include "return_service.h"
 #include <jansson.h>
+#include <stdlib.h>
 #include <string.h>
 #include "db/postgres.h"
 #include "utils/json.h"
@@ -14,29 +15,18 @@ char* return_service(const char* request) {
         return json_response_error("JSON non valido");
     }
 
-    const int rental_id = json_integer_value(json_object_get(deSerialized, "rental_id"));
-    const int user_id = json_integer_value(json_object_get(deSerialized, "user_id"));
-    const int film_id = json_integer_value(json_object_get(deSerialized, "film_id"));
+    const char* rental_id = json_string_value(json_object_get(deSerialized, "rental_id"));
 
     PGresult* result;
-    const char* query;
-    const char* params[2];
 
     if (rental_id > 0) {
-        query = "UPDATE Noleggio "
+        const char* params[1];
+        const char* query = "UPDATE Noleggio "
                 "SET restituito = true "
                 "WHERE noleggio_id = $1 AND restituito = false "
                 "RETURNING noleggio_id;";
-        params[0] = (char*)&rental_id;
+        params[0] = rental_id;
         result = db_execute_query(query, 1, params);
-    } else if (user_id > 0 && film_id > 0) {
-        query = "UPDATE Noleggio "
-                "SET restituito = true "
-                "WHERE utente_id = $1 AND film_id = $2 AND restituito = false "
-                "RETURNING noleggio_id;";
-        params[0] = (char*)&user_id;
-        params[1] = (char*)&film_id;
-        result = db_execute_query(query, 2, params);
     } else {
         json_decref(deSerialized);
         return json_response_error("Dati per la restituzione non validi");
