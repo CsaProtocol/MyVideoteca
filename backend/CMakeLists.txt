@@ -139,8 +139,8 @@ add_executable(
         src/services/all_rentals_service.h
         src/utils/config.c
         src/utils/config.h
-        tests/login_test.cpp
-        tests/signup_test.cpp
+        tests/all_rentals_test.cpp
+        tests/all_rentals_test.h
 )
 
 target_compile_options(
