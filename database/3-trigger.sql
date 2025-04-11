@@ -118,3 +118,24 @@ BEGIN
     WHERE id = in_utente_id;
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION noleggio_unico_film()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM Noleggio
+        WHERE utente_id = NEW.utente_id
+          AND film_id = NEW.film_id
+          AND restituito = FALSE
+    ) THEN
+        RAISE EXCEPTION 'Hai già noleggiato questo film e non lo hai ancora restituito.';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER noleggio_unico_film_trigger
+BEFORE INSERT ON Noleggio
+FOR EACH ROW
+EXECUTE FUNCTION noleggio_unico_film();

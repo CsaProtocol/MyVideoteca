@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import it.unina.myvideoteca.MainActivity
@@ -19,6 +20,8 @@ import it.unina.myvideoteca.data.SharedPrefManager
 import it.unina.myvideoteca.server.ServerController
 import it.unina.myvideoteca.socket.SocketSingleton
 import it.unina.myvideoteca.utils.DataParser
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -120,8 +123,20 @@ class CarrelloActivity: AppCompatActivity() {
 
     private fun gestisciNoleggioFallito(failedRentals: JSONArray?) {
         if (failedRentals != null && failedRentals.length() > 0) {
-            val errorMessage = "Alcuni film non sono stati noleggiati. Puoi riprovare quando saranno disponibili o avrai restituito altri film."
-            Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("ATTENZIONE!")
+            val errorMessage = "Uno o più film non sono stati noleggiati. I possibili motivi sono:"
+            val error1 = " • Hai già noleggiato questo film e ancora non lo hai restituito;"
+            val error2 = " • Hai superato il numero di noleggi massimi per utente;"
+            val error3 = " • Il film non è disponibile al momento."
+            builder.setMessage("$errorMessage \n $error1 \n $error2 \n $error3 ")
+            builder.setPositiveButton("OK", null)
+            val dialog = builder.create()
+            dialog.setOnShowListener {
+                val titleTextView = dialog.findViewById<TextView>(android.R.id.title)
+                titleTextView?.setTextColor(ContextCompat.getColor(this, R.color.mv_red)) // Cambia il colore del titolo in rosso
+            }
+            dialog.show()
         }
     }
 
@@ -131,8 +146,11 @@ class CarrelloActivity: AppCompatActivity() {
                 val rental = successfulRentals.getJSONObject(i)
                 val filmId = rental.optInt("film_id")
                 rimuoviDalCarrello(filmId)// Rimuove i film noleggiati dal carrello
+                lifecycleScope.launch {
+                    delay(2500) // 3 secondi
+                    recreate() // Aggiorna l'activity dopo 3 secondi
+                }
             }
-            recreate() // Aggiorna l'activity
         }
     }
 
@@ -161,7 +179,7 @@ class CarrelloActivity: AppCompatActivity() {
                 if (currentId != filmid) {
                     newArray.put(currentFilm)
                 } else {
-                    Log.d("Carrello", "Film con id ${filmid} rimosso dal carrello")
+                    Log.d("Carrello", "Film con id $filmid rimosso dal carrello")
                 }
             }
             userCart.put("films", newArray)

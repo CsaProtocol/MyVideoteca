@@ -46,10 +46,10 @@ class ServerController(private val client: SocketClient, private val context: Co
             put("titolo", filtri.titolo)
             put("regista", filtri.regista)
             put("genere", filtri.genere)
-            put("anno", filtri.anno)
-            put("durata_min", filtri.durataMin)
-            put("durata_max", filtri.durataMax)
-            put("popolari", filtri.popolari)
+            filtri.anno?.takeIf { it.isNotBlank() }?.toIntOrNull()?.let { put("anno", it) }
+            filtri.durataMin?.takeIf { it.isNotBlank() }?.toIntOrNull()?.let { put("durata_min", it) }
+            filtri.durataMax?.takeIf { it.isNotBlank() }?.toIntOrNull()?.let { put("durata_max", it) }
+            put("popolari", filtri.popolari.toBoolean())
             //put("jwt_token", SharedPrefManager.getToken(context))
         }
 
