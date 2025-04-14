@@ -19,7 +19,7 @@ char* return_service(const char* request) {
 
     PGresult* result;
 
-    if (rental_id > 0) {
+    if (rental_id) {
         const char* params[1];
         const char* query = "UPDATE Noleggio "
                 "SET restituito = true "
