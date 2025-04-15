@@ -9,6 +9,7 @@
 #include "services/search_service.h"
 #include "services/signup_service.h"
 #include "utils/json.h"
+#include "utils/jwt_utils.h"
 
 char* process_request(const char* request) {
     json_error_t error;
@@ -35,16 +36,26 @@ char* process_request(const char* request) {
         json_decref(deSerialized);
         return response;
     }
-
-    //TODO - CONTROLLA JWT TOKEN
-
-    if(strcmp(endpoint, "ricerca") == 0) {
-        response = search_service(request);
+    if(strcmp(endpoint, "heartbeat") == 0) {
+        response = json_response_success("Heartbeat riuscito");
         json_decref(deSerialized);
         return response;
     }
-    if(strcmp(endpoint, "heartbeat") == 0) {
-        response = json_response_success("Heartbeat riuscito");
+
+    //TODO - CONTROLLA JWT TOKEN
+    const char* token = json_string_value(json_object_get(deSerialized, "token"));
+    if (token == NULL) {
+        json_decref(deSerialized);
+        return json_response_error("Token mancante");
+    }
+    if (!verify_jwt(token)) {
+        json_decref(deSerialized);
+        return json_response_error("Token non valido o scaduto");
+    }
+    
+
+    if(strcmp(endpoint, "ricerca") == 0) {
+        response = search_service(request);
         json_decref(deSerialized);
         return response;
     }

@@ -50,7 +50,7 @@ class ServerController(private val client: SocketClient, private val context: Co
             filtri.durataMin?.takeIf { it.isNotBlank() }?.toIntOrNull()?.let { put("durata_min", it) }
             filtri.durataMax?.takeIf { it.isNotBlank() }?.toIntOrNull()?.let { put("durata_max", it) }
             put("popolari", filtri.popolari.toBoolean())
-            //put("jwt_token", SharedPrefManager.getToken(context))
+            put("token", SharedPrefManager.getToken(context))
         }
 
         client.sendMessage(jsonRequest.toString())
@@ -74,7 +74,7 @@ class ServerController(private val client: SocketClient, private val context: Co
             put("endpoint", "noleggio")
             put("films", filmIdsArray)
             put("user_id", userId?.toIntOrNull() ?: -1)
-            //put("jwt_token", SharedPrefManager.getToken(context))
+            put("token", SharedPrefManager.getToken(context))
         }
 
         client.sendMessage(jsonRequest.toString())
@@ -88,7 +88,7 @@ class ServerController(private val client: SocketClient, private val context: Co
         val jsonRequest = JSONObject().apply{
             put("endpoint", "get_noleggi")
             put("userid", SharedPrefManager.getUserId(context))
-            //put("jwt_token", SharedPrefManager.getToken(context))
+            put("token", SharedPrefManager.getToken(context))
         }
 
         client.sendMessage(jsonRequest.toString())
@@ -103,7 +103,7 @@ class ServerController(private val client: SocketClient, private val context: Co
             put("user_id", SharedPrefManager.getUserId(context))
             put("film_id", noleggio.filmId)
             put("rental_id", (noleggio.noleggioId).toString())
-            //put("jwt_token", SharedPrefManager.getToken(context))
+            put("token", SharedPrefManager.getToken(context))
         }
 
         client.sendMessage(jsonRequest.toString())

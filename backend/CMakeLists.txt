@@ -41,6 +41,9 @@ find_package(PostgreSQL REQUIRED)
 find_package(jansson REQUIRED)
 find_package(OpenSSL REQUIRED)
 find_package(argon2 REQUIRED)
+# Aggiungi i percorsi per la libreria libjwt
+include_directories(/usr/include)  # Aggiungi i file header di libjwt
+link_directories(/usr/lib/x86_64-linux-gnu)  # Aggiungi la directory contenente libjwt.so
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 #                                         MAIN COMPILATION OPTIONS                                         #
@@ -79,6 +82,8 @@ add_executable(
         src/services/all_rentals_service.h
         src/utils/config.c
         src/utils/config.h
+        src/utils/jwt_utils.c
+        src/utils/jwt_utils.h
 )
 
 target_compile_options(
@@ -100,6 +105,7 @@ target_link_libraries(
     PostgreSQL::PostgreSQL
     openssl::openssl
     argon2::argon2
+    jwt 
 )
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
@@ -139,6 +145,8 @@ add_executable(
         src/services/all_rentals_service.h
         src/utils/config.c
         src/utils/config.h
+        src/utils/jwt_utils.c
+        src/utils/jwt_utils.h
         tests/all_rentals_test.cpp
         tests/all_rentals_test.h
 )
@@ -163,5 +171,6 @@ target_link_libraries(
     PostgreSQL::PostgreSQL
     openssl::openssl
     argon2::argon2
+    jwt
 )
 

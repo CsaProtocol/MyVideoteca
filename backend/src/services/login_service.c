@@ -6,6 +6,7 @@
 #include "db/postgres.h"
 #include "utils/json.h"
 #include "utils/logger.h"
+#include "utils/jwt_utils.h"
 
 char* login_service(const char* request) {
     json_error_t error;
@@ -64,6 +65,10 @@ char* login_service(const char* request) {
         return json_response_error("Errore nell'esecuzione della query");
     }
 
+    // Genera il token JWT
+    char token_buffer[1024];
+    generate_jwt(token_buffer, sizeof(token_buffer), id);
+
     json_t* response = json_object();
     json_object_set_new(response, "status", json_string("success"));
     json_object_set_new(response, "message", json_string("Login effettuato con successo"));
@@ -71,6 +76,7 @@ char* login_service(const char* request) {
     json_object_set_new(response, "numero_film_non_restituiti", json_integer(atoi(PQgetvalue(result, 0, 1))));
     json_object_set_new(response, "max_noleggi", json_integer(atoi(PQgetvalue(result, 0, 2))));
     json_object_set_new(response, "film_non_restituiti", json_string(PQgetvalue(result, 0, 3)));
+    json_object_set_new(response, "token", json_string(token_buffer));
 
     db_free_result(result);
     json_decref(deSerialized);
