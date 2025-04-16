@@ -41,9 +41,9 @@ find_package(PostgreSQL REQUIRED)
 find_package(jansson REQUIRED)
 find_package(OpenSSL REQUIRED)
 find_package(argon2 REQUIRED)
-# Aggiungi i percorsi per la libreria libjwt
-include_directories(/usr/include)  # Aggiungi i file header di libjwt
-link_directories(/usr/lib/x86_64-linux-gnu)  # Aggiungi la directory contenente libjwt.so
+
+include_directories(/usr/include)
+link_directories(/usr/lib/x86_64-linux-gnu)
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 #                                         MAIN COMPILATION OPTIONS                                         #
@@ -54,8 +54,6 @@ add_executable(
     ${MAIN_FILE}
     ${SOURCE_FILES}
         src/main.c
-        src/models/film.c
-        src/models/film.h
         src/db/postgres.c
         src/db/postgres.h
         src/utils/logger.c
@@ -117,8 +115,6 @@ add_executable(
     ${SOURCE_FILES}
     ${TEST_FILES}
         src/main.c
-        src/models/film.c
-        src/models/film.h
         src/db/postgres.c
         src/db/postgres.h
         src/utils/logger.c
