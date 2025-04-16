@@ -79,11 +79,7 @@ class MainActivity : AppCompatActivity() {
             val email = emailEditText.text.toString().trim()
             val password = passwordEditText.text.toString().trim()
 
-            if (nome.isEmpty() || cognome.isEmpty() || email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Compilare tutti i campi per procedere.", Toast.LENGTH_SHORT).show()
-            } else {
-                registrazione(nome, cognome, email, password)
-            }
+            onRegistratiClicked(nome, cognome, email, password)
         }
 
         accediText.setOnClickListener{
@@ -93,7 +89,19 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun registrazione(nome: String, cognome: String, email: String, password: String) {
+    fun onRegistratiClicked(nome: String, cognome: String, email: String, password: String) {
+        if (nome.isNotBlank() && cognome.isNotBlank() && email.isNotBlank() && password.isNotBlank()) {
+            registrazione(nome, cognome, email, password)
+        }else{
+            showToastCampiNonValidi()
+        }
+    }
+
+    fun showToastCampiNonValidi(){
+        Toast.makeText(this, "Compilare tutti i campi per procedere.", Toast.LENGTH_SHORT).show()
+    }
+
+    fun registrazione(nome: String, cognome: String, email: String, password: String) {
         serverController.signUp(nome, cognome, email, password) { response ->
             runOnUiThread {
                 if (response != null) {
