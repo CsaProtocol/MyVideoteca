@@ -1,11 +1,10 @@
 #include <cstdio>
 #include <gtest/gtest.h>
 
-TEST(NetworkTest, CaptureResponse) {
-    FILE* pipe = popen("echo -n '{\"endpoint\":\"get_noleggi\",\"userid\":\"42\"}' | nc localhost 8080", "r");
+TEST(ServiceTests, EmailMissing) {
+    FILE* pipe = popen("echo -n '{\"endpoint\":\"signup\",\"password\":\"qualcosa\",\"nome\":\"giovanni\",\"cognome\":\"rossi\"}' | nc localhost 8080", "r");
     ASSERT_TRUE(pipe) << "Failed to open pipe!";
 
-    // Read and validate the response (example)
     char buffer[128];
     std::string response;
     while (fgets(buffer, sizeof(buffer), pipe) != nullptr) {
@@ -16,5 +15,5 @@ TEST(NetworkTest, CaptureResponse) {
     ASSERT_NE(status, -1) << "Command failed!";
 
     // Validate the server's response
-    EXPECT_TRUE(response.find("expected_response") != std::string::npos);
+    EXPECT_TRUE(response.find("Campi obbligatori mancanti") != std::string::npos);
 }
