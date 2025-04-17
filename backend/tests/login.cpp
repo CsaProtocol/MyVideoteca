@@ -36,7 +36,7 @@ TEST(LoginTests, PasswordMissing) {
 }
 
 TEST(LoginTests, JsonComplete) {
-    FILE* pipe = popen("echo '{\"endpoint\":\"login\",\"email\":\"test123@gmail.com\",\"password\":\"password123\",\"nome\":\"Mario\",\"cognome\":\"Rossi\"}' | nc -w 1 localhost 8080", "r");
+    FILE* pipe = popen("echo '{\"endpoint\":\"login\",\"email\":\"test123@gmail.com\",\"password\":\"password123\"}' | nc -w 1 localhost 8080", "r");
     ASSERT_TRUE(pipe) << "Failed to open pipe!";
 
     char buffer[128];
