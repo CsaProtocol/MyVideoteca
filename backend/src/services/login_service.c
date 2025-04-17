@@ -47,7 +47,7 @@ char* login_service(const char* request) {
 
     const char* query2 = "SELECT aggiorna_flag_utente(CAST($1 AS INT));";
     const char* params2[1] = {id};
-    log_info("Esecuzione della query per aggiornare il flag dell'utente con ID: %d", id);
+    log_info("Esecuzione della query per aggiornare il flag dell'utente con ID: %s", id);
     result = db_execute_query(query2, 1, params2);
     if (!result) {
         log_error("Errore nell'esecuzione della query");

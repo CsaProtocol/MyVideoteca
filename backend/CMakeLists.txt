@@ -144,6 +144,7 @@ add_executable(
         src/utils/jwt_utils.h
         tests/signup.cpp
         tests/login.cpp
+        tests/main.cpp
 )
 
 target_compile_options(
