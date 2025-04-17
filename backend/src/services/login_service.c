@@ -20,6 +20,12 @@ char* login_service(const char* request) {
     const char* email = json_string_value(json_object_get(deSerialized, "email"));
     const char* password = json_string_value(json_object_get(deSerialized, "password"));
 
+    if (!email || !password) {
+        log_error("Campi obbligatori mancanti");
+        json_decref(deSerialized);
+        return json_response_error("Campi obbligatori mancanti");
+    }
+
     if (!login(email, password)) {
         log_error("Login fallito");
         json_decref(deSerialized);

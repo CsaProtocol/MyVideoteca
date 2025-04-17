@@ -114,7 +114,6 @@ add_executable(
     ${TEST_BINARY}
     ${SOURCE_FILES}
     ${TEST_FILES}
-        src/main.c
         src/db/postgres.c
         src/db/postgres.h
         src/utils/logger.c
@@ -143,8 +142,8 @@ add_executable(
         src/utils/config.h
         src/utils/jwt_utils.c
         src/utils/jwt_utils.h
-        tests/all_rentals_test.cpp
-        tests/all_rentals_test.h
+        tests/signup.cpp
+        tests/login.cpp
 )
 
 target_compile_options(

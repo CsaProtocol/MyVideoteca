@@ -42,7 +42,6 @@ char* process_request(const char* request) {
         return response;
     }
 
-    //TODO - CONTROLLA JWT TOKEN
     const char* token = json_string_value(json_object_get(deSerialized, "token"));
     if (token == NULL) {
         json_decref(deSerialized);
@@ -52,7 +51,6 @@ char* process_request(const char* request) {
         json_decref(deSerialized);
         return json_response_error("Token non valido o scaduto");
     }
-    
 
     if(strcmp(endpoint, "ricerca") == 0) {
         response = search_service(request);

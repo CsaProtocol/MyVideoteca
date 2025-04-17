@@ -21,19 +21,12 @@ void* handle_client(void* client_socket_ptr) {
     char buffer[4096] = {0};
     ssize_t bytes_read;
 
-    const char* greeting = "Welcome to the server! Please send your request.\n";
-    if (write(client_socket, greeting, strlen(greeting)) < 0) {
-        log_error("Failed to send greeting to client");
-        close(client_socket);
-        return NULL;
-    }
-
     while ((bytes_read = read(client_socket, buffer, sizeof(buffer) - 1)) > 0) {
         buffer[bytes_read] = '\0';
 
         char* response = process_request(buffer);
         // Aggiungi '\n' alla risposta
-        size_t response_len = strlen(response);
+        const size_t response_len = strlen(response);
         char* response_with_newline = malloc(response_len + 2); // +1 per '\n', +1 per '\0'
         if (!response_with_newline) {
             log_error("Allocazione memoria fallita");
@@ -70,7 +63,7 @@ bool initialize_server(const server_config_t config) {
     int opt = 1;
     if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt))) {
         log_error("Impostazione delle opzioni del socket fallita");
-        close(server_fd); // Fix: close socket on error
+        close(server_fd);
         server_fd = -1;
         return false;
     }
@@ -82,14 +75,14 @@ bool initialize_server(const server_config_t config) {
 
     if (bind(server_fd, (struct sockaddr*)&address, sizeof(address)) < 0) {
         log_error("Binding fallito");
-        close(server_fd); // Fix: close socket on error
+        close(server_fd);
         server_fd = -1;
         return false;
     }
 
     if (listen(server_fd, config.backlog) < 0) {
         log_error("Ascolto fallito");
-        close(server_fd); // Fix: close socket on error
+        close(server_fd);
         server_fd = -1;
         return false;
     }

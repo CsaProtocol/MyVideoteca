@@ -1,4 +1,3 @@
-
 INSERT INTO film (titolo, regista, genere, anno, durata, descrizione, numero_copie, numero_copie_disponibili)
 VALUES 
 ('Inception', 'Christopher Nolan', 'Fantascienza', 2010, 148, 'Un ladro esperto nei sogni entra nella mente delle persone.', 5, 5),
