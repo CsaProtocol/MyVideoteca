@@ -29,11 +29,11 @@ static bool file_exists(const char* file_path) {
 }
 
 void environment_init() {
-    char* host = getenv("HOST");
-    char* port = getenv("PORT");
-    char* dbname = getenv("DBNAME");
-    char* user = getenv("USER");
-    char* password = getenv("PASSWORD");
+    char* host = getenv("DB_HOST");
+    char* port = getenv("DB_PORT");
+    char* dbname = getenv("DB_NAME");
+    char* user = getenv("DB_USER");
+    char* password = getenv("DB_PASSWORD");
 
     if (!host || !port || !dbname || !user || !password) {
         log_error("Environment variables not set");
