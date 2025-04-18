@@ -28,9 +28,12 @@ WORKDIR /app
 COPY . .
 
 RUN conan install . --output-folder=dependencies --build=missing && \
-RUN cmake -S . -B build -DCMAKE_BUILD_TYPE=release && \
-RUN cmake --build build
+    cmake -S . -B build -DCMAKE_BUILD_TYPE=release && \
+    cmake --build build
 
 EXPOSE 8080
 
-CMD ["./build/bin/server"]
+RUN chmod +x ./out/bin/demo && \
+    chmod +x ./out/bin/unit_tests
+
+CMD ["./out/bin/demo"]

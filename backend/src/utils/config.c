@@ -5,7 +5,7 @@
 #include <string.h>
 #include "logger.h"
 
-static const db_config_t default_db_config = {
+static db_config_t default_db_config = {
     .host = "localhost",
     .port = 5432,
     .dbname = "videoteca",
@@ -26,6 +26,25 @@ static bool file_exists(const char* file_path) {
         return true;
     }
     return false;
+}
+
+void environment_init() {
+    char* host = getenv("HOST");
+    char* port = getenv("PORT");
+    char* dbname = getenv("DBNAME");
+    char* user = getenv("USER");
+    char* password = getenv("PASSWORD");
+
+    if (!host || !port || !dbname || !user || !password) {
+        log_error("Environment variables not set");
+        return;
+    }
+
+    strcpy(default_db_config.host, host);
+    default_db_config.port = atoi(port);
+    strcpy(default_db_config.dbname, dbname);
+    strcpy(default_db_config.user, user);
+    strcpy(default_db_config.password, password);
 }
 
 bool save_config(const char* file_path, const db_config_t* db_config, const server_config_t* server_config) {
@@ -65,6 +84,7 @@ bool load_config(const char* file_path, db_config_t* db_config, server_config_t*
     if (!file_exists(file_path)) {
         log_info("Configuration file doesn't exist, creating with default values");
 
+        environment_init();
         *db_config = default_db_config;
         *server_config = default_server_config;
 
@@ -79,6 +99,7 @@ bool load_config(const char* file_path, db_config_t* db_config, server_config_t*
         return false;
     }
 
+    environment_init();
     *db_config = default_db_config;
     *server_config = default_server_config;
 
