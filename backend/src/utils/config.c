@@ -40,11 +40,11 @@ void environment_init() {
         return;
     }
 
-    strcpy(default_db_config.host, host);
+    default_db_config.host = strdup(host);
+    default_db_config.dbname = strdup(dbname);
+    default_db_config.user = strdup(user);
+    default_db_config.password = strdup(password);
     default_db_config.port = atoi(port);
-    strcpy(default_db_config.dbname, dbname);
-    strcpy(default_db_config.user, user);
-    strcpy(default_db_config.password, password);
 }
 
 bool save_config(const char* file_path, const db_config_t* db_config, const server_config_t* server_config) {
