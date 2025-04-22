@@ -28,7 +28,7 @@ void init_logger(const char* log_file_path, const log_level_t min_level) {
     pthread_mutex_unlock(&log_mutex);
 }
 
-static void log_message(const log_level_t level, const char* level_str, const char* format, va_list args) {
+static void log_message(const log_level_t level, const char* level_str, const char* format, const va_list args) {
     if (level < current_min_level) return;
 
     pthread_mutex_lock(&log_mutex);
@@ -41,7 +41,7 @@ static void log_message(const log_level_t level, const char* level_str, const ch
 
     const pthread_t thread_id = pthread_self();
 
-    fprintf(log_file, "[%s] [%lu] [%s] ", timestamp, (unsigned long)thread_id, level_str);
+    fprintf(log_file, "[%s] [%lu] [%s] ", timestamp, thread_id, level_str);
     vfprintf(log_file, format, args);
     fprintf(log_file, "\n");
     fflush(log_file);
@@ -49,28 +49,28 @@ static void log_message(const log_level_t level, const char* level_str, const ch
     pthread_mutex_unlock(&log_mutex);
 }
 
-void log_debug(const char* format, ...) {
+void log_debug(const char* format) {
     va_list args;
     va_start(args, format);
     log_message(LOG_DEBUG, "DEBUG", format, args);
     va_end(args);
 }
 
-void log_info(const char* format, ...) {
+void log_info(const char* format) {
     va_list args;
     va_start(args, format);
     log_message(LOG_INFO, "INFO", format, args);
     va_end(args);
 }
 
-void log_warning(const char* format, ...) {
+void log_warning(const char* format) {
     va_list args;
     va_start(args, format);
     log_message(LOG_WARNING, "WARNING", format, args);
     va_end(args);
 }
 
-void log_error(const char* format, ...) {
+void log_error(const char* format) {
     va_list args;
     va_start(args, format);
     log_message(LOG_ERROR, "ERROR", format, args);
