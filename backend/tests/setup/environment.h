@@ -19,12 +19,10 @@ class TestEnvironment final : public testing::Environment {
 public:
     void SetUp() override;
     void TearDown() override;
-
-protected:
-    static void environment_setup();
-
+    
 private:
     std::thread::id thread_id;
+    static void environment_setup();
 
 };
 
