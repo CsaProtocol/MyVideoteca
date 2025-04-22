@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get install libjwt-dev -y
+RUN apt-get update && apt-get install libjwt-dev -y
 
 RUN python3 -m pip install --user pipx \
     && python3 -m pipx ensurepath
@@ -25,9 +25,10 @@ RUN pipx install conan
 
 WORKDIR /app
 
-COPY . .
+COPY ./backend .
 
-RUN conan install . --output-folder=dependencies --build=missing && \
+RUN conan profile detect && \
+    conan install . --output-folder=dependencies --build=missing && \
     cmake -S . -B build -DCMAKE_BUILD_TYPE=release && \
     cmake --build build
 

@@ -15,20 +15,3 @@ VALUES
 ('Toy Story', 'John Lasseter', 'Animazione', 1995, 81, 'La vita di Woody, un cowboy giocattolo e pupazzo preferito del suo piccolo padrono, è minacciata dall arrivo di Buzz Lightyear, un nuovo robot colorato e pieno di luci.', 5, 5),
 ('Amy', 'Asif Kapadia', 'Documentario', 2015, 128, 'Amy è un documentario del 2015 diretto da Asif Kapadia sulla vita della cantante Amy Winehouse, morta a soli 27 anni per abuso di alcol.', 5, 5),
 ('Colpa delle stelle', 'Josh Boone', 'Romantico', 2014, 126, 'Due giovani si conoscono durante le riunioni in un gruppo di sostegno per malati di cancro e si innamorano l uno dell altra.', 5, 5);
-
-
-/* INSERT INTO utente (nome, cognome, email, password_hash, film_non_restituiti)
-VALUES 
-('Mario', 'Rossi', 'mario.rossi@email.com', 'hash_password_1', FALSE),
-('Luca', 'Bianchi', 'luca.bianchi@email.com', 'hash_password_2', FALSE),
-('Giulia', 'Verdi', 'giulia.verdi@email.com', 'hash_password_3', FALSE),
-('Anna', 'Neri', 'anna.neri@email.com', 'hash_password_4', FALSE),
-('Marco', 'Gialli', 'marco.gialli@email.com', 'hash_password_5', FALSE); --Questi utenti non vanno bene poiche' la password non e' hashata dal nostro server.
-
-INSERT INTO noleggio (utente_id, film_id, data_noleggio)
-VALUES 
-(1, 1, '2025-03-20 10:00:00'),
-(2, 2, '2025-03-21 15:30:00'),
-(3, 3, '2025-03-22 18:45:00'),
-(4, 4, '2025-03-23 09:15:00'),
-(5, 5, '2025-03-24 12:00:00'); */
