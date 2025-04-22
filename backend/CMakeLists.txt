@@ -142,8 +142,8 @@ add_executable(
         src/utils/config.h
         src/utils/jwt_utils.c
         src/utils/jwt_utils.h
-        tests/signup.cpp
-        tests/login.cpp
+        tests/service_tests/signup.cpp
+        tests/service_tests/login.cpp
         tests/main.cpp
 )
 

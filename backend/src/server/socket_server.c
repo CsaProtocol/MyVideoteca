@@ -46,6 +46,7 @@ void* handle_client(void* client_socket_ptr) {
         if(written < 0) {
             log_error("Impossibile inviare risposta al client");
             free(response);
+            free(response_with_newline);
             break;
         }
 
