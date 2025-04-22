@@ -2,12 +2,12 @@
 #include <gtest/gtest.h>
 
 TEST(SignupTests, EmailMissing) {
-    FILE* pipe = popen("echo '{\"endpoint\":\"signup\",\"password\":\"password123\",\"nome\":\"Mario\",\"cognome\":\"Rossi\"}' | nc -w 1 localhost 8080", "r");
+    FILE* pipe = popen(R"(echo '{"endpoint":"signup","password":"password123","nome":"Mario","cognome":"Rossi"}' | nc -w 1 localhost 8080)", "r");
     ASSERT_TRUE(pipe) << "Failed to open pipe!";
 
-    char buffer[128];
+    std::string buffer;
     std::string response;
-    while (fgets(buffer, sizeof(buffer), pipe) != nullptr) {
+    while (fgets(buffer.data(), static_cast<int>(buffer.size()), pipe) != nullptr) {
         response += buffer;
     }
 
@@ -19,12 +19,12 @@ TEST(SignupTests, EmailMissing) {
 }
 
 TEST(SignupTests, PasswordMissing) {
-    FILE* pipe = popen("echo '{\"endpoint\":\"signup\",\"email\":\"test123@gmail.com\",\"nome\":\"Mario\",\"cognome\":\"Rossi\"}' | nc -w 1 localhost 8080", "r");
+    FILE* pipe = popen(R"(echo '{"endpoint":"signup","email":"test123@gmail.com","nome":"Mario","cognome":"Rossi"}' | nc -w 1 localhost 8080)", "r");
     ASSERT_TRUE(pipe) << "Failed to open pipe!";
 
-    char buffer[128];
+    std::string buffer;
     std::string response;
-    while (fgets(buffer, sizeof(buffer), pipe) != nullptr) {
+    while (fgets(buffer.data(), static_cast<int>(buffer.size()), pipe) != nullptr) {
         response += buffer;
     }
 
@@ -36,12 +36,12 @@ TEST(SignupTests, PasswordMissing) {
 }
 
 TEST(SignupTests, NameMissing) {
-    FILE* pipe = popen("echo '{\"endpoint\":\"signup\",\"email\":\"test123@gmail.com\",\"password\":\"password123\",\"cognome\":\"Rossi\"}' | nc -w 1 localhost 8080", "r");
+    FILE* pipe = popen(R"(echo '{"endpoint":"signup","email":"test123@gmail.com","password":"password123","cognome":"Rossi"}' | nc -w 1 localhost 8080)", "r");
     ASSERT_TRUE(pipe) << "Failed to open pipe!";
 
-    char buffer[128];
+    std::string buffer;
     std::string response;
-    while (fgets(buffer, sizeof(buffer), pipe) != nullptr) {
+    while (fgets(buffer.data(), static_cast<int>(buffer.size()), pipe) != nullptr) {
         response += buffer;
     }
 
@@ -53,12 +53,12 @@ TEST(SignupTests, NameMissing) {
 }
 
 TEST(SignupTests, SurnameMissing) {
-    FILE* pipe = popen("echo '{\"endpoint\":\"signup\",\"email\":\"test123@gmail.com\",\"password\":\"password123\",\"nome\":\"Giovanni\"}' | nc -w 1 localhost 8080", "r");
+    FILE* pipe = popen(R"(echo '{"endpoint":"signup","email":"test123@gmail.com","password":"password123","nome":"Giovanni"}' | nc -w 1 localhost 8080)", "r");
     ASSERT_TRUE(pipe) << "Failed to open pipe!";
 
-    char buffer[128];
+    std::string buffer;
     std::string response;
-    while (fgets(buffer, sizeof(buffer), pipe) != nullptr) {
+    while (fgets(buffer.data(), static_cast<int>(buffer.size()), pipe) != nullptr) {
         response += buffer;
     }
 
@@ -70,12 +70,12 @@ TEST(SignupTests, SurnameMissing) {
 }
 
 TEST(SignupTests, JsonComplete) {
-    FILE* pipe = popen("echo '{\"endpoint\":\"signup\",\"email\":\"test123@gmail.com\",\"password\":\"password123\",\"nome\":\"Mario\",\"cognome\":\"Rossi\"}' | nc -w 1 localhost 8080", "r");
+    FILE* pipe = popen(R"(echo '{"endpoint":"signup","email":"test123@gmail.com","password":"password123","nome":"Mario","cognome":"Rossi"}' | nc -w 1 localhost 8080)", "r");
     ASSERT_TRUE(pipe) << "Failed to open pipe!";
 
-    char buffer[128];
+    std::string buffer;
     std::string response;
-    while (fgets(buffer, sizeof(buffer), pipe) != nullptr) {
+    while (fgets(buffer.data(), static_cast<int>(buffer.size()), pipe) != nullptr) {
         response += buffer;
     }
 
