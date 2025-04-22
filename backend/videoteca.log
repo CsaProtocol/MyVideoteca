@@ -1,0 +1,9 @@
+[2025-04-22 18:07:05] [139755931264832] [INFO] Avvio del Server MyVideoteca...
+[2025-04-22 18:07:05] [139755931264832] [INFO] Configuration file doesn't exist, creating with default values
+[2025-04-22 18:07:05] [139755931264832] [INFO] Configuration saved to properties.json
+[2025-04-22 18:07:05] [139755931264832] [INFO] Connesso al database PostgreSQL
+[2025-04-22 18:07:05] [139755931264832] [INFO] Server inizializzato sulla porta 8080
+[2025-04-22 18:07:05] [139755931264832] [INFO] Server avviato. In attesa di connessioni...
+[2025-04-22 18:07:07] [139755931264832] [INFO] Ricevuto segnale 2, arresto in corso...
+[2025-04-22 18:07:07] [139755931264832] [INFO] Server arrestato
+[2025-04-22 18:07:07] [139755931264832] [INFO] Disconnesso dal database PostgreSQL

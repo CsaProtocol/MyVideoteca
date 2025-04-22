@@ -49,28 +49,28 @@ static void log_message(const log_level_t level, const char* level_str, const ch
     pthread_mutex_unlock(&log_mutex);
 }
 
-void log_debug(const char* format) {
+void log_debug(const char* format, ...) {
     va_list args;
     va_start(args, format);
     log_message(LOG_DEBUG, "DEBUG", format, args);
     va_end(args);
 }
 
-void log_info(const char* format) {
+void log_info(const char* format, ...) {
     va_list args;
     va_start(args, format);
     log_message(LOG_INFO, "INFO", format, args);
     va_end(args);
 }
 
-void log_warning(const char* format) {
+void log_warning(const char* format, ...) {
     va_list args;
     va_start(args, format);
     log_message(LOG_WARNING, "WARNING", format, args);
     va_end(args);
 }
 
-void log_error(const char* format) {
+void log_error(const char* format, ...) {
     va_list args;
     va_start(args, format);
     log_message(LOG_ERROR, "ERROR", format, args);

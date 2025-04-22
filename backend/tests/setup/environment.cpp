@@ -1,7 +1,7 @@
 #include "environment.h"
 
 void TestEnvironment::SetUp() {
-    std::thread environment_thread(environment_setup);
+    std::jthread environment_thread(environment_setup);
     thread_id = environment_thread.get_id();
     environment_thread.detach();
     std::this_thread::sleep_for(std::chrono::seconds(5));

@@ -5,9 +5,9 @@ TEST(LoginTests, EmailMissing) {
     FILE* pipe = popen(R"(echo '{"endpoint":"login","password":"password123"}' | nc -w 1 localhost 8080)", "r");
     ASSERT_TRUE(pipe) << "Failed to open pipe!";
 
-    std::string buffer;
+    char buffer[128];
     std::string response;
-    while (fgets(buffer.data(), static_cast<int>(buffer.size()), pipe) != nullptr) {
+    while (fgets(buffer, sizeof(buffer), pipe) != nullptr) {
         response += buffer;
     }
 
@@ -22,9 +22,9 @@ TEST(LoginTests, PasswordMissing) {
     FILE* pipe = popen(R"(echo '{"endpoint":"login","email":"test123@gmail.com"}' | nc -w 1 localhost 8080)", "r");
     ASSERT_TRUE(pipe) << "Failed to open pipe!";
 
-    std::string buffer;
+    char buffer[128];
     std::string response;
-    while (fgets(buffer.data(), static_cast<int>(buffer.size()), pipe) != nullptr) {
+    while (fgets(buffer, sizeof(buffer), pipe) != nullptr) {
         response += buffer;
     }
 
@@ -39,9 +39,9 @@ TEST(LoginTests, JsonComplete) {
     FILE* pipe = popen(R"(echo '{"endpoint":"login","email":"test123@gmail.com","password":"password123"}' | nc -w 1 localhost 8080)", "r");
     ASSERT_TRUE(pipe) << "Failed to open pipe!";
 
-    std::string buffer;
+    char buffer[128];
     std::string response;
-    while (fgets(buffer.data(), static_cast<int>(buffer.size()), pipe) != nullptr) {
+    while (fgets(buffer, sizeof(buffer), pipe) != nullptr) {
         response += buffer;
     }
 
