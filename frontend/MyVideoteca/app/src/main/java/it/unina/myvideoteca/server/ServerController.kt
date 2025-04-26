@@ -1,8 +1,6 @@
 package it.unina.myvideoteca.server
 
 import android.content.Context
-import it.unina.myvideoteca.data.CarrelloFilm
-import it.unina.myvideoteca.data.Film
 import it.unina.myvideoteca.data.RicercaFilm
 import it.unina.myvideoteca.data.Noleggio
 import it.unina.myvideoteca.data.SharedPrefManager
