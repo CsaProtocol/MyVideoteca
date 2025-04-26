@@ -73,9 +73,9 @@ char* rental_service(const char* request) {
         params_insert[1] = malloc(16);
         sprintf(params_insert[1], "%d", film_id);
 
-        result = db_execute_query(query_insert, 2, (const char**) params_insert);
-        free((void*)params_insert[0]);
-        free((void*)params_insert[1]);
+        result = db_execute_query(query_insert, 2, params_insert);
+        free(params_insert[0]);
+        free(params_insert[1]);
 
         if(!result) {
             json_object_set_new(rental_result, "error", json_string("Errore creazione noleggio"));
