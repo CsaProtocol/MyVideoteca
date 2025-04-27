@@ -73,7 +73,7 @@ char* rental_service(const char* request) {
         params_insert[1] = malloc(16);
         sprintf(params_insert[1], "%d", film_id);
 
-        result = db_execute_query(query_insert, 2, params_insert);
+        result = db_execute_query(query_insert, 2, (const char**) params_insert);
         free(params_insert[0]);
         free(params_insert[1]);
 

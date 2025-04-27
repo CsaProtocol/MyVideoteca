@@ -28,7 +28,7 @@ void init_logger(const char* log_file_path, const log_level_t min_level) {
     pthread_mutex_unlock(&log_mutex);
 }
 
-static void log_message(const log_level_t level, const char* level_str, const char* format, const va_list args) {
+static void log_message(const log_level_t level, const char* level_str, const char* format, va_list args) {
     if (level < current_min_level) return;
 
     pthread_mutex_lock(&log_mutex);
