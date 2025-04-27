@@ -71,16 +71,15 @@ char* login_service(const char* request) {
         return json_response_error("Errore nell'esecuzione della query");
     }
 
-    // Genera il token JWT
     char token_buffer[1024];
     generate_jwt(token_buffer, sizeof(token_buffer), id);
 
     json_t* response = json_object();
     json_object_set_new(response, "status", json_string("success"));
     json_object_set_new(response, "message", json_string("Login effettuato con successo"));
-    json_object_set_new(response, "id", json_integer(atoi(id)));
-    json_object_set_new(response, "numero_film_non_restituiti", json_integer(atoi(PQgetvalue(result, 0, 1))));
-    json_object_set_new(response, "max_noleggi", json_integer(atoi(PQgetvalue(result, 0, 2))));
+    json_object_set_new(response, "id", json_string(PQgetvalue(result, 0, 0)));
+    json_object_set_new(response, "numero_film_non_restituiti", json_integer(strtol(PQgetvalue(result, 0, 1), NULL, 10)));
+    json_object_set_new(response, "max_noleggi", json_integer(strtol(PQgetvalue(result, 0, 2), NULL, 10)));
     json_object_set_new(response, "film_non_restituiti", json_string(PQgetvalue(result, 0, 3)));
     json_object_set_new(response, "token", json_string(token_buffer));
 
