@@ -42,7 +42,7 @@ char* login_service(const char* request) {
         return json_response_error("Errore nell'esecuzione della query");
     }
 
-    char* id = PQgetvalue(result, 0, 0);
+    char* id = strdup(PQgetvalue(result, 0, 0));
     db_free_result(result);
 
     const char* query2 = "SELECT aggiorna_flag_utente(CAST($1 AS INT));";
@@ -83,6 +83,7 @@ char* login_service(const char* request) {
     json_object_set_new(response, "film_non_restituiti", json_string(PQgetvalue(result, 0, 3)));
     json_object_set_new(response, "token", json_string(token_buffer));
 
+    free(id);
     db_free_result(result);
     json_decref(deSerialized);
 
