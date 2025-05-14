@@ -7,7 +7,7 @@ MyVideoteca è un software per la gestione di una videoteca. Il software permett
 - restituire i film che ha precedentemente noleggiato;
 - effettuare il logout.
 
-** Come avviare MyVideoteca **
+## Come avviare MyVideoteca
 Per lo sviluppo del progetto è stato richiesto l'utilizzo di Docker Compose.
 
 Per creare il container per il backend posizionarsi nella cartella che contiene il progetto (MyVideoteca) e eseguire il comando
